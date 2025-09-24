@@ -1,4 +1,46 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateTaskDto } from './dto/create-task.dto';
+import { PrismaErrorService } from 'src/prisma/prisma-error.service';
+import { Task } from '@prisma/client';
 
 @Injectable()
-export class TasksService {}
+export class TasksService {
+    constructor(private prisma: PrismaService, private prismaErrorService: PrismaErrorService) { }
+
+    async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
+        try {
+            return this.prisma.task.create({ data: createTaskDto });
+        } catch (error) {
+            this.prismaErrorService.handleError(error, 'Failed to create task');
+        }
+    }
+
+    async getTasks(): Promise<Task[]> {
+        return this.prisma.task.findMany();
+    }
+
+    async getTaskById(id: number): Promise<Task> {
+        const task = await this.prisma.task.findUnique({ where: { id } });
+        if (!task) throw new NotFoundException(`Task with ID ${id} not found`);
+        return task;
+    }
+
+    async updateTask(id: number, updateTaskDto: Partial<CreateTaskDto>) {
+        try {
+            await this.getTaskById(id);
+            return this.prisma.task.update({ where: { id }, data: updateTaskDto });
+        } catch (error) {
+            this.prismaErrorService.handleError(error, 'Failed to update task');
+        }
+    }
+
+    async deleteTask(id: number): Promise<void> {
+        try {
+            await this.getTaskById(id);
+            await this.prisma.task.delete({ where: { id } });
+        } catch (error) {
+            this.prismaErrorService.handleError(error, 'Failed to delete task');
+        }
+    }
+}
