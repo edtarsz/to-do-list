@@ -13,9 +13,10 @@ export class CreateTaskDto {
     @IsOptional()
     priority?: Priority;
 
+    // DatePipe en el front para separar fecha y hora
     @IsDateString()
     @IsOptional()
-    dueDate?: Date;
+    dueDateTime?: string;
 
     @IsBoolean()
     @IsOptional()

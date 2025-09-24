@@ -1,6 +1,5 @@
 import { Injectable, ConflictException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 
-
 @Injectable()
 export class PrismaErrorService {
     private prismaErrorMap: Record<string, any> = {

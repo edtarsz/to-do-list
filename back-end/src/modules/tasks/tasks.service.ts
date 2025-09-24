@@ -6,7 +6,10 @@ import { Task } from '@prisma/client';
 
 @Injectable()
 export class TasksService {
-    constructor(private prisma: PrismaService, private prismaErrorService: PrismaErrorService) { }
+    constructor(
+        private readonly prisma: PrismaService,
+        private readonly prismaErrorService: PrismaErrorService
+    ) { }
 
     async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
         try {
