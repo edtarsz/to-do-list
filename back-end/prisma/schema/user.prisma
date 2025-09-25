@@ -1,0 +1,16 @@
+model User {
+    id       Int    @id @default(autoincrement())
+    name     String
+    lastName String
+    username String
+    password String
+    role     Role   @default(USER)
+    tasks   Task[]
+    
+    @@map("users")
+}
+
+enum Role {
+    ADMIN
+    USER
+}

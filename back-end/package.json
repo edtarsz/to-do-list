@@ -6,6 +6,9 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "db:seed": "ts-node prisma/seeds/seed.ts",
+    "db:reset": "npx prisma db push --force-reset && npm run db:seed",
+    "db:push": "npx prisma db push && npm run db:seed",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",

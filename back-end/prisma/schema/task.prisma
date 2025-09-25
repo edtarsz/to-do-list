@@ -7,11 +7,15 @@ model Task {
   completed   Boolean  @default(false)
   createdAt   DateTime @default(now())
 
+  // Relacion de muchos a uno con User
+  userId Int
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   @@map("tasks")
 }
 
 enum Priority {
-    LOW
-    MEDIUM
-    HIGH
+  LOW
+  MEDIUM
+  HIGH
 }
