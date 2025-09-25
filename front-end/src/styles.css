@@ -10,7 +10,7 @@
 @font-face {
     font-family: 'UbuntuRegular';
     src: url('/assets/fonts/Ubuntu/Ubuntu-Regular.woff2') format('woff2');
-    font-weight: normal;        
+    font-weight: normal;
 }
 
 @font-face {
@@ -53,5 +53,5 @@
 }
 
 body {
-    font-family: var(--ubuntu-mono-regular);
+    font-family: var(--font-family-ubuntu-mono);
 }
