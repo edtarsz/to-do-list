@@ -1,9 +1,31 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { ConfigService } from '@nestjs/config';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(process.env.PORT ?? 3000);
-  console.log(`Server running on http://localhost:${process.env.PORT ?? 3000}`);
+
+  // Hace la magia 
+  app.enableCors({
+    origin: app.get(ConfigService).get('FRONTEND_URL'),
+    methods: 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS',
+    credentials: true,
+  });
+
+  // Sirve para validar los DTOs
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
+    forbidNonWhitelisted: true,
+    transform: true,
+    transformOptions: {
+      enableImplicitConversion: true,
+    }
+  }));
+
+  const PORT = app.get(ConfigService).get('PORT');
+
+  await app.listen(PORT);
+  console.log(`Server running on http://localhost:${PORT}`);
 }
 bootstrap();
