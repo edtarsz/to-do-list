@@ -6,25 +6,51 @@
 
 :root {
     /* Fonts */
-    /* --ubuntu-bold: 'UbuntuBold';
-    --ubuntu-regular: 'UbuntuRegular'; */
+    --ubuntu-regular: 'UbuntuRegular';
+    --ubuntu-bold: 'UbuntuBold';
+
+    --ubuntu-mono-regular: 'UbuntuMonoRegular';
+    --ubuntu-mono-bold: 'UbuntuMonoBold';
 
     /* Colors */
-    /* --primary-color: #141B41;
-    --primary-color-hover: #293175;
+    --primary-color: #F4F4F4;
+    --secondary-color: #FFFFFF;
 
-    --secondary-color: #626581;
-    --tertiary-color: #D28600;
+    --dark: #1F1F1F;
+    --gray: #8F8F8F;
+    --purple: #753FDA;
 
-    --card-background-color: #272B52;
-    --small-card-background-color: #4C4D74; */
+    --high: #870505;
+    --medium: #E2A400;
+    --low: #047857;
+
+    --profile: #F2B6C9;
 }
 
-body{
-    /*  */
+body {
+    font-family: var(--ubuntu-mono-regular);
 }
 
 @font-face {
-    /* font-family: ;
-    src: url(); */
+    font-family: 'UbuntuRegular';
+    src: url('assets/fonts/Ubuntu/Ubuntu-Regular.woff2') format('woff2');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'UbuntuBold';
+    src: url('assets/fonts/Ubuntu/Ubuntu-Bold.woff2') format('woff2');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'UbuntuMonoRegular';
+    src: url('assets/fonts/Ubuntu_Mono/UbuntuMono-Regular.woff2') format('woff2');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'UbuntuMonoBold';
+    src: url('assets/fonts/Ubuntu_Mono/UbuntuMono-Bold.woff2') format('woff2');
+    font-weight: normal;
 }
