@@ -1,1 +1,30 @@
-/* You can add global styles to this file, and also import other style files */
+@import "tailwindcss";
+
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    /* Fonts */
+    /* --ubuntu-bold: 'UbuntuBold';
+    --ubuntu-regular: 'UbuntuRegular'; */
+
+    /* Colors */
+    /* --primary-color: #141B41;
+    --primary-color-hover: #293175;
+
+    --secondary-color: #626581;
+    --tertiary-color: #D28600;
+
+    --card-background-color: #272B52;
+    --small-card-background-color: #4C4D74; */
+}
+
+body{
+    /*  */
+}
+
+@font-face {
+    /* font-family: ;
+    src: url(); */
+}
