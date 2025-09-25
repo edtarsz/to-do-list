@@ -1,17 +1,42 @@
 @import "tailwindcss";
 
+@theme {
+    --font-family-ubuntu: 'UbuntuRegular', sans-serif;
+    --font-family-ubuntu-bold: 'UbuntuBold', sans-serif;
+    --font-family-ubuntu-mono: 'UbuntuMonoRegular', monospace;
+    --font-family-ubuntu-mono-bold: 'UbuntuMonoBold', monospace;
+}
+
+@font-face {
+    font-family: 'UbuntuRegular';
+    src: url('/assets/fonts/Ubuntu/Ubuntu-Regular.woff2') format('woff2');
+    font-weight: normal;        
+}
+
+@font-face {
+    font-family: 'UbuntuBold';
+    src: url('/assets/fonts/Ubuntu/Ubuntu-Bold.woff2') format('woff2');
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'UbuntuMonoRegular';
+    src: url('/assets/fonts/Ubuntu_Mono/UbuntuMono-Regular.woff2') format('woff2');
+    font-weight: normal;
+}
+
+@font-face {
+    font-family: 'UbuntuMonoBold';
+    src: url('/assets/fonts/Ubuntu_Mono/UbuntuMono-Bold.woff2') format('woff2');
+    font-weight: bold;
+}
+
+
 * {
     box-sizing: border-box;
 }
 
 :root {
-    /* Fonts */
-    --ubuntu-regular: 'UbuntuRegular';
-    --ubuntu-bold: 'UbuntuBold';
-
-    --ubuntu-mono-regular: 'UbuntuMonoRegular';
-    --ubuntu-mono-bold: 'UbuntuMonoBold';
-
     /* Colors */
     --primary-color: #F4F4F4;
     --secondary-color: #FFFFFF;
@@ -29,28 +54,4 @@
 
 body {
     font-family: var(--ubuntu-mono-regular);
-}
-
-@font-face {
-    font-family: 'UbuntuRegular';
-    src: url('assets/fonts/Ubuntu/Ubuntu-Regular.woff2') format('woff2');
-    font-weight: normal;
-}
-
-@font-face {
-    font-family: 'UbuntuBold';
-    src: url('assets/fonts/Ubuntu/Ubuntu-Bold.woff2') format('woff2');
-    font-weight: normal;
-}
-
-@font-face {
-    font-family: 'UbuntuMonoRegular';
-    src: url('assets/fonts/Ubuntu_Mono/UbuntuMono-Regular.woff2') format('woff2');
-    font-weight: normal;
-}
-
-@font-face {
-    font-family: 'UbuntuMonoBold';
-    src: url('assets/fonts/Ubuntu_Mono/UbuntuMono-Bold.woff2') format('woff2');
-    font-weight: normal;
 }
