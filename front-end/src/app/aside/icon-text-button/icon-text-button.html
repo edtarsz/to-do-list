@@ -1,0 +1,14 @@
+<div
+  class="w-[35px] h-[35px] border-1 rounded-md flex items-center justify-center cursor-pointer transition-colors duration-200"
+  [style.backgroundColor]="bgColor"
+  [style.color]="textColor"
+  [style.borderColor]="borderColor"
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()"
+  (click)="click.emit()"
+>
+
+  <svg [attr.width]="iconSize" [attr.height]="iconSize" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <g [innerHTML]="iconSvg"></g>
+  </svg>
+</div>

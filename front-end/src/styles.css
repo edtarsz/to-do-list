@@ -40,10 +40,12 @@
     /* Colors */
     --primary-color: #F4F4F4;
     --secondary-color: #FFFFFF;
-
+    
+    --light: #FFFFFF;
     --dark: #1F1F1F;
     --gray: #8F8F8F;
     --purple: #753FDA;
+    --red: #870505;
 
     --high: #870505;
     --medium: #E2A400;
