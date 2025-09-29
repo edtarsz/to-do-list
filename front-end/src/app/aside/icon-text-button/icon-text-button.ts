@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-icon-text-button',
@@ -7,20 +8,26 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrl: './icon-text-button.css'
 })
 export class IconTextButton {
-  @Input() bgColor: string = 'transparent';
-  @Input() borderColor: string = 'var(--purple)';
-  @Input() textColor: string = 'var(--light)';
+  @Input() bgColor!: string;
+  @Input() borderColor!: string;
+  @Input() textColor!: string;
 
   @Input() iconSize: string = '21';
   @Input() iconSvg!: string;
   @Input() text!: string;
+  @Input() viewBox: string = '0 0 24 24';
 
-  @Output() click = new EventEmitter<void>();
+  // @Output() click = new EventEmitter<void>();
+
+  private sanitizer = inject(DomSanitizer);
+
+  sanitizeSvg(svg: string) {
+    return this.sanitizer.bypassSecurityTrustHtml(svg);
+  }
 
   onMouseEnter() {
-    this.bgColor = 'var(--purple)';
+    this.bgColor = this.borderColor;
     this.textColor = 'white';
-    this.borderColor = 'var(--purple)';
   }
 
   onMouseLeave() {

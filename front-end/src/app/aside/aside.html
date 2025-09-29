@@ -28,10 +28,19 @@
             <div class="flex items-center justify-between">
                 <h2 class="font-family-ubuntu-bold text-[var(--gray)]">LISTS</h2>
                 <div class="flex items-center gap-[0.5vw]">
-                    <app-icon-text-button [iconSvg]="trashIcon" [borderColor]="'var(--red)'" [textColor]="'var(--red)'">
+                    <app-icon-text-button 
+                        [iconSvg]="trashIcon" 
+                        [borderColor]="'var(--red)'"
+                        [textColor]="'var(--red)'"
+                        [viewBox]="'0 0 17 17'"
+                        [iconSize]="'17'">
                     </app-icon-text-button>
-                    <app-icon-text-button [iconSvg]="addIcon" [borderColor]="'var(--purple)'"
-                        [textColor]="'var(--purple)'">
+                    <app-icon-text-button 
+                        [iconSvg]="addIcon" 
+                        [borderColor]="'var(--purple)'"
+                        [textColor]="'var(--purple)'"
+                        [viewBox]="'0 0 21 21'"
+                        [iconSize]="'21'">
                     </app-icon-text-button>
                 </div>
             </div>
@@ -42,6 +51,7 @@
             </ul>
             }
         </div>
+        <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
     </div>
     <div>
         <h3>Eduardo Talavera Ramos</h3>
