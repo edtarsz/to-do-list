@@ -34,6 +34,14 @@ export class IconRegistryService {
       <path d="M8 18H8.01" stroke="#8F8F8F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       <path d="M12 18H12.01" stroke="#8F8F8F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       <path d="M16 18H16.01" stroke="#8F8F8F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    `,
+    close: `
+      <path d="M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    `,
+    send: `
+      <path d="M14.536 22.186C14.574 22.2807 14.64 22.3615 14.7253 22.4175C14.8105 22.4736 14.9108 22.5023 15.0128 22.4996C15.1148 22.497 15.2136 22.4633 15.2958 22.4029C15.3781 22.3426 15.4399 22.2585 15.473 22.162L21.973 3.162C22.005 3.0734 22.0111 2.97751 21.9906 2.88556C21.9701 2.79361 21.9238 2.7094 21.8572 2.64278C21.7906 2.57616 21.7064 2.5299 21.6144 2.50939C21.5225 2.48889 21.4266 2.495 21.338 2.527L2.33799 9.027C2.24148 9.0601 2.15741 9.12192 2.09706 9.20417C2.03671 9.28643 2.00296 9.38517 2.00035 9.48716C1.99773 9.58915 2.02638 9.68949 2.08245 9.77473C2.13851 9.85997 2.21931 9.92601 2.31399 9.964L10.244 13.144C10.4947 13.2444 10.7224 13.3945 10.9136 13.5852C11.1047 13.776 11.2552 14.0035 11.356 14.254L14.536 22.186Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M21.854 2.647L10.914 13.586" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     `
   };
 

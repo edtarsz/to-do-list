@@ -1,7 +1,8 @@
 <div class="h-screen w-screen flex gap-[1vw] bg-[var(--primary-color)] p-[2vw]">
+  <!-- min width provisional not deployment -->
   <app-aside class="aside" [ngClass]="{
-        'w-[20%]': interfaceService.isAsideOpen(),
-        'w-[7rem]': !interfaceService.isAsideOpen()
+        'w-[20%] min-w-[250px]': interfaceService.isAsideOpen(),
+        'w-[7rem] min-w-0': !interfaceService.isAsideOpen()
     }"></app-aside>
   <app-main class="w-full"></app-main>
 </div>

@@ -6,10 +6,11 @@ import { IconRegistryService } from '../services/icon-registry.service';
 import { InterfaceService } from '../services/interface.service';
 import { CommonModule } from '@angular/common';
 import { AsideSection } from "./aside-section/aside-section";
+import { AddList } from "./operations/add-list/add-list";
 
 @Component({
   selector: 'app-aside',
-  imports: [AsideItem, IconTextButton, CommonModule, AsideSection],
+  imports: [AsideItem, IconTextButton, CommonModule, AsideSection, AddList],
   templateUrl: './aside.html',
   styleUrl: './aside.css'
 })
@@ -29,6 +30,10 @@ export class Aside {
 
   toggleProfileSettings() {
     this.interfaceService.toggleProfileSettings();
+  }
+
+  toggleAddList() {
+    this.interfaceService.toggleAddList();
   }
 
   get showText() {

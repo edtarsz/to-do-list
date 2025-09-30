@@ -13,6 +13,8 @@ export class AsideItem {
 
   @Input() title!: string;
   @Input() color!: string;
+  @Input() bgColorHover?: string;
+  @Input() borderColor?: string;
 
   @Input() viewBox: string = '0 0 24 24';
   @Input() iconSvg!: string;

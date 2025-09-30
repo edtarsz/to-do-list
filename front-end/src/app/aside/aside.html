@@ -1,3 +1,6 @@
+@if (interfaceService.isAddListOpen()) {
+<app-add-list></app-add-list>
+}
 <div class="bg-[var(--secondary-color)] h-full rounded-2xl p-[1.5vw] flex flex-col justify-between">
     <div class="flex flex-col gap-[1vw]">
         <div class="flex items-center justify-between h-[3rem]">
@@ -22,9 +25,9 @@
 
         <app-aside-section [title]="'MENU'" [showText]="interfaceService.isAsideOpen()">
             <app-aside-item [title]="'To-do'" [iconSvg]="noteIcon" [iconSize]="'24'" [viewBox]="'0 0 24 24'"
-                [showText]="interfaceService.isAsideOpen()"></app-aside-item>
+                [showText]="interfaceService.isAsideOpen()" [bgColorHover]="'var(--primary-color)'"></app-aside-item>
             <app-aside-item [title]="'Calendar'" [iconSvg]="calendarIcon" [iconSize]="'24'" [viewBox]="'0 0 24 24'"
-                [showText]="interfaceService.isAsideOpen()"></app-aside-item>
+                [showText]="interfaceService.isAsideOpen()" [bgColorHover]="'var(--primary-color)'"></app-aside-item>
         </app-aside-section>
 
         <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
@@ -32,18 +35,19 @@
         <app-aside-section [title]="'LISTS'" [showText]="interfaceService.isAsideOpen()">
             <div section-buttons class="flex items-center gap-[0.5vw]">
                 <app-icon-text-button [iconSvg]="trashIcon" [borderColor]="'var(--red)'" [textColor]="'var(--red)'"
-                    [viewBox]="'0 0 17 17'" [iconSize]="'17'">
+                    [bgColorHover]="'var(--red)'" [viewBox]="'0 0 17 17'" [iconSize]="'17'">
                 </app-icon-text-button>
                 <app-icon-text-button [iconSvg]="addIcon" [borderColor]="'var(--purple)'" [textColor]="'var(--purple)'"
-                    [viewBox]="'0 0 21 21'" [iconSize]="'21'">
+                    [bgColorHover]="'var(--purple)'" [viewBox]="'0 0 21 21'" [iconSize]="'21'"
+                    (click)="toggleAddList()">
                 </app-icon-text-button>
             </div>
         </app-aside-section>
 
         <ul class="font-family-ubuntu-mono-bold flex flex-col">
             @for (list of listService.lists$(); track list.id) {
-            <app-aside-item [title]="list.title" [color]="list.color"
-                [showText]="interfaceService.isAsideOpen()"></app-aside-item>
+            <app-aside-item [title]="list.title" [color]="list.color" [showText]="interfaceService.isAsideOpen()"
+                [bgColorHover]="'var(--primary-color)'"></app-aside-item>
             }
         </ul>
         <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
@@ -51,12 +55,24 @@
     <div class="w-full flex flex-col gap-[0.5vw]">
         @if (interfaceService.isProfileSettingsOpen()) {
         <ul class="font-family-ubuntu-mono-bold flex flex-col">
-            <app-aside-item [title]="'Sign Out'"></app-aside-item>
-            <app-aside-item [title]="'Update Profile'"></app-aside-item>
+            <li class="gap-[1vw] flex items-center py-2 transition-transform duration-200 hover:bg-[var(--primary-color)] rounded-lg hover:cursor-pointer"
+                [ngClass]="{
+                    'hover:translate-x-1 hover:px-[1vw]': interfaceService.isAsideOpen(),
+                    'justify-center text-center': !interfaceService.isAsideOpen(),
+                }">
+                Sign Out
+            </li>
+            <li class="gap-[1vw] flex items-center py-2 transition-transform duration-200 hover:bg-[var(--primary-color)] rounded-lg hover:cursor-pointer"
+                [ngClass]="{
+                    'hover:translate-x-1 hover:px-[1vw]': interfaceService.isAsideOpen(),
+                    'justify-center text-center': !interfaceService.isAsideOpen(),
+                }">
+                Update Profile
+            </li>
         </ul>
         <hr class="w-8 border-[var(--purple)] border-t-4 m-auto rounded-4xl">
         }
-        <div class="p-2 h-auto flex justify-center items-center gap-[0.5vw] transition-transform duration-200 hover:bg-[var(--primary-color)] rounded-lg hover:cursor-pointer"
+        <div class="p-2 h-auto flex justify-center items-center gap-[1vw] transition-transform duration-200 hover:bg-[var(--primary-color)] rounded-lg hover:cursor-pointer"
             [ngClass]="{ 
             'justify-center px-0': !interfaceService.isAsideOpen() 
         }" (click)="toggleProfileSettings()">
