@@ -21,6 +21,8 @@ export class AsideItem {
   @Input() iconSize: string = '21';
 
   @Input() showText: boolean = true;
+  
+  @Input() deleting: boolean = false;
 
   sanitizeSvg(svg: string) {
     return this.sanitizer.bypassSecurityTrustHtml(svg);

@@ -34,11 +34,23 @@
 
         <app-aside-section [title]="'LISTS'" [showText]="interfaceService.isAsideOpen()">
             <div section-buttons class="flex items-center gap-[0.5vw]">
-                <app-icon-text-button [iconSvg]="trashIcon" [borderColor]="'var(--red)'" [textColor]="'var(--red)'"
-                    [bgColorHover]="'var(--red)'" [viewBox]="'0 0 17 17'" [iconSize]="'17'">
+                <app-icon-text-button 
+                    [iconSvg]="trashIcon" 
+                    [borderColor]="'var(--red)'" 
+                    [textColor]="'var(--red)'"
+                    [bgColorHover]="'var(--red)'" 
+                    [viewBox]="'0 0 17 17'" 
+                    [iconSize]="'17'" 
+                    [isActive]="interfaceService.deleteActive()"
+                    (click)="toggleDeleteActive()">
                 </app-icon-text-button>
-                <app-icon-text-button [iconSvg]="addIcon" [borderColor]="'var(--purple)'" [textColor]="'var(--purple)'"
-                    [bgColorHover]="'var(--purple)'" [viewBox]="'0 0 21 21'" [iconSize]="'21'"
+                <app-icon-text-button 
+                    [iconSvg]="addIcon" 
+                    [borderColor]="'var(--purple)'" 
+                    [textColor]="'var(--purple)'"
+                    [bgColorHover]="'var(--purple)'" 
+                    [viewBox]="'0 0 21 21'" 
+                    [iconSize]="'21'"
                     (click)="toggleAddList()">
                 </app-icon-text-button>
             </div>
@@ -47,7 +59,7 @@
         <ul class="font-family-ubuntu-mono-bold flex flex-col">
             @for (list of listService.lists$(); track list.id) {
             <app-aside-item [title]="list.title" [color]="list.color" [showText]="interfaceService.isAsideOpen()"
-                [bgColorHover]="'var(--primary-color)'"></app-aside-item>
+                [bgColorHover]="'var(--primary-color)'" [deleting]="interfaceService.deleteActive()"></app-aside-item>
             }
         </ul>
         <hr class="border-[#1f1f1f20] border-t-2 border-dashed">

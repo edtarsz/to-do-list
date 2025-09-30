@@ -11,9 +11,9 @@
         <g [innerHTML]="sanitizeSvg(iconSvg)"></g>
     </svg>
     } @else {
-    <div class="rounded-full w-2 h-2 inline-block my-2" [style.background-color]="color"></div>
+    <div class="rounded-full w-2 h-2 inline-block my-2" [style.background-color]="color" [class.shake]="deleting"></div>
     }
     @if (showText) {
-    <a href="#">{{ title }}</a>
+    <a href="#" [class.shake]="deleting">{{ title }}</a>
     }
 </li>

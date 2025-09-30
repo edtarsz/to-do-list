@@ -1,22 +1,50 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, computed } from '@angular/core';
+
+interface InterfaceState {
+    isAsideOpen: boolean;
+    isProfileSettingsOpen: boolean;
+    isAddListOpen: boolean;
+    deleteActive: boolean;
+}
 
 @Injectable({
     providedIn: 'root'
 })
 export class InterfaceService {
-    isAsideOpen = signal(true);
-    isProfileSettingsOpen = signal(false);
-    isAddListOpen = signal(false);
+    private state = signal<InterfaceState>({
+        isAsideOpen: true,
+        isProfileSettingsOpen: false,
+        isAddListOpen: false,
+        deleteActive: false
+    });
+
+    isAsideOpen = computed(() => this.state().isAsideOpen);
+    isProfileSettingsOpen = computed(() => this.state().isProfileSettingsOpen);
+    isAddListOpen = computed(() => this.state().isAddListOpen);
+    deleteActive = computed(() => this.state().deleteActive);
 
     toggleAside() {
-        this.isAsideOpen.update(v => !v);
+        this.state.update(v => ({ ...v, isAsideOpen: !v.isAsideOpen }));
     }
 
     toggleProfileSettings() {
-        this.isProfileSettingsOpen.update(v => !v);
+        this.state.update(v => ({ ...v, isProfileSettingsOpen: !v.isProfileSettingsOpen }));
     }
 
     toggleAddList() {
-        this.isAddListOpen.update(v => !v);
+        this.state.update(v => ({ ...v, isAddListOpen: !v.isAddListOpen }));
+    }
+
+    toggleDeleteActive() {
+        this.state.update(v => ({ ...v, deleteActive: !v.deleteActive }));
+    }
+
+    closeAll() {
+        this.state.set({
+            isAsideOpen: false,
+            isProfileSettingsOpen: false,
+            isAddListOpen: false,
+            deleteActive: false
+        });
     }
 }

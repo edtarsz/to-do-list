@@ -22,7 +22,7 @@ export class AddList {
     '#B6E7F2',
     '#8FD3B1',
     '#F2B6C9',
-    '#FFFACD',
+    '#D38F8F',
     '#D5A6BD',
     '#C1E1C1',
     '#FFB347',

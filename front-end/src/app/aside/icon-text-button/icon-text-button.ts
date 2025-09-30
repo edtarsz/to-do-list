@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input, Output } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
@@ -14,13 +14,17 @@ export class IconTextButton {
   @Input() bgColor?: string;
   @Input() borderColor?: string;
   @Input() bgColorHover?: string;
+  @Input() bgColorActive?: string;
 
   @Input() textColor?: string;
-  @Input() text?: string;
+  @Input() textColorActive?: string;
 
+  @Input() text?: string;
   @Input() iconSize: string = '21';
   @Input() iconSvg!: string;
   @Input() viewBox: string = '0 0 24 24';
+
+  @Input() isActive: boolean = false;
 
   hover = false;
 
@@ -36,11 +40,18 @@ export class IconTextButton {
     this.hover = false;
   }
 
+  // Prioridad Activo > Hover > Default
   get currentBgColor() {
+    if (this.isActive) {
+      return this.bgColorActive ?? this.bgColorHover ?? this.bgColor;
+    }
     return this.hover ? this.bgColorHover : this.bgColor ?? 'transparent';
   }
 
   get currentTextColor() {
+    if (this.isActive) {
+      return this.textColorActive ?? 'white';
+    }
     return this.hover ? 'white' : this.textColor ?? this.borderColor;
   }
 }

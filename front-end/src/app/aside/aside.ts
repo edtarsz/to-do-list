@@ -25,6 +25,9 @@ export class Aside {
   calendarIcon = this.iconRegistryService.getIcon('calendar');
 
   toggleAside() {
+    if (this.interfaceService.deleteActive()) {
+      this.interfaceService.toggleDeleteActive();
+    }
     this.interfaceService.toggleAside();
   }
 
@@ -36,7 +39,7 @@ export class Aside {
     this.interfaceService.toggleAddList();
   }
 
-  get showText() {
-    return this.interfaceService.isAsideOpen();
+  toggleDeleteActive() {
+    this.interfaceService.toggleDeleteActive();
   }
 }
