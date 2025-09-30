@@ -1,0 +1,16 @@
+<div class="flex flex-col">
+    <div class="flex items-center justify-between" [ngClass]="{ 'justify-center': !showText }">
+        <h2 class="font-family-ubuntu-bold text-[var(--gray)] py-2 transition-all duration-200"
+            [ngClass]="{'text-center': !showText,}">
+            {{ title }}
+        </h2>
+        @if (interfaceService.isAsideOpen()) {
+            <ng-content select="[section-buttons]"></ng-content>
+        }
+    </div>
+    
+    <!-- Lista de items pasada desde fuera -->
+    <ul class="font-family-ubuntu-mono-bold flex flex-col">
+        <ng-content></ng-content>
+    </ul>
+</div>

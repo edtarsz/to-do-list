@@ -5,10 +5,11 @@ import { IconTextButton } from './icon-text-button/icon-text-button';
 import { IconRegistryService } from '../services/icon-registry.service';
 import { InterfaceService } from '../services/interface.service';
 import { CommonModule } from '@angular/common';
+import { AsideSection } from "./aside-section/aside-section";
 
 @Component({
   selector: 'app-aside',
-  imports: [AsideItem, IconTextButton, CommonModule],
+  imports: [AsideItem, IconTextButton, CommonModule, AsideSection],
   templateUrl: './aside.html',
   styleUrl: './aside.css'
 })

@@ -1,5 +1,5 @@
 <div class="bg-[var(--secondary-color)] h-full rounded-2xl p-[1.5vw] flex flex-col justify-between">
-    <div class="flex flex-col gap-[1.5vw]">
+    <div class="flex flex-col gap-[1vw]">
         <div class="flex items-center justify-between h-[3rem]">
             @if (interfaceService.isAsideOpen()) {
             <div class="flex items-center gap-[0.5vw]">
@@ -17,46 +17,47 @@
             </div>
             }
         </div>
-        <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
-        <div class="flex flex-col gap-2">
-            <h2 class="font-family-ubuntu-bold text-[var(--gray)]"
-                [ngClass]="{ 'text-center': !interfaceService.isAsideOpen() }">MENU</h2>
-            <ul class="font-family-ubuntu-mono-bold flex flex-col">
-                <app-aside-item [title]="'To-do'" [iconSvg]="noteIcon" [iconSize]="'24'" [viewBox]="'0 0 24 24'"
-                    [showText]="interfaceService.isAsideOpen()"></app-aside-item>
-                <app-aside-item [title]="'Calendar'" [iconSvg]="calendarIcon" [iconSize]="'24'" [viewBox]="'0 0 24 24'"
-                    [showText]="interfaceService.isAsideOpen()"></app-aside-item>
-            </ul>
-        </div>
-        <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
-        <div class="flex flex-col font-family-ubuntu-mono-bold gap-2">
-            <div class="flex items-center justify-between"
-                [ngClass]="{ 'justify-center': !interfaceService.isAsideOpen() }">
-                <h2 class="font-family-ubuntu-bold text-[var(--gray)] py-2"
-                    [ngClass]="{ 'text-center': !interfaceService.isAsideOpen() }">LISTS</h2>
-                @if (interfaceService.isAsideOpen()) {
-                <div class="flex items-center gap-[0.5vw] h-full">
-                    <app-icon-text-button [iconSvg]="trashIcon" [borderColor]="'var(--red)'" [textColor]="'var(--red)'"
-                        [viewBox]="'0 0 17 17'" [iconSize]="'17'">
-                    </app-icon-text-button>
-                    <app-icon-text-button [iconSvg]="addIcon" [borderColor]="'var(--purple)'"
-                        [textColor]="'var(--purple)'" [viewBox]="'0 0 21 21'" [iconSize]="'21'">
-                    </app-icon-text-button>
-                </div>
-                }
-            </div>
 
-            <ul class="font-family-ubuntu-mono-bold flex flex-col">
-                @for (list of listService.lists$(); track list.id) {
-                <app-aside-item [title]="list.title" [color]="list.color"
-                    [showText]="interfaceService.isAsideOpen()"></app-aside-item>
-                }
-            </ul>
-        </div>
+        <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
+
+        <app-aside-section [title]="'MENU'" [showText]="interfaceService.isAsideOpen()">
+            <app-aside-item [title]="'To-do'" [iconSvg]="noteIcon" [iconSize]="'24'" [viewBox]="'0 0 24 24'"
+                [showText]="interfaceService.isAsideOpen()"></app-aside-item>
+            <app-aside-item [title]="'Calendar'" [iconSvg]="calendarIcon" [iconSize]="'24'" [viewBox]="'0 0 24 24'"
+                [showText]="interfaceService.isAsideOpen()"></app-aside-item>
+        </app-aside-section>
+
+        <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
+
+        <app-aside-section [title]="'LISTS'" [showText]="interfaceService.isAsideOpen()">
+            <div section-buttons class="flex items-center gap-[0.5vw]">
+                <app-icon-text-button [iconSvg]="trashIcon" [borderColor]="'var(--red)'" [textColor]="'var(--red)'"
+                    [viewBox]="'0 0 17 17'" [iconSize]="'17'">
+                </app-icon-text-button>
+                <app-icon-text-button [iconSvg]="addIcon" [borderColor]="'var(--purple)'" [textColor]="'var(--purple)'"
+                    [viewBox]="'0 0 21 21'" [iconSize]="'21'">
+                </app-icon-text-button>
+            </div>
+        </app-aside-section>
+
+        <ul class="font-family-ubuntu-mono-bold flex flex-col">
+            @for (list of listService.lists$(); track list.id) {
+            <app-aside-item [title]="list.title" [color]="list.color"
+                [showText]="interfaceService.isAsideOpen()"></app-aside-item>
+            }
+        </ul>
         <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
     </div>
-    <div>
-        <h3>Eduardo Talavera Ramos</h3>
-        <h4>Normal User</h4>
+    <div
+        class="h-[3vw] flex items-center gap-[0.5vw] transition-transform duration-200 hover:bg-[var(--primary-color)] rounded-lg hover:cursor-pointer">
+        <div class="w-[50px] h-[50px] flex items-center justify-center bg-[var(--pink)] rounded-full">
+            <img src="assets/svgs/user.svg" alt="" class="w-[35px] h-[35px]">
+        </div>
+        @if (interfaceService.isAsideOpen()) {
+        <div class="font-family-ubuntu-mono-bold text-sm">
+            <h3>Ramosz</h3>
+            <h4 class="text-[var(--gray)]">Normal User</h4>
+        </div>
+        }
     </div>
 </div>
