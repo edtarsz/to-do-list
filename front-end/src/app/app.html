@@ -1,5 +1,5 @@
-<div class="h-screen w-screen flex gap-[1vw] bg-[var(--primary-color)] p-[2vw]">
-  <app-aside [ngClass]="{
+<div class="h-screen w-screen flex gap-[1vw] bg-[var(--primary-color)] p-[2vw] transition-[width] duration-300">
+  <app-aside class="aside" [ngClass]="{
         'w-[20%]': interfaceService.isAsideOpen(),
         'w-[7rem]': !interfaceService.isAsideOpen()
     }"></app-aside>

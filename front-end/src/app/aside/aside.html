@@ -48,10 +48,12 @@
         </ul>
         <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
     </div>
-    <div
-        class="h-[3vw] flex items-center gap-[0.5vw] transition-transform duration-200 hover:bg-[var(--primary-color)] rounded-lg hover:cursor-pointer">
-        <div class="w-[50px] h-[50px] flex items-center justify-center bg-[var(--pink)] rounded-full">
-            <img src="assets/svgs/user.svg" alt="" class="w-[35px] h-[35px]">
+    <div class="p-2 h-auto flex justify-center items-center gap-[0.5vw] transition-transform duration-200 hover:bg-[var(--primary-color)] rounded-lg hover:cursor-pointer"
+        [ngClass]="{ 
+          'justify-center px-0': !interfaceService.isAsideOpen() 
+        }">
+        <div class="w-[40px] h-[40px] flex items-center justify-center bg-[var(--pink)] rounded-full">
+            <img src="assets/svgs/user.svg" alt="" class="w-[30px] h-[30px]">
         </div>
         @if (interfaceService.isAsideOpen()) {
         <div class="font-family-ubuntu-mono-bold text-sm">
