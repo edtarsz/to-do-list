@@ -1,12 +1,12 @@
 import { Component, inject, Signal } from '@angular/core';
-import { ListService } from '../services/lists.service';
+import { ListService } from '../../services/lists.service';
 import { AsideItem } from "./aside-item/aside-item";
-import { IconTextButton } from './icon-text-button/icon-text-button';
-import { IconRegistryService } from '../services/icon-registry.service';
-import { InterfaceService } from '../services/interface.service';
+import { IconRegistryService } from '../../services/icon-registry.service';
+import { InterfaceService } from '../../services/interface.service';
 import { CommonModule } from '@angular/common';
 import { AsideSection } from "./aside-section/aside-section";
 import { AddList } from "./operations/add-list/add-list";
+import { IconTextButton } from '../icon-text-button/icon-text-button';
 
 @Component({
   selector: 'app-aside',

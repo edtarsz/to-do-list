@@ -1,11 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Aside } from "./aside/aside";
+import { InterfaceService } from '../services/interface.service';
+import { CommonModule } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-main',
-  imports: [],
+  imports: [Aside, CommonModule, RouterOutlet],
   templateUrl: './main.html',
   styleUrl: './main.css'
 })
 export class Main {
-
+  public interfaceService = inject(InterfaceService);
 }

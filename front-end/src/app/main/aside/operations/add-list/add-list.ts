@@ -1,9 +1,9 @@
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
-import { InterfaceService } from '../../../services/interface.service';
-import { AsideItem } from "../../aside-item/aside-item";
-import { IconTextButton } from "../../icon-text-button/icon-text-button";
-import { IconRegistryService } from '../../../services/icon-registry.service';
 import { CommonModule } from '@angular/common';
+import { IconRegistryService } from '../../../../services/icon-registry.service';
+import { InterfaceService } from '../../../../services/interface.service';
+import { IconTextButton } from '../../../icon-text-button/icon-text-button';
+import { AsideItem } from '../../aside-item/aside-item';
 
 @Component({
   selector: 'app-add-list',

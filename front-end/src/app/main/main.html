@@ -1,3 +1,10 @@
-<main class="bg-white h-full w-full rounded-2xl p-[1.5vw]">
-    <p>main works!</p>
+<main class="h-screen w-screen flex gap-[1vw] bg-[var(--primary-color)] p-[2vw]">
+    <!-- min width provisional not deployment -->
+    <app-aside class="aside" [ngClass]="{
+        'w-[20%] min-w-[250px]': interfaceService.isAsideOpen(),
+        'w-[7rem] min-w-0': !interfaceService.isAsideOpen()
+    }"></app-aside>
+    <div class="flex-1 h-full">
+        <router-outlet></router-outlet>
+    </div>
 </main>
