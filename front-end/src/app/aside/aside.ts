@@ -27,6 +27,10 @@ export class Aside {
     this.interfaceService.toggleAside();
   }
 
+  toggleProfileSettings() {
+    this.interfaceService.toggleProfileSettings();
+  }
+
   get showText() {
     return this.interfaceService.isAsideOpen();
   }

@@ -48,18 +48,27 @@
         </ul>
         <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
     </div>
-    <div class="p-2 h-auto flex justify-center items-center gap-[0.5vw] transition-transform duration-200 hover:bg-[var(--primary-color)] rounded-lg hover:cursor-pointer"
-        [ngClass]="{ 
-          'justify-center px-0': !interfaceService.isAsideOpen() 
-        }">
-        <div class="w-[40px] h-[40px] flex items-center justify-center bg-[var(--pink)] rounded-full">
-            <img src="assets/svgs/user.svg" alt="" class="w-[30px] h-[30px]">
-        </div>
-        @if (interfaceService.isAsideOpen()) {
-        <div class="font-family-ubuntu-mono-bold text-sm">
-            <h3>Ramosz</h3>
-            <h4 class="text-[var(--gray)]">Normal User</h4>
-        </div>
+    <div class="w-full flex flex-col gap-[0.5vw]">
+        @if (interfaceService.isProfileSettingsOpen()) {
+        <ul class="font-family-ubuntu-mono-bold flex flex-col">
+            <app-aside-item [title]="'Sign Out'"></app-aside-item>
+            <app-aside-item [title]="'Update Profile'"></app-aside-item>
+        </ul>
+        <hr class="w-8 border-[var(--purple)] border-t-4 m-auto rounded-4xl">
         }
+        <div class="p-2 h-auto flex justify-center items-center gap-[0.5vw] transition-transform duration-200 hover:bg-[var(--primary-color)] rounded-lg hover:cursor-pointer"
+            [ngClass]="{ 
+            'justify-center px-0': !interfaceService.isAsideOpen() 
+        }" (click)="toggleProfileSettings()">
+            <div class="w-[40px] h-[40px] flex items-center justify-center bg-[var(--pink)] rounded-full">
+                <img src="assets/svgs/user.svg" alt="" class="w-[30px] h-[30px]">
+            </div>
+            @if (interfaceService.isAsideOpen()) {
+            <div class="font-family-ubuntu-mono-bold text-sm">
+                <h3>Ramosz</h3>
+                <h4 class="text-[var(--gray)]">Normal User</h4>
+            </div>
+            }
+        </div>
     </div>
 </div>
