@@ -15,6 +15,11 @@ export const routes: Routes = [
             {
                 path: 'calendar',
                 component: Calendar
+            },
+            {
+                path: '',
+                redirectTo: 'task',
+                pathMatch: 'full'
             }
         ]
     },
