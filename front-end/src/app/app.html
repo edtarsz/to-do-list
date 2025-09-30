@@ -1,4 +1,7 @@
-<div class="h-screen w-screen grid grid-cols-4 gap-[1vw] bg-[var(--primary-color)] p-[2vw]">
-  <app-aside class="col-span-1"></app-aside>
-  <app-main class="col-span-3"></app-main>
+<div class="h-screen w-screen flex gap-[1vw] bg-[var(--primary-color)] p-[2vw]">
+  <app-aside [ngClass]="{
+        'w-[20%]': interfaceService.isAsideOpen(),
+        'w-[7rem]': !interfaceService.isAsideOpen()
+    }"></app-aside>
+  <app-main class="w-full"></app-main>
 </div>

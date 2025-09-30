@@ -8,18 +8,16 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrl: './icon-text-button.css'
 })
 export class IconTextButton {
+  private sanitizer = inject(DomSanitizer);
+
   @Input() bgColor!: string;
   @Input() borderColor!: string;
   @Input() textColor!: string;
+  @Input() text!: string;
 
   @Input() iconSize: string = '21';
   @Input() iconSvg!: string;
-  @Input() text!: string;
   @Input() viewBox: string = '0 0 24 24';
-
-  // @Output() click = new EventEmitter<void>();
-
-  private sanitizer = inject(DomSanitizer);
 
   sanitizeSvg(svg: string) {
     return this.sanitizer.bypassSecurityTrustHtml(svg);
