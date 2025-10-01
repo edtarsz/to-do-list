@@ -11,7 +11,7 @@
     <div class="w-full h-full bg-[var(--secondary-color)] rounded-2xl p-[1.5vw] shadow-md">
         <div class="relative w-full h-full rounded-xl overflow-hidden">
             @for (image of images; track $index) {
-            <img [src]="image" alt="Slide {{$index + 1}}"
+            <img draggable="false" [src]="image" alt="Slide {{$index + 1}}"
                 class="absolute top-0 left-0 w-full h-full object-cover object-center rounded-xl transition-opacity duration-1000 cursor-pointer"
                 [class.opacity-100]="currentIndex === $index" [class.opacity-0]="currentIndex !== $index"
                 (click)="nextSlide()">
