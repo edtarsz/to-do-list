@@ -1,20 +1,19 @@
-<div class="w-[35px] h-[35px] rounded-md flex items-center justify-center cursor-pointer transition-colors duration-200"
+<div
+  class="w-[35px] h-[35px] rounded-md flex items-center justify-center cursor-pointer transition-colors duration-200 gap-2"
   [ngClass]="{ 
     'border': borderColor, 
-    'w-full p-2': text, 
-  }" 
-  [style.backgroundColor]="currentBgColor || null"
-  [style.color]="currentTextColor || null" 
-  [style.borderColor]="borderColor || null" 
-  (mouseenter)="onMouseEnter()"
-  (mouseleave)="onMouseLeave()">
+    'w-full h-full p-2': text, 
+  }" [style.backgroundColor]="currentBgColor || null" [style.color]="currentTextColor || null"
+  [style.borderColor]="borderColor || null" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
 
   @if (text) {
-    <span class="p-2">{{ text }}</span>
+  <span>{{ text }}</span>
   }
 
+  @if (iconSvg) {
   <svg [attr.width]="iconSize" [attr.height]="iconSize" [attr.viewBox]="viewBox" fill="none" stroke="currentColor"
     xmlns="http://www.w3.org/2000/svg">
     <g [innerHTML]="sanitizeSvg(iconSvg)"></g>
   </svg>
+  }
 </div>
