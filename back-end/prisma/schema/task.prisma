@@ -3,9 +3,14 @@ model Task {
   title       String
   description String?
   priority    Priority @default(MEDIUM)
-  dueDateTime String?
-  completed   Boolean  @default(false)
-  createdAt   DateTime @default(now())
+
+  startDate String?
+  dueDate String?
+
+  startTime String?
+  dueTime String?
+
+  completed Boolean @default(false)
 
   // Relacion de muchos a uno con User
   userId Int

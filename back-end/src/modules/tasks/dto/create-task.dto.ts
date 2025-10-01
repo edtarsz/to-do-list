@@ -1,4 +1,4 @@
-import { IsEnum, IsOptional, IsString, IsDateString, IsBoolean, IsNumber, MinLength, MaxLength } from 'class-validator';
+import { IsEnum, IsOptional, IsString, IsDateString, IsBoolean, MinLength, MaxLength } from 'class-validator';
 import { Priority } from '@prisma/client';
 
 export class CreateTaskDto {
@@ -16,10 +16,21 @@ export class CreateTaskDto {
     @IsOptional()
     priority?: Priority;
 
-    // DatePipe en el front para separar fecha y hora
     @IsDateString()
     @IsOptional()
-    dueDateTime?: string;
+    startDate?: string;
+
+    @IsDateString()
+    @IsOptional()
+    dueDate?: string;
+
+    @IsDateString()
+    @IsOptional()
+    startTime?: string;
+
+    @IsDateString()
+    @IsOptional()
+    dueTime?: string;
 
     @IsBoolean()
     @IsOptional()

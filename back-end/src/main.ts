@@ -14,14 +14,9 @@ async function bootstrap() {
   });
 
   // Sirve para validar los DTOs
-  app.useGlobalPipes(new ValidationPipe({
-    whitelist: true,
-    forbidNonWhitelisted: true,
-    transform: true,
-    transformOptions: {
-      enableImplicitConversion: true,
-    }
-  }));
+  app.useGlobalPipes(new ValidationPipe());
+
+  app.setGlobalPrefix('api');
 
   const PORT = app.get(ConfigService).get('PORT');
 
