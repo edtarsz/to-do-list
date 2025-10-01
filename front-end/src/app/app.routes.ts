@@ -15,6 +15,11 @@ export const routes: Routes = [
                 path: 'register',
                 loadComponent: () => import('./auth/register/register').then(m => m.Register),
             },
+            {
+                path: '',
+                redirectTo: 'login',
+                pathMatch: 'full'
+            }
         ]
     },
     {
@@ -30,11 +35,6 @@ export const routes: Routes = [
                 pathMatch: 'full'
             }
         ]
-    },
-    {
-        path: '',
-        redirectTo: '/login',
-        pathMatch: 'full'
     },
     {
         path: '**',
