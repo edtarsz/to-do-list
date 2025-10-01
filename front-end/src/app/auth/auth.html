@@ -9,11 +9,22 @@
         </div>
     </div>
     <div class="w-full h-full bg-[var(--secondary-color)] rounded-2xl p-[1.5vw] shadow-md">
-        <img src="assets/images/calendar.png" alt="" class="w-full h-full object-cover object-left rounded-xl">
+        <div class="relative w-full h-full rounded-xl overflow-hidden">
+            @for (image of images; track $index) {
+            <img [src]="image" alt="Slide {{$index + 1}}"
+                class="absolute top-0 left-0 w-full h-full object-cover object-center rounded-xl transition-opacity duration-1000 cursor-pointer"
+                [class.opacity-100]="currentIndex === $index" [class.opacity-0]="currentIndex !== $index"
+                (click)="nextSlide()">
+            }
+        </div>
+
         <div class="m-auto relative bottom-10 flex justify-around items-center w-30 lg:w-40 gap-4 rounded-2xl">
-            <div class="bg-[var(--purple)] w-full h-1 rounded-2xl shadow-md"></div>
-            <div class="bg-[var(--light-purple)] w-full h-1 rounded-2xl shadow-sm"></div>
-            <div class="bg-[var(--light-purple)] w-full h-1 rounded-2xl shadow-md"></div>
+            @for (image of images; track $index) {
+            <div class="w-[100%] bg-[var(--purple)] h-1 rounded-2xl shadow-md transition-all duration-500 cursor-pointer"
+                [class.bg-[var(--purple)]]="currentIndex === $index"
+                [class.bg-[var(--light-purple)]]="currentIndex !== $index" [class.w-full]="currentIndex === $index" (click)="nextSlide()">
+            </div>
+            }
         </div>
     </div>
 </div>
