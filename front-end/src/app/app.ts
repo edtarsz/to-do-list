@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Main } from './main/main';
 import { Aside } from './main/aside/aside';
 import { CommonModule } from '@angular/common';
-import { InterfaceService } from './services/interface.service';
+import { InterfaceService } from './global-services/interface.service';
 import { RouterOutlet } from '@angular/router';
 
 @Component({

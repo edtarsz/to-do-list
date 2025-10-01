@@ -5,12 +5,14 @@ import { PrismaService } from './prisma/prisma.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { TasksModule } from './modules/tasks/tasks.module';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
     PrismaModule,
     UsersModule,
     TasksModule,
+    AuthModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
@@ -18,7 +20,8 @@ import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
   ],
   providers: [PrismaService,
     {
-      provide: 'APP_GUARD', useClass: JwtAuthGuard,
+      provide: 'APP_GUARD', 
+      useClass: JwtAuthGuard,
     }
   ],
   controllers: [],

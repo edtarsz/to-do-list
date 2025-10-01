@@ -10,7 +10,7 @@ interface InterfaceState {
 @Injectable({
     providedIn: 'root'
 })
-export class InterfaceService {
+    export class InterfaceService {
     private state = signal<InterfaceState>({
         isAsideOpen: true,
         isProfileSettingsOpen: false,
@@ -39,6 +39,7 @@ export class InterfaceService {
         this.state.update(v => ({ ...v, deleteActive: !v.deleteActive }));
     }
 
+    // Used when signing out
     closeAll() {
         this.state.set({
             isAsideOpen: false,

@@ -1,12 +1,13 @@
-<app-auth-section [buttonText]="'Sign in'" [title]="'Sign in'"
-    [description]="`Don't have an account?`" [route]="'/auth/register'" [routeText]="'Sign up'">
+<app-auth-section [formGroup]="loginForm" [buttonText]="'Sign in'" [title]="'Sign in'"
+    [description]="`Don't have an account?`" [route]="'/register'" [routeText]="'Sign up'" [buttonAction]="'login'"
+    (formSubmit)="onSubmit()">
     <div class="flex flex-col gap-5">
         <div class="flex gap-[2vw]">
             <input type="text" placeholder="Enter your username"
                 class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200">
         </div>
         <div class="flex gap-[2vw]">
-            <input type="text" placeholder="Enter your password"
+            <input type="password" placeholder="Enter your password"
                 class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200">
         </div>
     </div>

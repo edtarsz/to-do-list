@@ -5,6 +5,7 @@ import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideHttpClient } from '@angular/common/http';
 
+// withInterceptors
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(),

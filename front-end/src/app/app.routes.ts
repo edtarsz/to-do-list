@@ -1,26 +1,29 @@
 import { Routes } from '@angular/router';
-import { Main } from './main/main';
-import { Task } from './main/task/task';
-import { Calendar } from './main/calendar/calendar';
-import { Login } from './auth/login/login';
-import { Register } from './auth/register/register';
-import { Auth } from './auth/auth';
+import { authGuard, publicGuard } from './auth/auth.guard';
 
 export const routes: Routes = [
     {
-        path: 'auth',
-        component: Auth,
+        path: '',
+        loadComponent: () => import('./auth/auth').then(m => m.Auth),
+        canActivate: [publicGuard],
         children: [
-            { path: 'login', component: Login },
-            { path: 'register', component: Register }
+            {
+                path: 'login',
+                loadComponent: () => import('./auth/login/login').then(m => m.Login),
+            },
+            {
+                path: 'register',
+                loadComponent: () => import('./auth/register/register').then(m => m.Register),
+            },
         ]
     },
     {
         path: 'index',
-        component: Main,
+        loadComponent: () => import('./main/main').then(m => m.Main),
+        canActivate: [authGuard],
         children: [
-            { path: 'task', component: Task },
-            { path: 'calendar', component: Calendar },
+            { path: 'task', loadComponent: () => import('./main/task/task').then(m => m.Task) },
+            { path: 'calendar', loadComponent: () => import('./main/calendar/calendar').then(m => m.Calendar) },
             {
                 path: '',
                 redirectTo: 'task',
@@ -30,11 +33,11 @@ export const routes: Routes = [
     },
     {
         path: '',
-        redirectTo: '/index/task',
+        redirectTo: '/login',
         pathMatch: 'full'
     },
     {
         path: '**',
-        redirectTo: '/index/task'
+        redirectTo: '/login'
     }
 ];

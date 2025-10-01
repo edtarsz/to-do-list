@@ -13,7 +13,7 @@ export class AuthService {
     ) { }
 
     async register(userDTO: RegisterDTO) {
-        const { name, lastName, username, password, role } = userDTO;
+        const { name, lastName, username, password } = userDTO;
 
         const existingUser = await this.prisma.user.findUnique({
             where: { username },
@@ -24,7 +24,7 @@ export class AuthService {
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const userRole: Role = 'USER';
+        const role: Role = Role.USER;
 
         const user = await this.prisma.user.create({
             data: {
@@ -32,7 +32,7 @@ export class AuthService {
                 lastName,
                 username,
                 password: hashedPassword,
-                role: userRole,
+                role,
             },
         });
 

@@ -1,7 +1,7 @@
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IconRegistryService } from '../../../../services/icon-registry.service';
-import { InterfaceService } from '../../../../services/interface.service';
+import { IconRegistryService } from '../../../../global-services/icon-registry.service';
+import { InterfaceService } from '../../../../global-services/interface.service';
 import { IconTextButton } from '../../../icon-text-button/icon-text-button';
 import { AsideItem } from '../../aside-item/aside-item';
 

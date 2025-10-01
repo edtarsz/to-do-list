@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Aside } from "./aside/aside";
-import { InterfaceService } from '../services/interface.service';
+import { InterfaceService } from '../global-services/interface.service';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 

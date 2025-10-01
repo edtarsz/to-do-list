@@ -14,8 +14,13 @@ async function bootstrap() {
   });
 
   // Sirve para validar los DTOs
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
+    forbidNonWhitelisted: true,
+    transform: true,
+  }));
 
+  // Prefijo global para las rutas
   app.setGlobalPrefix('api');
 
   const PORT = app.get(ConfigService).get('PORT');

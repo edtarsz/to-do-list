@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input } from '@angular/core';
-import { InterfaceService } from '../../../services/interface.service';
+import { InterfaceService } from '../../../global-services/interface.service';
 
 @Component({
   selector: 'app-aside-section',

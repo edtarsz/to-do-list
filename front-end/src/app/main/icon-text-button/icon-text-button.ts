@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
@@ -26,6 +26,9 @@ export class IconTextButton {
 
   @Input() isActive: boolean = false;
 
+  @Output() buttonClick = new EventEmitter<void>();
+  @Input() type: 'button' | 'submit' | 'reset' = 'button';
+
   hover = false;
 
   sanitizeSvg(svg: string) {
@@ -38,6 +41,10 @@ export class IconTextButton {
 
   onMouseLeave() {
     this.hover = false;
+  }
+
+  onClick() {
+    this.buttonClick.emit();
   }
 
   // Prioridad Activo > Hover > Default

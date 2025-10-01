@@ -1,14 +1,23 @@
-<div class="flex flex-col gap-5">
-    <h1 class="text-5xl font-family-ubuntu-mono-bold">{{ title }}</h1>
-    <p>
-        {{ description }}
-        <a [routerLink]="[route]" class="text-[var(--purple)] font-family-ubuntu-mono-bold underline">{{ routeText }}</a>
-    </p>
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="flex flex-col gap-5">
     <div class="flex flex-col gap-5">
-        <ng-content></ng-content>
-        <div class="w-full flex gap-[2vw] h-12">
-            <app-icon-text-button [text]="buttonText" [bgColorHover]="'var(--purple)'" [borderColor]="'var(--purple)'"
-                class="w-full"></app-icon-text-button>
+        <h1 class="text-5xl font-family-ubuntu-mono-bold">{{ title }}</h1>
+        <p>
+            {{ description }}
+            <a [routerLink]="[route]" class="text-[var(--purple)] font-family-ubuntu-mono-bold underline">{{ routeText
+                }}</a>
+        </p>
+        
+        <div class="flex flex-col gap-5">
+            <ng-content></ng-content>
+            <div class="w-full flex gap-[2vw] h-12">
+                <app-icon-text-button 
+                    [text]="buttonText" 
+                    [bgColorHover]="'var(--purple)'"
+                    [borderColor]="'var(--purple)'" 
+                    [type]="'submit'"
+                    class="w-full">
+                </app-icon-text-button>
+            </div>
         </div>
     </div>
-</div>
+</form>

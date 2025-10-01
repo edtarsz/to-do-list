@@ -1,16 +1,17 @@
 import { Component, inject, Signal } from '@angular/core';
-import { ListService } from '../../services/lists.service';
+import { ListService } from '../../global-services/lists.service';
 import { AsideItem } from "./aside-item/aside-item";
-import { IconRegistryService } from '../../services/icon-registry.service';
-import { InterfaceService } from '../../services/interface.service';
+import { IconRegistryService } from '../../global-services/icon-registry.service';
+import { InterfaceService } from '../../global-services/interface.service';
 import { CommonModule } from '@angular/common';
 import { AsideSection } from "./aside-section/aside-section";
 import { AddList } from "./operations/add-list/add-list";
 import { IconTextButton } from '../icon-text-button/icon-text-button';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-aside',
-  imports: [AsideItem, IconTextButton, CommonModule, AsideSection, AddList],
+  imports: [AsideItem, IconTextButton, CommonModule, AsideSection, AddList, RouterLink],
   templateUrl: './aside.html',
   styleUrl: './aside.css'
 })
