@@ -1,13 +1,13 @@
 <div
   class="w-[35px] h-[35px] rounded-md flex items-center justify-center cursor-pointer transition-colors duration-200 gap-2"
   [ngClass]="{ 
-    'border': borderColor, 
+    'border-1': borderColor, 
     'w-full h-full p-2': text, 
   }" [style.backgroundColor]="currentBgColor || null" [style.color]="currentTextColor || null"
   [style.borderColor]="borderColor || null" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
 
   @if (text) {
-  <span>{{ text }}</span>
+  <span class="font-family-ubuntu-mono-bold">{{ text }}</span>
   }
 
   @if (iconSvg) {
