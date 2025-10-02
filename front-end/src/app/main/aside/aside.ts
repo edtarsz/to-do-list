@@ -18,12 +18,14 @@ import { AuthStateService } from '../../global-services/auth-state.service';
 })
 export class Aside {
   public listService = inject(ListService);
-  
+
   public iconRegistryService = inject(IconRegistryService);
   public interfaceService = inject(InterfaceService);
 
   public authStateService = inject(AuthStateService);
   private authService = inject(AuthService);
+
+  menu = this.iconRegistryService.getMenu();
 
   trashIcon = this.iconRegistryService.getIcon('trash');
   addIcon = this.iconRegistryService.getIcon('add');
@@ -51,6 +53,22 @@ export class Aside {
 
   toggleDeleteActive() {
     this.interfaceService.toggleDeleteActive();
+  }
+
+  deleteList(listId: number): void {
+    if (this.interfaceService.deleteActive()) {
+      this.listService.deleteList(listId).subscribe()
+    } else if (this.interfaceService.selectedListId() !== listId) {
+      this.interfaceService.selectedListId.set(listId);
+    } else {
+      this.interfaceService.selectedListId.set(null);
+    }
+  }
+
+  toggleMenuSelection(menuId: number): void {
+    if (this.interfaceService.selectedMenuId() !== menuId) {
+      this.interfaceService.selectedMenuId.set(menuId);
+    }
   }
 
   logOut() {

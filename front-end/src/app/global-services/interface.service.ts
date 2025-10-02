@@ -10,7 +10,7 @@ interface InterfaceState {
 @Injectable({
     providedIn: 'root'
 })
-    export class InterfaceService {
+export class InterfaceService {
     private state = signal<InterfaceState>({
         isAsideOpen: true,
         isProfileSettingsOpen: false,
@@ -22,6 +22,9 @@ interface InterfaceState {
     isProfileSettingsOpen = computed(() => this.state().isProfileSettingsOpen);
     isAddListOpen = computed(() => this.state().isAddListOpen);
     deleteActive = computed(() => this.state().deleteActive);
+
+    selectedListId = signal<number | null>(null);
+    selectedMenuId = signal<number>(1);
 
     toggleAside() {
         this.state.update(v => ({ ...v, isAsideOpen: !v.isAsideOpen }));
@@ -47,5 +50,8 @@ interface InterfaceState {
             isAddListOpen: false,
             deleteActive: false
         });
+
+        this.selectedListId.set(null);
+        this.selectedMenuId.set(1);
     }
 }

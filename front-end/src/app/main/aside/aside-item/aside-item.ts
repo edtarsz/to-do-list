@@ -21,6 +21,7 @@ export class AsideItem {
   @Input() iconSize: string = '21';
 
   @Input() showText: boolean = true;
+  @Input() selected: boolean = false;
   
   @Input() deleting: boolean = false;
 

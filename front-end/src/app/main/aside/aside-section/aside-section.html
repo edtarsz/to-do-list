@@ -5,12 +5,12 @@
             {{ title }}
         </h2>
         @if (interfaceService.isAsideOpen()) {
-            <ng-content select="[section-buttons]"></ng-content>
+        <ng-content select="[section-buttons]"></ng-content>
         }
     </div>
-    
+
     <!-- Lista de items pasada desde fuera -->
-    <ul class="font-family-ubuntu-mono-bold flex flex-col">
+    <ul class="font-family-ubuntu-mono-bold flex flex-col gap-1">
         <ng-content></ng-content>
     </ul>
 </div>
