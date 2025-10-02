@@ -71,7 +71,7 @@
                 [ngClass]="{
                     'hover:translate-x-1 hover:px-[1vw]': interfaceService.isAsideOpen(),
                     'justify-center text-center': !interfaceService.isAsideOpen(),
-                }" [routerLink]="['/login']">
+                }" (click)="logOut()">
                 Sign Out
             </li>
             <li class="gap-[1vw] flex items-center py-2 transition-transform duration-200 hover:bg-[var(--primary-color)] rounded-lg hover:cursor-pointer"

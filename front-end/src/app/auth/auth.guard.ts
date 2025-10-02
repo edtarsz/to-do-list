@@ -22,6 +22,6 @@ export const publicGuard: CanActivateFn = () => {
         return true;
     }
 
-    router.navigate(['/']);
+    router.navigate(['/index/tasks']);
     return false;
 };

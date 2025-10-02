@@ -7,11 +7,11 @@ import { CommonModule } from '@angular/common';
 import { AsideSection } from "./aside-section/aside-section";
 import { AddList } from "./operations/add-list/add-list";
 import { IconTextButton } from '../icon-text-button/icon-text-button';
-import { RouterLink } from '@angular/router';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-aside',
-  imports: [AsideItem, IconTextButton, CommonModule, AsideSection, AddList, RouterLink],
+  imports: [AsideItem, IconTextButton, CommonModule, AsideSection, AddList],
   templateUrl: './aside.html',
   styleUrl: './aside.css'
 })
@@ -19,6 +19,7 @@ export class Aside {
   public listService = inject(ListService);
   public iconRegistryService = inject(IconRegistryService);
   public interfaceService = inject(InterfaceService);
+  private authService = inject(AuthService);
 
   trashIcon = this.iconRegistryService.getIcon('trash');
   addIcon = this.iconRegistryService.getIcon('add');
@@ -42,5 +43,10 @@ export class Aside {
 
   toggleDeleteActive() {
     this.interfaceService.toggleDeleteActive();
+  }
+
+  logOut() {
+    this.interfaceService.closeAll();
+    this.authService.logout();
   }
 }

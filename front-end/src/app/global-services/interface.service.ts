@@ -42,7 +42,7 @@ interface InterfaceState {
     // Used when signing out
     closeAll() {
         this.state.set({
-            isAsideOpen: false,
+            isAsideOpen: true,
             isProfileSettingsOpen: false,
             isAddListOpen: false,
             deleteActive: false

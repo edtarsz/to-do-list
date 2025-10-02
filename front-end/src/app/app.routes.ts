@@ -22,22 +22,30 @@ export const routes: Routes = [
             }
         ]
     },
+
     {
         path: 'index',
         loadComponent: () => import('./main/main').then(m => m.Main),
         canActivate: [authGuard],
         children: [
-            { path: 'task', loadComponent: () => import('./main/task/task').then(m => m.Task) },
-            { path: 'calendar', loadComponent: () => import('./main/calendar/calendar').then(m => m.Calendar) },
+            {
+                path: 'tasks',
+                loadComponent: () => import('./main/task/task').then(m => m.Task)
+            },
+            {
+                path: 'calendar',
+                loadComponent: () => import('./main/calendar/calendar').then(m => m.Calendar)
+            },
             {
                 path: '',
-                redirectTo: 'task',
+                redirectTo: 'tasks',
                 pathMatch: 'full'
             }
         ]
     },
+
     {
         path: '**',
-        redirectTo: '/login'
+        redirectTo: 'index'
     }
 ];

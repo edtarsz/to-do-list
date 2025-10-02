@@ -27,24 +27,21 @@ export class AuthService {
         this.checkAuth();
     }
 
-    register(username: string, name: string, lastName: string, password: string) {
+    register(name: string, lastName: string, username: string, password: string) {
         this.isLoading.set(true);
 
-        const userDTO: UserDTO = { username, name, lastName, password };
+        const userDTO: UserDTO = { name, lastName, username, password };
 
         return this.http.post(`${this.apiUrl}/auth/register`, userDTO).pipe(
             tap(() => this.isLoading.set(false)),
             catchError((err) => {
                 this.isLoading.set(false);
 
-                // Si viene un error de validación del backend
                 if (err.status === 400 && err.error?.message) {
-                    // err.error.message normalmente es un array de strings
                     console.error('Errores de validación:', err.error.message);
                     return throwError(() => err.error.message.join(', '));
                 }
 
-                // Otros errores (ConflictException, 500, etc.)
                 console.error('Error inesperado:', err);
                 return throwError(() => err.error?.message || 'Error desconocido');
             })

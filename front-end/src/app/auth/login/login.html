@@ -1,14 +1,32 @@
 <app-auth-section [formGroup]="loginForm" [buttonText]="'Sign in'" [title]="'Sign in'"
     [description]="`Don't have an account?`" [route]="'/register'" [routeText]="'Sign up'" [buttonAction]="'login'"
     (formSubmit)="onSubmit()">
+
     <div class="flex flex-col gap-5">
-        <div class="flex gap-[2vw]">
-            <input type="text" placeholder="Enter your username"
+        <div class="flex flex-col w-full">
+            <input formControlName="username" type="text" placeholder="Enter your username"
                 class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200">
+            @if (loginForm.get('username')?.touched && loginForm.get('username')?.errors) {
+            <small class="text-red-500">
+                {{ getErrorMessage('username') }}
+            </small>
+            }
         </div>
-        <div class="flex gap-[2vw]">
-            <input type="password" placeholder="Enter your password"
+
+        <div class="flex flex-col w-full">
+            <input formControlName="password" type="password" placeholder="Enter your password"
                 class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200">
+            @if (loginForm.get('password')?.touched && loginForm.get('password')?.errors) {
+            <small class="text-red-500">
+                {{ getErrorMessage('password') }}
+            </small>
+            }
         </div>
+
+        @if (errorMessage) {
+        <div class="text-red-500 text-sm">
+            {{ errorMessage }}
+        </div>
+        }
     </div>
 </app-auth-section>
