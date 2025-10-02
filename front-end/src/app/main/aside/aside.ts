@@ -8,6 +8,7 @@ import { AsideSection } from "./aside-section/aside-section";
 import { AddList } from "./operations/add-list/add-list";
 import { IconTextButton } from '../icon-text-button/icon-text-button';
 import { AuthService } from '../../auth/auth.service';
+import { AuthStateService } from '../../global-services/auth-state.service';
 
 @Component({
   selector: 'app-aside',
@@ -19,6 +20,8 @@ export class Aside {
   public listService = inject(ListService);
   public iconRegistryService = inject(IconRegistryService);
   public interfaceService = inject(InterfaceService);
+
+  public authState = inject(AuthStateService);
   private authService = inject(AuthService);
 
   trashIcon = this.iconRegistryService.getIcon('trash');

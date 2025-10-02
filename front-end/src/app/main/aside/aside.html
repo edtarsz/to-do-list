@@ -93,8 +93,8 @@
             </div>
             @if (interfaceService.isAsideOpen()) {
             <div class="font-family-ubuntu-mono-bold text-sm">
-                <h3>Ramosz</h3>
-                <h4 class="text-[var(--gray)]">Normal User</h4>
+                <h3>{{ authState.userName() }}</h3>
+                <h4 class="text-[var(--gray)]">{{ authState.user()?.role }}</h4>
             </div>
             }
         </div>

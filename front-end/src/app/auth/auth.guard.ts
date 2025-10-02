@@ -1,12 +1,13 @@
 import { inject } from '@angular/core';
 import { Router, CanActivateFn } from '@angular/router';
 import { AuthService } from './auth.service';
+import { AuthStateService } from '../global-services/auth-state.service';
 
 export const authGuard: CanActivateFn = () => {
-    const authService = inject(AuthService);
+    const authStateService = inject(AuthStateService);
     const router = inject(Router);
 
-    if (authService.isAuthenticated()) {
+    if (authStateService.isAuthenticated()) {
         return true;
     }
 
@@ -15,10 +16,10 @@ export const authGuard: CanActivateFn = () => {
 };
 
 export const publicGuard: CanActivateFn = () => {
-    const authService = inject(AuthService);
+    const authStateService = inject(AuthStateService);
     const router = inject(Router);
 
-    if (!authService.isAuthenticated()) {
+    if (!authStateService.isAuthenticated()) {
         return true;
     }
 

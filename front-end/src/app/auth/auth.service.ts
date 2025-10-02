@@ -1,9 +1,10 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { tap, catchError } from 'rxjs/operators';
 import { firstValueFrom, throwError } from 'rxjs';
 import { Role, UserDTO } from '../models/user';
+import { AuthStateService } from '../global-services/auth-state.service';
 
 interface AuthResponse {
     access_token: string;
@@ -14,12 +15,8 @@ interface AuthResponse {
     providedIn: 'root'
 })
 export class AuthService {
+    private authStateService = inject(AuthStateService);
     private apiUrl = 'http://localhost:3000/api';
-
-    currentUser = signal<UserDTO | null>(null);
-    isAuthenticated = signal(false);
-    isLoading = signal(false);
-    private initialized = false;
 
     constructor(
         private http: HttpClient,
@@ -27,38 +24,34 @@ export class AuthService {
     ) { }
 
     async initializeAuth(): Promise<void> {
-        if (this.initialized) return;
-        this.initialized = true;
-
         const token = this.getToken();
         if (!token) {
-            this.isAuthenticated.set(false);
+            this.authStateService.clear();
             return;
         }
 
-        this.isLoading.set(true);
+        this.authStateService.setLoading(true);
         try {
-            const user = await firstValueFrom(this.http.get<UserDTO>(`${this.apiUrl}/auth/me`));
-            this.currentUser.set(user);
-            this.isAuthenticated.set(true);
+            const user = await firstValueFrom(
+                this.http.get<UserDTO>(`${this.apiUrl}/auth/me`)
+            );
+            this.authStateService.setUser(user);
         } catch (error) {
-            localStorage.removeItem('access_token');
-            this.currentUser.set(null);
-            this.isAuthenticated.set(false);
+            this.authStateService.clear();
         } finally {
-            this.isLoading.set(false);
+            this.authStateService.setLoading(false);
         }
     }
 
     register(name: string, lastName: string, username: string, password: string) {
-        this.isLoading.set(true);
+        this.authStateService.setLoading(true);
 
         const userDTO: UserDTO = { name, lastName, username, password };
 
         return this.http.post(`${this.apiUrl}/auth/register`, userDTO).pipe(
-            tap(() => this.isLoading.set(false)),
+            tap(() => this.authStateService.setLoading(false)),
             catchError((err) => {
-                this.isLoading.set(false);
+                this.authStateService.setLoading(false);
 
                 if (err.status === 400 && err.error?.message) {
                     console.error('Errores de validación:', err.error.message);
@@ -72,17 +65,15 @@ export class AuthService {
     }
 
     login(username: string, password: string) {
-        this.isLoading.set(true);
+        this.authStateService.setLoading(true);
 
         return this.http.post<AuthResponse>(`${this.apiUrl}/auth/login`, {
-            username,
-            password
+            username, password
         }).pipe(
             tap(response => {
                 localStorage.setItem('access_token', response.access_token);
-                this.currentUser.set(response.user);
-                this.isAuthenticated.set(true);
-                this.isLoading.set(false);
+                this.authStateService.setUser(response.user);
+                this.authStateService.setLoading(false);
             }),
             catchError(this.handleError.bind(this))
         );
@@ -90,9 +81,7 @@ export class AuthService {
 
     logout() {
         localStorage.removeItem('access_token');
-        this.currentUser.set(null);
-        this.isAuthenticated.set(false);
-        this.initialized = false;
+        this.authStateService.clear();
         this.router.navigate(['/login']);
     }
 
@@ -101,7 +90,7 @@ export class AuthService {
     }
 
     private handleError(error: HttpErrorResponse) {
-        this.isLoading.set(false);
+        this.authStateService.setLoading(false);
 
         let errorMessage = 'Ocurrió un error';
 
