@@ -3,54 +3,49 @@ import { HttpClient } from "@angular/common/http";
 import { tap } from "rxjs/internal/operators/tap";
 import { Observable } from "rxjs";
 import { List } from "../models/list";
-import { lists } from "../../assets/mock/lists";
 
 @Injectable({
     providedIn: 'root'
 })
 export class ListService {
-    private apiURL = 'http://localhost:3000/api/v1/lists';
+    private apiURL = 'http://localhost:3000/api/lists';
     private httpClient = inject(HttpClient);
 
-    lists = signal<List[]>(lists);
+    lists = signal<List[]>([]);
     readonly lists$ = this.lists.asReadonly();
 
-    agregarList(list: List): Observable<List> {
+    addList(list: List): Observable<List> {
         const url = this.apiURL;
         return this.httpClient.post<List>(url, list).pipe(
-            tap(() => this.obtenerLists().subscribe())
+            tap(() => this.getLists().subscribe())
         );
     }
 
-    eliminarList(id: number): Observable<void> {
+    deleteList(id: number): Observable<void> {
         const url = `${this.apiURL}/${id}`;
         return this.httpClient.delete<void>(url).pipe(
-            tap(() => this.obtenerLists().subscribe())
+            tap(() => this.getLists().subscribe())
         );
     }
 
-    actualizarList(id: number, listEditada: List): Observable<List> {
+    updateList(id: number, updatedList: List): Observable<List> {
         const url = `${this.apiURL}/${id}`;
-        return this.httpClient.patch<List>(url, listEditada).pipe(
-            tap(() => this.obtenerLists().subscribe())
+        return this.httpClient.patch<List>(url, updatedList).pipe(
+            tap(() => this.getLists().subscribe())
         );
     }
 
-    obtenerLists(): Observable<List[]> {
+    getLists(): Observable<List[]> {
         const url = this.apiURL;
         return this.httpClient.get<List[]>(url).pipe(tap(res => this.lists.set(res)));
     }
 
-    obtenerListPorId(id: number): Observable<List> {
+    getListById(id: number): Observable<List> {
         const url = `${this.apiURL}/${id}`;
         return this.httpClient.get<List>(url).pipe();
     }
 
-    asignarTaskACarrera(taskId: number, carreraId: number): Observable<List> {
-        const url = `${this.apiURL}/${taskId}`;
-
-        return this.httpClient.patch<List>(url, { carreraId }).pipe(
-            tap(() => this.obtenerLists().subscribe())
-        );
+    clear() {
+        this.lists.set([]);
     }
 }

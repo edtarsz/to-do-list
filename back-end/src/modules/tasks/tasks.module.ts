@@ -5,7 +5,7 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 
 @Module({
   imports: [PrismaModule],
-  controllers: [TasksController],
-  providers: [TasksService]
+  providers: [TasksService],
+  controllers: [TasksController]
 })
 export class TasksModule { }

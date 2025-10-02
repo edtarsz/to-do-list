@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { ListsService } from './lists.service';
-import { CreateListDto } from './dto/create-list.dto';
-import { UpdateListDto } from './dto/update-list.dto';
 import { UserId } from 'src/decorators/user.decorator';
+import { CreateListDTO } from './dto/create-list.dto';
+import { UpdateListDTO } from './dto/update-list.dto';
 
 @Controller('lists')
 export class ListsController {
@@ -10,7 +10,7 @@ export class ListsController {
 
     // El request se utiliza para obtener el userId del usuario autenticado
     @Post()
-    create(@Body() createListDto: CreateListDto, @UserId() userId: number) {
+    create(@Body() createListDto: CreateListDTO, @UserId() userId: number) {
         return this.listsService.createList(createListDto, userId);
     }
 
@@ -25,8 +25,8 @@ export class ListsController {
     }
 
     @Patch(':id')
-    update(@Param('id', ParseIntPipe) id: number, @Body() updateListDto: UpdateListDto, @UserId() userId: number) {
-        return this.listsService.updateList(id, updateListDto, userId);
+    update(@Param('id', ParseIntPipe) id: number, @Body() updateListDTO: UpdateListDTO, @UserId() userId: number) {
+        return this.listsService.updateList(id, updateListDTO, userId);
     }
 
     @Delete(':id')

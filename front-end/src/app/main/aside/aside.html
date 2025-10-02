@@ -58,7 +58,7 @@
 
         <ul class="font-family-ubuntu-mono-bold flex flex-col">
             @for (list of listService.lists$(); track list.id) {
-            <app-aside-item [title]="list.title" [color]="list.color" [showText]="interfaceService.isAsideOpen()"
+            <app-aside-item [title]="list.name" [color]="list.color" [showText]="interfaceService.isAsideOpen()"
                 [bgColorHover]="'var(--primary-color)'" [deleting]="interfaceService.deleteActive()"></app-aside-item>
             }
         </ul>
@@ -93,8 +93,8 @@
             </div>
             @if (interfaceService.isAsideOpen()) {
             <div class="font-family-ubuntu-mono-bold text-sm">
-                <h3>{{ authState.userName() }}</h3>
-                <h4 class="text-[var(--gray)]">{{ authState.user()?.role }}</h4>
+                <h3>{{ authStateService.userName() }}</h3>
+                <h4 class="text-[var(--gray)]">{{ authStateService.user()?.role }}</h4>
             </div>
             }
         </div>

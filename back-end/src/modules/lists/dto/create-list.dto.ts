@@ -1,6 +1,6 @@
 import { IsString, MinLength, MaxLength } from 'class-validator';
 
-export class CreateListDto {
+export class CreateListDTO {
     @IsString()
     @MinLength(1)
     @MaxLength(255)

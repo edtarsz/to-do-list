@@ -18,16 +18,21 @@ import { AuthStateService } from '../../global-services/auth-state.service';
 })
 export class Aside {
   public listService = inject(ListService);
+  
   public iconRegistryService = inject(IconRegistryService);
   public interfaceService = inject(InterfaceService);
 
-  public authState = inject(AuthStateService);
+  public authStateService = inject(AuthStateService);
   private authService = inject(AuthService);
 
   trashIcon = this.iconRegistryService.getIcon('trash');
   addIcon = this.iconRegistryService.getIcon('add');
   noteIcon = this.iconRegistryService.getIcon('note');
   calendarIcon = this.iconRegistryService.getIcon('calendar');
+
+  constructor() {
+    this.listService.getLists().subscribe();
+  }
 
   toggleAside() {
     if (this.interfaceService.deleteActive()) {

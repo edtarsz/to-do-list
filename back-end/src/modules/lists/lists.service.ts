@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { List } from '@prisma/client';
 import { PrismaErrorService } from 'src/prisma/prisma-error.service';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateListDto } from './dto/create-list.dto';
+import { CreateListDTO } from './dto/create-list.dto';
 
 @Injectable()
 export class ListsService {
@@ -11,9 +11,9 @@ export class ListsService {
         private readonly prismaErrorService: PrismaErrorService
     ) { }
 
-    async createList(createListDto: CreateListDto, userId: number): Promise<List> {
+    async createList(createListDTO: CreateListDTO, userId: number): Promise<List> {
         try {
-            return this.prisma.list.create({ data: { ...createListDto, userId } });
+            return this.prisma.list.create({ data: { ...createListDTO, userId } });
         } catch (error) {
             this.prismaErrorService.handleError(error, 'Failed to create list');
         }
@@ -29,10 +29,10 @@ export class ListsService {
         return list;
     }
 
-    async updateList(id: number, updateListDto: Partial<CreateListDto>, userId: number) {
+    async updateList(id: number, updateListDTO: Partial<CreateListDTO>, userId: number) {
         try {
             await this.getListById(id, userId);
-            return this.prisma.list.update({ where: { id }, data: updateListDto });
+            return this.prisma.list.update({ where: { id }, data: updateListDTO });
         } catch (error) {
             this.prismaErrorService.handleError(error, 'Failed to update list');
         }

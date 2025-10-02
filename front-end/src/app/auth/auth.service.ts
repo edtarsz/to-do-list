@@ -5,6 +5,7 @@ import { tap, catchError } from 'rxjs/operators';
 import { firstValueFrom, throwError } from 'rxjs';
 import { Role, UserDTO } from '../models/user';
 import { AuthStateService } from '../global-services/auth-state.service';
+import { ListService } from '../global-services/lists.service';
 
 interface AuthResponse {
     access_token: string;
@@ -16,6 +17,7 @@ interface AuthResponse {
 })
 export class AuthService {
     private authStateService = inject(AuthStateService);
+    private listService = inject(ListService);
     private apiUrl = 'http://localhost:3000/api';
 
     constructor(
@@ -73,6 +75,7 @@ export class AuthService {
             tap(response => {
                 localStorage.setItem('access_token', response.access_token);
                 this.authStateService.setUser(response.user);
+                
                 this.authStateService.setLoading(false);
             }),
             catchError(this.handleError.bind(this))
@@ -82,6 +85,7 @@ export class AuthService {
     logout() {
         localStorage.removeItem('access_token');
         this.authStateService.clear();
+        this.listService.clear();
         this.router.navigate(['/login']);
     }
 

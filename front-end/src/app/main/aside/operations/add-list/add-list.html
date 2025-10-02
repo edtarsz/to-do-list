@@ -10,34 +10,36 @@
                 </app-icon-text-button>
             </div>
             <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
-            <input type="text" placeholder="List's name"
-                class="w-full bg-[var(--secondary-color)] rounded-lg p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200 placeholder-[var(--gray)] text-sm">
-            <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
-            <div class="flex justify-between items-center relative">
-                <div class="relative">
-                    <app-aside-item [title]="'Select color'" [color]="selectedColor" [showText]="true" class="text-sm"
-                        [borderColor]="selectedColor" (click)="toggleColorPicker()">
-                    </app-aside-item>
+            <form [formGroup]="addListForm" (ngSubmit)="addList()" class="flex flex-col gap-4">
+                <input type="text" placeholder="List's name" formControlName="name"
+                    class="w-full bg-[var(--secondary-color)] rounded-lg p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200 placeholder-[var(--gray)] text-sm">
+                <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
+                <div class="flex justify-between items-center relative">
+                    <div class="relative">
+                        <app-aside-item [title]="'Select color'" [color]="selectedColor()" [showText]="true"
+                            class="text-sm" [borderColor]="selectedColor()" (click)="toggleColorPicker()">
+                        </app-aside-item>
 
-                    @if (showColorPicker) {
-                    <div
-                        class="absolute top-full w-[250px] left-0 mt-2 p-2 bg-white rounded-lg shadow-lg z-10 grid grid-cols-6 gap-2">
-                        @for (color of pastelColors; track $index) {
-                        <div [style.background-color]="color" (click)="selectColor(color)"
-                            class="w-8 h-8 rounded cursor-pointer hover:scale-110 transition-transform"
-                            [class.border-purple-500]="selectedColor === color"
-                            [class.border-gray-300]="selectedColor !== color">
+                        @if (showColorPicker) {
+                        <div
+                            class="absolute top-full w-[250px] left-0 mt-2 p-2 bg-white rounded-lg shadow-lg z-10 grid grid-cols-6 gap-2">
+                            @for (color of pastelColors; track $index) {
+                            <div [style.background-color]="color" (click)="selectColor(color)"
+                                class="w-8 h-8 rounded cursor-pointer hover:scale-110 transition-transform"
+                                [class.border-purple-500]="selectedColor() === color"
+                                [class.border-gray-300]="selectedColor() !== color">
+                            </div>
+                            }
                         </div>
                         }
                     </div>
-                    }
-                </div>
 
-                <app-icon-text-button [iconSvg]="sendIcon" [textColor]="'var(--purple)'"
-                    [bgColorHover]="'var(--purple)'" [borderColor]="'var(--purple)'" [viewBox]="'0 0 24 25'"
-                    [iconSize]="'20'" [text]="'Add Task'">
-                </app-icon-text-button>
-            </div>
+                    <app-icon-text-button [type]="'submit'" [iconSvg]="sendIcon" [textColor]="'var(--purple)'"
+                        [bgColorHover]="'var(--purple)'" [borderColor]="'var(--purple)'" [viewBox]="'0 0 24 25'"
+                        [iconSize]="'20'" [text]="'Add Task'">
+                    </app-icon-text-button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
