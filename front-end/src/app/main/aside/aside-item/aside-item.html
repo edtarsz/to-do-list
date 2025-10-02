@@ -1,8 +1,8 @@
 <li class="gap-[1vw] flex items-center py-2 transition-transform duration-200 rounded-lg hover:cursor-pointer"
     [ngClass]="{
         'hover:translate-x-1 hover:px-[1vw]': showText,
-        'px-[1vw] bg-[var(--bgColorHover)]': selected,
-        'translate-x-1': selected && showText,
+        'bg-[var(--bgColorHover)]': selected,
+        'px-[1vw] translate-x-1': selected && showText,
         'justify-center': !showText,
         'hover:bg-[var(--bgColorHover)]': bgColorHover || '',
         'border-b-2 border-[var(--borderColor)] rounded-none px-2': borderColor,
