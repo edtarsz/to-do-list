@@ -24,6 +24,19 @@ export class IconRegistryService {
       <path d="M2 18H6" stroke="#8F8F8F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       <path d="M21.378 5.62603C21.7763 5.22767 22.0001 4.68739 22.0001 4.12403C22.0001 3.56067 21.7763 3.02038 21.378 2.62203C20.9796 2.22367 20.4393 1.99988 19.876 1.99988C19.3126 1.99988 18.7723 2.22367 18.374 2.62203L13.364 7.63403C13.1262 7.87165 12.9522 8.16536 12.858 8.48803L12.021 11.358C11.9959 11.4441 11.9944 11.5353 12.0166 11.6221C12.0389 11.7089 12.084 11.7882 12.1474 11.8516C12.2108 11.915 12.2901 11.9601 12.3769 11.9824C12.4637 12.0046 12.5549 12.0031 12.641 11.978L15.511 11.141C15.8336 11.0468 16.1274 10.8728 16.365 10.635L21.378 5.62603Z" stroke="#8F8F8F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>    
       `,
+    calendar_today: `
+      <path d="M11 14h1v4" stroke="#8F8F8F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M16 2v4" stroke="#8F8F8F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M3 10h18" stroke="#8F8F8F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M8 2v4" stroke="#8F8F8F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="3" y="4" width="18" height="18" rx="2" stroke="#8F8F8F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      `,
+    calendar_next: `
+      <path d="M8 2v4" stroke="#8F8F8F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M16 2v4" stroke="#8F8F8F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M3 10h18" stroke="#8F8F8F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="3" y="4" width="18" height="18" rx="2" stroke="#8F8F8F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      `,
     calendar: `
       <path d="M8 2V6" stroke="#8F8F8F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       <path d="M16 2V6" stroke="#8F8F8F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -55,8 +68,8 @@ export class IconRegistryService {
     return [
       {
         id: 1,
-        name: "To-do",
-        icon: this.getIcon('note'),
+        name: "Today",
+        icon: this.getIcon('calendar_today'),
         viewBox: '0 0 24 24',
         bgColorHover: 'var(--primary-color)',
         showText: true,
@@ -64,6 +77,15 @@ export class IconRegistryService {
       },
       {
         id: 2,
+        name: "Upcoming",
+        icon: this.getIcon('calendar_next'),
+        viewBox: '0 0 24 24',
+        bgColorHover: 'var(--primary-color)',
+        showText: true,
+        iconSize: '24'
+      },
+      {
+        id: 3,
         name: "Calendar",
         icon: this.getIcon('calendar'),
         viewBox: '0 0 24 24',

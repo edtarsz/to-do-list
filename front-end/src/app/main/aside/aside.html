@@ -45,16 +45,16 @@
                     (click)="toggleAddList()">
                 </app-icon-text-button>
             </div>
+            <div class="flex flex-col gap-1 mt-1">
+                @for (list of listService.lists$(); track list.id) {
+                <app-aside-item [title]="list.name" [color]="list.color" [showText]="interfaceService.isAsideOpen()"
+                    [bgColorHover]="'var(--primary-color)'" [deleting]="interfaceService.deleteActive()"
+                    (click)="deleteList(+list.id!)"
+                    [selected]="interfaceService.selectedListId() === list.id"></app-aside-item>
+                }
+            </div>
         </app-aside-section>
 
-        <ul class="font-family-ubuntu-mono-bold flex flex-col gap-1">
-            @for (list of listService.lists$(); track list.id) {
-            <app-aside-item [title]="list.name" [color]="list.color" [showText]="interfaceService.isAsideOpen()"
-                [bgColorHover]="'var(--primary-color)'" [deleting]="interfaceService.deleteActive()"
-                (click)="deleteList(+list.id!)"
-                [selected]="interfaceService.selectedListId() === list.id"></app-aside-item>
-            }
-        </ul>
         <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
     </div>
     <div class="w-full flex flex-col gap-[0.5vw]">

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { AuthStateService } from '../../global-services/auth-state.service';
 
 @Component({
   selector: 'app-task',
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './task.css'
 })
 export class Task {
-
+  public authStateService = inject(AuthStateService);
 }

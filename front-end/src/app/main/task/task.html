@@ -1,3 +1,15 @@
-<div class="bg-white h-full w-full rounded-2xl p-[1.5vw]">
-    <p>task works!</p>
+<div class="h-full w-full gap-[1vw] flex flex-col">
+    <div class="flex gap-[1vw] justify-between">
+        <div class="p-[1.5vw] rounded-2xl bg-[var(--secondary-color)] w-full flex flex-col justify-center">
+            <h1 class="text-[2vw] font-family-ubuntu-mono-bold">Good Morning, {{ authStateService.user()?.username }}!
+            </h1>
+            <p class="text-[var(--gray)]">What do you plan to accomplish today?</p>
+        </div>
+        <div class="flex p-[1.5vw] rounded-2xl bg-[var(--secondary-color)] w-auto flex-col justify-center">
+            <h2 class="whitespace-nowrap font-family-ubuntu-mono-bold text-xl">September 18, 11:34 PM</h2>
+        </div>
+    </div>
+    <div class="w-full h-full bg-[var(--secondary-color)] rounded-2xl p-[1.5vw]">
+        <h1 class="text-[2vw] font-family-ubuntu-mono-bold">Today's Tasks</h1>
+    </div>
 </div>
