@@ -26,7 +26,6 @@ export class Login {
   }
 
   onSubmit() {
-    console.log("Form submitted:", this.loginForm.valid);
     if (this.loginForm.valid) {
       const { username, password } = this.loginForm.value;
       this.authService.login(username, password).subscribe({

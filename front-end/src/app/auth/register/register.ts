@@ -29,7 +29,6 @@ export class Register {
   }
 
   onSubmit() {
-    console.log("Form submitted:", this.registerForm.valid);
     if (this.registerForm.valid) {
       const { name, lastName, username, password } = this.registerForm.value;
 

@@ -2,7 +2,7 @@ import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { tap, catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { firstValueFrom, throwError } from 'rxjs';
 import { Role, UserDTO } from '../models/user';
 
 interface AuthResponse {
@@ -19,12 +19,35 @@ export class AuthService {
     currentUser = signal<UserDTO | null>(null);
     isAuthenticated = signal(false);
     isLoading = signal(false);
+    private initialized = false;
 
     constructor(
         private http: HttpClient,
         private router: Router
-    ) {
-        this.checkAuth();
+    ) { }
+
+    async initializeAuth(): Promise<void> {
+        if (this.initialized) return;
+        this.initialized = true;
+
+        const token = this.getToken();
+        if (!token) {
+            this.isAuthenticated.set(false);
+            return;
+        }
+
+        this.isLoading.set(true);
+        try {
+            const user = await firstValueFrom(this.http.get<UserDTO>(`${this.apiUrl}/auth/me`));
+            this.currentUser.set(user);
+            this.isAuthenticated.set(true);
+        } catch (error) {
+            localStorage.removeItem('access_token');
+            this.currentUser.set(null);
+            this.isAuthenticated.set(false);
+        } finally {
+            this.isLoading.set(false);
+        }
     }
 
     register(name: string, lastName: string, username: string, password: string) {
@@ -69,31 +92,12 @@ export class AuthService {
         localStorage.removeItem('access_token');
         this.currentUser.set(null);
         this.isAuthenticated.set(false);
+        this.initialized = false;
         this.router.navigate(['/login']);
     }
 
     getToken(): string | null {
         return localStorage.getItem('access_token');
-    }
-
-    private checkAuth() {
-        const token = this.getToken();
-        if (token) {
-            this.isLoading.set(true);
-
-            this.http.get<UserDTO>(`${this.apiUrl}/auth/me`)
-                .subscribe({
-                    next: (user) => {
-                        this.currentUser.set(user);
-                        this.isAuthenticated.set(true);
-                        this.isLoading.set(false);
-                    },
-                    error: () => {
-                        this.logout();
-                        this.isLoading.set(false);
-                    }
-                });
-        }
     }
 
     private handleError(error: HttpErrorResponse) {
