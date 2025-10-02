@@ -24,7 +24,7 @@
         <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
 
         <app-aside-section [title]="'MENU'" [showText]="interfaceService.isAsideOpen()">
-            @for (menuItem of menu; track $index) {
+            @for (menuItem of menu; track menuItem.id) {
             <app-aside-item [title]="menuItem.name" [iconSvg]="menuItem.icon" [iconSize]="menuItem.iconSize"
                 [viewBox]="menuItem.viewBox" [showText]="interfaceService.isAsideOpen()"
                 [bgColorHover]="menuItem.bgColorHover" (click)="toggleMenuSelection(menuItem.id)"
@@ -36,13 +36,13 @@
 
         <app-aside-section [title]="'LISTS'" [showText]="interfaceService.isAsideOpen()">
             <div section-buttons class="flex items-center gap-[0.5vw]">
-                <app-icon-text-button [iconSvg]="trashIcon" [borderColor]="'var(--red)'" [textColor]="'var(--red)'"
-                    [bgColorHover]="'var(--red)'" [viewBox]="'0 0 17 17'" [iconSize]="'17'"
-                    [isActive]="interfaceService.deleteActive()" (click)="toggleDeleteActive()">
+                <app-icon-text-button [iconSvg]="trashIcon" [borderColor]="'var(--red)'" [color]="'var(--red)'"
+                    [bgColorHover]="'var(--red)'" [colorHover]="'var(--secondary-color)'" [viewBox]="'0 0 17 17'"
+                    [iconSize]="'17'" [isActive]="interfaceService.deleteActive()" (click)="toggleDeleteActive()">
                 </app-icon-text-button>
-                <app-icon-text-button [iconSvg]="addIcon" [borderColor]="'var(--purple)'" [textColor]="'var(--purple)'"
-                    [bgColorHover]="'var(--purple)'" [viewBox]="'0 0 21 21'" [iconSize]="'21'"
-                    (click)="toggleAddList()">
+                <app-icon-text-button [iconSvg]="addIcon" [borderColor]="'var(--purple)'" [color]="'var(--purple)'"
+                    [bgColorHover]="'var(--purple)'" [colorHover]="'var(--secondary-color)'" [viewBox]="'0 0 21 21'"
+                    [iconSize]="'21'" (click)="toggleAddList()">
                 </app-icon-text-button>
             </div>
             <div class="flex flex-col gap-1 mt-1">

@@ -4,7 +4,7 @@
         <div class="flex flex-col w-full h-full p-[2vw] gap-4">
             <div class="flex items-center justify-between">
                 <h3 class="font-family-ubuntu-mono-bold text-2xl">Add List</h3>
-                <app-icon-text-button [iconSvg]="closeIcon" [textColor]="'var(--purple)'"
+                <app-icon-text-button [iconSvg]="closeIcon" [color]="'var(--purple)'"
                     [bgColorHover]="'var(--purple)'" [viewBox]="'0 0 24 24'" [iconSize]="'24'"
                     (click)="toggleAddList()">
                 </app-icon-text-button>
@@ -34,7 +34,7 @@
                         }
                     </div>
 
-                    <app-icon-text-button [type]="'submit'" [iconSvg]="sendIcon" [textColor]="'var(--purple)'"
+                    <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'" [iconSvg]="sendIcon" [color]="'var(--purple)'"
                         [bgColorHover]="'var(--purple)'" [borderColor]="'var(--purple)'" [viewBox]="'0 0 24 25'"
                         [iconSize]="'20'" [text]="'Add Task'">
                     </app-icon-text-button>

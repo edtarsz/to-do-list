@@ -9,7 +9,27 @@
             <h2 class="whitespace-nowrap font-family-ubuntu-mono-bold text-xl">September 18, 11:34 PM</h2>
         </div>
     </div>
-    <div class="w-full h-full bg-[var(--secondary-color)] rounded-2xl p-[1.5vw]">
-        <h1 class="text-[2vw] font-family-ubuntu-mono-bold">Today's Tasks</h1>
+    <div
+        class="w-full h-full bg-[var(--secondary-color)] rounded-2xl p-[1.5vw] flex flex-col gap-[1vw] justify-between">
+        <div class="w-full h-full font-family-ubuntu-mono-bold">
+            <div class="flex justify-between items-center">
+                <h1 class="text-[2vw] font-family-ubuntu-mono-bold">{{ getTitle() }} Tasks</h1>
+                <ul class="flex gap-2">
+                    <div class="flex gap-4 h-full">
+                        <app-icon-text-button icon="add" text="Date" [iconSvg]="iconRegistryService.getIcon('add')"
+                            [color]="'var(--dark)'"></app-icon-text-button>
+                    </div>
+                    <div class="flex gap-4 h-full">
+                        <app-icon-text-button icon="add" text="Priority" [iconSvg]="iconRegistryService.getIcon('add')"
+                            [color]="'var(--dark)'"></app-icon-text-button>
+                    </div>
+                </ul>
+            </div>
+        </div>
+        <div class="w-[20%] min-w-[150px]">
+            <app-icon-text-button [colorHover]="'var(--secondary-color)'" [color]="'var(--purple)'" icon="add"
+                text="New Task" [borderColor]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
+                [iconSvg]="iconRegistryService.getIcon('add')"></app-icon-text-button>
+        </div>
     </div>
 </div>
