@@ -1,0 +1,15 @@
+<div
+    class="left-0 top-0 fixed w-screen h-screen bg-[rgba(0,0,0,0.5)] flex justify-center items-center backdrop-blur-sm z-1" (click)="togglePopUp()">
+    <div class="w-[40vw] bg-[var(--primary-color)] rounded-xl" (click)="$event.stopPropagation()">
+        <div class="flex flex-col w-full h-full p-[2vw] gap-4">
+            <div class="flex items-center justify-between">
+                <h3 class="font-family-ubuntu-mono-bold text-2xl">{{ title }}</h3>
+                <app-icon-text-button [iconSvg]="closeIcon" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'" [colorHover]="'var(--secondary-color)'"
+                    [viewBox]="'0 0 24 24'" [iconSize]="'24'" (click)="togglePopUp()">
+                </app-icon-text-button>
+            </div>
+            <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
+            <ng-content></ng-content>
+        </div>
+    </div>
+</div>

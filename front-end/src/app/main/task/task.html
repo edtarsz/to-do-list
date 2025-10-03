@@ -9,27 +9,57 @@
             <h2 class="whitespace-nowrap font-family-ubuntu-mono-bold text-xl">September 18, 11:34 PM</h2>
         </div>
     </div>
-    <div
-        class="w-full h-full bg-[var(--secondary-color)] rounded-2xl p-[1.5vw] flex flex-col gap-[1vw] justify-between">
-        <div class="w-full h-full font-family-ubuntu-mono-bold">
+    <div class="w-full h-full bg-[var(--secondary-color)] rounded-2xl p-[1.5vw] flex flex-col justify-between">
+        <div class="flex flex-col w-full h-full font-family-ubuntu-mono-bold gap-[1vw]">
             <div class="flex justify-between items-center">
                 <h1 class="text-[2vw] font-family-ubuntu-mono-bold">{{ getTitle() }} Tasks</h1>
                 <ul class="flex gap-2">
-                    <div class="flex gap-4 h-full">
+                    <div class="flex h-full">
                         <app-icon-text-button icon="add" text="Date" [iconSvg]="iconRegistryService.getIcon('add')"
                             [color]="'var(--dark)'"></app-icon-text-button>
                     </div>
-                    <div class="flex gap-4 h-full">
+                    <div class="flex h-full">
                         <app-icon-text-button icon="add" text="Priority" [iconSvg]="iconRegistryService.getIcon('add')"
                             [color]="'var(--dark)'"></app-icon-text-button>
                     </div>
                 </ul>
             </div>
+            <div class="flex justify-between cursor-pointer">
+                <div class="flex items-center gap-4">
+                    <div class="border border-[var(--gray)] aspect-square h-[60%] rounded-sm cursor-pointer"></div>
+                    <div class="flex flex-col">
+                        <h4 class="text-[var(--gray)]">Agrupación</h4>
+                        <h3 class="text-xl">Create design system</h3>
+                    </div>
+                </div>
+                <div class="flex gap-2 h-[80%]">
+                    <div>
+                        <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'"
+                            [iconSvg]="sendIcon" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
+                            [borderColor]="'var(--purple)'" [viewBox]="'0 0 24 25'" [iconSize]="'20'" [text]="'Today'">
+                        </app-icon-text-button>
+                    </div>
+                    <div>
+                        <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'"
+                            [iconSvg]="sendIcon" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
+                            [borderColor]="'var(--purple)'" [viewBox]="'0 0 24 25'" [iconSize]="'20'"
+                            [text]="'11:59 PM'">
+                        </app-icon-text-button>
+                    </div>
+                    <div>
+                        <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'"
+                            [iconSvg]="sendIcon" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
+                            [borderColor]="'var(--purple)'" [viewBox]="'0 0 24 25'" [iconSize]="'20'" [text]="'High'">
+                        </app-icon-text-button>
+                    </div>
+                </div>
+            </div>
+            <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
         </div>
         <div class="w-[20%] min-w-[150px]">
             <app-icon-text-button [colorHover]="'var(--secondary-color)'" [color]="'var(--purple)'" icon="add"
                 text="New Task" [borderColor]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
-                [iconSvg]="iconRegistryService.getIcon('add')"></app-icon-text-button>
+                [iconSvg]="iconRegistryService.getIcon('add')" (click)="togglePopUp()"></app-icon-text-button>
         </div>
     </div>
 </div>

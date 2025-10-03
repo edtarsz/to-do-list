@@ -1,18 +1,20 @@
-import { Component, inject, Signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ListService } from '../../global-services/lists.service';
 import { AsideItem } from "./aside-item/aside-item";
 import { IconRegistryService } from '../../global-services/icon-registry.service';
-import { InterfaceService } from '../../global-services/interface.service';
 import { CommonModule } from '@angular/common';
-import { AsideSection } from "./aside-section/aside-section";
-import { AddList } from "./operations/add-list/add-list";
-import { IconTextButton } from '../icon-text-button/icon-text-button';
 import { AuthService } from '../../auth/auth.service';
 import { AuthStateService } from '../../global-services/auth-state.service';
+import { InterfaceService } from '../../global-services/interface.service';
+import { PopUp } from '../../shared/pop-up/pop-up';
+import { IconTextButton } from '../icon-text-button/icon-text-button';
+import { AddList } from '../operations/add-list/add-list';
+import { AsideSection } from './aside-section/aside-section';
+import { AddTask } from "../operations/add-task/add-task";
 
 @Component({
   selector: 'app-aside',
-  imports: [AsideItem, IconTextButton, CommonModule, AsideSection, AddList],
+  imports: [AsideItem, IconTextButton, CommonModule, AsideSection, AddList, PopUp, AddTask],
   templateUrl: './aside.html',
   styleUrl: './aside.css'
 })
@@ -47,8 +49,8 @@ export class Aside {
     this.interfaceService.toggleProfileSettings();
   }
 
-  toggleAddList() {
-    this.interfaceService.toggleAddList();
+  togglePopUp() {
+    this.interfaceService.setCurrentOperation('Add List');
   }
 
   toggleDeleteActive() {

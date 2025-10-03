@@ -1,6 +1,3 @@
-@if (interfaceService.isAddListOpen()) {
-<app-add-list></app-add-list>
-}
 <div class="bg-[var(--secondary-color)] h-full rounded-2xl p-[1.5vw] flex flex-col justify-between">
     <div class="flex flex-col gap-[1vw]">
         <div class="flex items-center justify-between h-[3rem]">
@@ -42,7 +39,7 @@
                 </app-icon-text-button>
                 <app-icon-text-button [iconSvg]="addIcon" [borderColor]="'var(--purple)'" [color]="'var(--purple)'"
                     [bgColorHover]="'var(--purple)'" [colorHover]="'var(--secondary-color)'" [viewBox]="'0 0 21 21'"
-                    [iconSize]="'21'" (click)="toggleAddList()">
+                    [iconSize]="'21'" (click)="togglePopUp()">
                 </app-icon-text-button>
             </div>
             <div class="flex flex-col gap-1 mt-1">

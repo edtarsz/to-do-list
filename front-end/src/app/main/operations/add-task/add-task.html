@@ -1,0 +1,24 @@
+<form [formGroup]="addListForm" (ngSubmit)="addList()" class="flex flex-col gap-4">
+    <input type="text" placeholder="Task's name" formControlName="name"
+        class="w-full bg-[var(--secondary-color)] rounded-lg p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200 placeholder-[var(--gray)] text-sm">
+    <textarea name="description" id="" formControlName="description" placeholder="Task's description" rows="6"
+        class="w-full bg-[var(--secondary-color)] rounded-lg p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-colors duration-200 placeholder-[var(--gray)] text-sm"></textarea>
+    <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
+    <div class="flex justify-between items-center relative">
+        <div class="flex">
+            <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'" [iconSvg]="sendIcon"
+                [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'" [borderColor]="'var(--purple)'"
+                [viewBox]="'0 0 24 25'" [iconSize]="'20'" [text]="'Add Task'">
+            </app-icon-text-button>
+            <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'" [iconSvg]="sendIcon"
+                [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'" [borderColor]="'var(--purple)'"
+                [viewBox]="'0 0 24 25'" [iconSize]="'20'" [text]="'Add Task'">
+            </app-icon-text-button>
+        </div>
+
+        <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'" [iconSvg]="sendIcon"
+            [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'" [borderColor]="'var(--purple)'"
+            [viewBox]="'0 0 24 25'" [iconSize]="'20'" [text]="'Add Task'">
+        </app-icon-text-button>
+    </div>
+</form>

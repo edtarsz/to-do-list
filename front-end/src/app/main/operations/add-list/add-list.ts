@@ -1,13 +1,12 @@
-import { Component, effect, ElementRef, inject, signal, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { IconRegistryService } from '../../../../global-services/icon-registry.service';
-import { InterfaceService } from '../../../../global-services/interface.service';
-import { IconTextButton } from '../../../icon-text-button/icon-text-button';
-import { AsideItem } from '../../aside-item/aside-item';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ListService } from '../../../../global-services/lists.service';
-import { AuthStateService } from '../../../../global-services/auth-state.service';
-import { List } from '../../../../models/list';
+import { CommonModule } from "@angular/common";
+import { Component, inject, signal, effect } from "@angular/core";
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { IconRegistryService } from "../../../global-services/icon-registry.service";
+import { InterfaceService } from "../../../global-services/interface.service";
+import { ListService } from "../../../global-services/lists.service";
+import { List } from "../../../models/list";
+import { AsideItem } from "../../aside/aside-item/aside-item";
+import { IconTextButton } from "../../icon-text-button/icon-text-button";
 
 @Component({
   selector: 'app-add-list',
@@ -16,10 +15,9 @@ import { List } from '../../../../models/list';
   styleUrl: './add-list.css'
 })
 export class AddList {
-  public interfaceService = inject(InterfaceService);
+public interfaceService = inject(InterfaceService);
   public iconRegistryService = inject(IconRegistryService);
 
-  public authStateService = inject(AuthStateService);
   private fb = inject(FormBuilder);
 
   public listService = inject(ListService);
@@ -60,12 +58,12 @@ export class AddList {
   sendIcon = this.iconRegistryService.getIcon('send');
   addIcon = this.iconRegistryService.getIcon('add');
 
-  toggleAddList() {
-    this.interfaceService.toggleAddList();
-  }
-
   toggleColorPicker() {
     this.showColorPicker = !this.showColorPicker;
+  }
+
+  togglePopUp() {
+    this.interfaceService.togglePopUp();
   }
 
   selectColor(color: string) {
@@ -78,7 +76,7 @@ export class AddList {
       this.listService.addList(this.buildList()).subscribe({
         next: () => {
           this.addListForm.reset();
-          this.toggleAddList();
+          this.togglePopUp();
         },
         error: (error) => {
           console.error(error);

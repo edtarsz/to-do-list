@@ -3,8 +3,8 @@ import { Injectable, signal, computed } from '@angular/core';
 interface InterfaceState {
     isAsideOpen: boolean;
     isProfileSettingsOpen: boolean;
-    isAddListOpen: boolean;
     deleteActive: boolean;
+    isPopUpOpen: boolean;
 }
 
 @Injectable({
@@ -14,14 +14,16 @@ export class InterfaceService {
     private state = signal<InterfaceState>({
         isAsideOpen: true,
         isProfileSettingsOpen: false,
-        isAddListOpen: false,
-        deleteActive: false
+        deleteActive: false,
+        isPopUpOpen: false
     });
 
     isAsideOpen = computed(() => this.state().isAsideOpen);
     isProfileSettingsOpen = computed(() => this.state().isProfileSettingsOpen);
-    isAddListOpen = computed(() => this.state().isAddListOpen);
     deleteActive = computed(() => this.state().deleteActive);
+    isPopUpOpen = computed(() => this.state().isPopUpOpen);
+
+    currentOperation = signal<'Add List' | 'Add Task'>('Add List');
 
     selectedListId = signal<number | null>(null);
     selectedMenuId = signal<number>(1);
@@ -34,12 +36,17 @@ export class InterfaceService {
         this.state.update(v => ({ ...v, isProfileSettingsOpen: !v.isProfileSettingsOpen }));
     }
 
-    toggleAddList() {
-        this.state.update(v => ({ ...v, isAddListOpen: !v.isAddListOpen }));
-    }
-
     toggleDeleteActive() {
         this.state.update(v => ({ ...v, deleteActive: !v.deleteActive }));
+    }
+
+    togglePopUp() {
+        this.state.update(v => ({ ...v, isPopUpOpen: !v.isPopUpOpen }));
+    }
+
+    setCurrentOperation(operation: 'Add List' | 'Add Task') {
+        this.togglePopUp();
+        this.currentOperation.set(operation);
     }
 
     // Used when signing out
@@ -47,8 +54,8 @@ export class InterfaceService {
         this.state.set({
             isAsideOpen: true,
             isProfileSettingsOpen: false,
-            isAddListOpen: false,
-            deleteActive: false
+            deleteActive: false,
+            isPopUpOpen: false
         });
 
         this.selectedListId.set(null);
