@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, effect, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { IconTextButton } from '../../icon-text-button/icon-text-button';
+import { IconTextButton } from '../../../global-components/icon-text-button/icon-text-button';
 import { IconRegistryService } from '../../../global-services/icon-registry.service';
 import { InterfaceService } from '../../../global-services/interface.service';
 import { ListService } from '../../../global-services/lists.service';

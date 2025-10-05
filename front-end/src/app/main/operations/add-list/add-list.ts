@@ -6,7 +6,7 @@ import { InterfaceService } from "../../../global-services/interface.service";
 import { ListService } from "../../../global-services/lists.service";
 import { List } from "../../../models/list";
 import { AsideItem } from "../../aside/aside-item/aside-item";
-import { IconTextButton } from "../../icon-text-button/icon-text-button";
+import { IconTextButton } from "../../../global-components/icon-text-button/icon-text-button";
 
 @Component({
   selector: 'app-add-list',

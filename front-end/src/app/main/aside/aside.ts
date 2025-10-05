@@ -6,15 +6,15 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../auth/auth.service';
 import { AuthStateService } from '../../global-services/auth-state.service';
 import { InterfaceService } from '../../global-services/interface.service';
-import { PopUp } from '../../shared/pop-up/pop-up';
-import { IconTextButton } from '../icon-text-button/icon-text-button';
+import { IconTextButton } from '../../global-components/icon-text-button/icon-text-button';
 import { AddList } from '../operations/add-list/add-list';
 import { AsideSection } from './aside-section/aside-section';
 import { AddTask } from "../operations/add-task/add-task";
+import { PopUp } from '../../global-components/pop-up/pop-up';
 
 @Component({
   selector: 'app-aside',
-  imports: [AsideItem, IconTextButton, CommonModule, AsideSection, AddList, PopUp, AddTask],
+  imports: [AsideItem, IconTextButton, CommonModule, AsideSection],
   templateUrl: './aside.html',
   styleUrl: './aside.css'
 })

@@ -1,5 +1,5 @@
 import { Component, inject, Input } from '@angular/core';
-import { IconTextButton } from "../../main/icon-text-button/icon-text-button";
+import { IconTextButton } from "../icon-text-button/icon-text-button";
 import { InterfaceService } from '../../global-services/interface.service';
 import { IconRegistryService } from '../../global-services/icon-registry.service';
 

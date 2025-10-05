@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { IconTextButton } from "../../main/icon-text-button/icon-text-button";
+import { IconTextButton } from "../../global-components/icon-text-button/icon-text-button";
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({

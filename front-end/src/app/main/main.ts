@@ -3,9 +3,9 @@ import { Aside } from "./aside/aside";
 import { InterfaceService } from '../global-services/interface.service';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
-import { PopUp } from "../shared/pop-up/pop-up";
 import { AddTask } from "./operations/add-task/add-task";
 import { AddList } from "./operations/add-list/add-list";
+import { PopUp } from '../global-components/pop-up/pop-up';
 
 @Component({
   selector: 'app-main',
