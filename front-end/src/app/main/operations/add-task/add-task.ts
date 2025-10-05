@@ -35,7 +35,8 @@ export class AddTask {
 
   closeIcon = this.iconRegistryService.getIcon('close');
   sendIcon = this.iconRegistryService.getIcon('send');
-  addIcon = this.iconRegistryService.getIcon('add');
+  clockIcon = this.iconRegistryService.getIcon('clock');
+  calendarCleanIcon = this.iconRegistryService.getIcon('calendar_clean');
 
   toggleColorPicker() {
     this.showColorPicker = !this.showColorPicker;
