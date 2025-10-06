@@ -75,7 +75,6 @@ export class AuthService {
             tap(response => {
                 localStorage.setItem('access_token', response.access_token);
                 this.authStateService.setUser(response.user);
-                
                 this.authStateService.setLoading(false);
             }),
             catchError(this.handleError.bind(this))

@@ -1,4 +1,4 @@
-<form [formGroup]="addListForm" (ngSubmit)="addList()" class="flex flex-col gap-4">
+<form [formGroup]="addTaskForm" (ngSubmit)="addTask()" class="flex flex-col gap-4">
     <input type="text" placeholder="Task's name" formControlName="name"
         class="w-full bg-[var(--secondary-color)] rounded-lg p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200 placeholder-[var(--gray)] text-sm">
     <textarea name="description" id="" formControlName="description" placeholder="Task's description" rows="6"
@@ -8,17 +8,31 @@
         <p class="text-[var(--gray)] italic text-end">Due is optional</p>
         <div class="flex gap-2 h-full w-full">
             <div class="flex flex-col gap-2 w-full">
-                <div class="h-full">
-                    <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'"
-                        [iconSvg]="clockIcon" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
-                        [borderColor]="'var(--purple)'" [viewBox]="'0 0 20 20'" [iconSize]="'20'" [text]="'List'">
+                <div class="w-full h-full relative">
+                    <app-icon-text-button [type]="'button'" [colorHover]="'var(--secondary-color)'"
+                        [iconSvg]="arrowListIcon" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
+                        [borderColor]="'var(--purple)'" [viewBox]="'0 0 14 9'" [iconSize]="'14'" [text]="selectedList()"
+                        (click)="toggleList()">
                     </app-icon-text-button>
+                    @if (showList) {
+                    <div class="absolute w-full left-0 px-4 py-2 bg-white rounded-lg shadow-lg z-10 grid gap-x-5"
+                        [class.grid-cols-1]="lists.length <= 5" [class.grid-cols-2]="lists.length > 5">
+
+                        @for (list of lists; track list.id) {
+                        <app-aside-item [title]="list.name" [color]="list.color"
+                            [showText]="interfaceService.isAsideOpen()" [bgColorHover]="'var(--primary-color)'"
+                            [deleting]="interfaceService.deleteActive()" (click)="selectList(+list.id!)"
+                            [selected]="interfaceService.selectedListId() === list.id">
+                        </app-aside-item>
+                        }
+                    </div>
+                    }
                 </div>
 
                 <div class="h-full">
-                    <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'"
-                        [iconSvg]="clockIcon" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
-                        [borderColor]="'var(--purple)'" [viewBox]="'0 0 20 20'" [iconSize]="'20'" [text]="'Priority'">
+                    <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'" [iconSvg]="flagIcon"
+                        [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'" [borderColor]="'var(--purple)'"
+                        [viewBox]="'0 0 25 25'" [iconSize]="'20'" [text]="'Priority'">
                     </app-icon-text-button>
                 </div>
             </div>
@@ -29,15 +43,15 @@
                     <div class="flex flex-col gap-2">
                         <div class="h-full">
                             <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'"
-                                [iconSvg]="calendarCleanIcon" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
-                                [borderColor]="'var(--purple)'" [viewBox]="'0 0 24 24'" [iconSize]="'20'"
+                                [iconSvg]="clockIcon" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
+                                [borderColor]="'var(--purple)'" [viewBox]="'0 0 20 20'" [iconSize]="'20'"
                                 [text]="'Start'">
                             </app-icon-text-button>
                         </div>
                         <div class="h-full">
                             <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'"
-                                [iconSvg]="calendarCleanIcon" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
-                                [borderColor]="'var(--purple)'" [viewBox]="'0 0 24 24'" [iconSize]="'20'"
+                                [iconSvg]="clockIcon" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
+                                [borderColor]="'var(--purple)'" [viewBox]="'0 0 20 20'" [iconSize]="'20'"
                                 [text]="`Due`">
                             </app-icon-text-button>
                         </div>
@@ -47,15 +61,15 @@
                     <div class="flex flex-col gap-2">
                         <div class="h-full">
                             <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'"
-                                [iconSvg]="clockIcon" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
-                                [borderColor]="'var(--purple)'" [viewBox]="'0 0 20 20'" [iconSize]="'20'"
+                                [iconSvg]="calendarCleanIcon" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
+                                [borderColor]="'var(--purple)'" [viewBox]="'0 0 24 24'" [iconSize]="'20'"
                                 [text]="'Start'">
                             </app-icon-text-button>
                         </div>
                         <div class="h-full">
                             <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'"
-                                [iconSvg]="clockIcon" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
-                                [borderColor]="'var(--purple)'" [viewBox]="'0 0 20 20'" [iconSize]="'20'"
+                                [iconSvg]="calendarCleanIcon" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
+                                [borderColor]="'var(--purple)'" [viewBox]="'0 0 24 24'" [iconSize]="'20'"
                                 [text]="`Due`">
                             </app-icon-text-button>
                         </div>

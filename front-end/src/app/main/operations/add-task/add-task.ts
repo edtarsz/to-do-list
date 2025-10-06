@@ -1,35 +1,49 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IconTextButton } from '../../../global-components/icon-text-button/icon-text-button';
 import { IconRegistryService } from '../../../global-services/icon-registry.service';
 import { InterfaceService } from '../../../global-services/interface.service';
+import { TaskService } from '../../../global-services/tasks.service';
+import { Task } from '../../task/task';
 import { ListService } from '../../../global-services/lists.service';
-import { List } from '../../../models/list';
+import { AsideItem } from "../../aside/aside-item/aside-item";
 
 @Component({
   selector: 'app-add-task',
-  imports: [IconTextButton, CommonModule, ReactiveFormsModule],
+  imports: [IconTextButton, CommonModule, ReactiveFormsModule, AsideItem],
   templateUrl: './add-task.html',
   styleUrl: './add-task.css'
 })
 export class AddTask {
   public interfaceService = inject(InterfaceService);
   public iconRegistryService = inject(IconRegistryService);
+  public taskService = inject(TaskService);
+  public listService = inject(ListService);
 
   private fb = inject(FormBuilder);
 
-  public listService = inject(ListService);
+  showList = false;
+  showPriority = false;
+  showStartTime = false;
+  showDueTime = false;
+  showStartDate = false;
+  showDueDate = false;
+  
+  selectedList = signal<string>('List');
 
-  selectedColor = signal('#FFD6E8');
-  showColorPicker = false;
-
-  addListForm!: FormGroup;
+  addTaskForm!: FormGroup;
 
   constructor() {
-    this.addListForm = this.fb.group({
+    this.addTaskForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(255)]],
-      description: ['', [Validators.required]]
+      description: ['', [Validators.required]],
+      list: ['', [Validators.required]],
+      priority: ['', [Validators.required]],
+      startTime: ['', [Validators.required]],
+      dueTime: ['', [Validators.required]],
+      startDate: ['', [Validators.required]],
+      dueDate: ['', [Validators.required]],
     });
   }
 
@@ -37,25 +51,18 @@ export class AddTask {
   sendIcon = this.iconRegistryService.getIcon('send');
   clockIcon = this.iconRegistryService.getIcon('clock');
   calendarCleanIcon = this.iconRegistryService.getIcon('calendar_clean');
-
-  toggleColorPicker() {
-    this.showColorPicker = !this.showColorPicker;
-  }
+  arrowListIcon = this.iconRegistryService.getIcon('arrow_list');
+  flagIcon = this.iconRegistryService.getIcon('flag');
 
   togglePopUp() {
     this.interfaceService.togglePopUp();
   }
 
-  selectColor(color: string) {
-    this.selectedColor.set(color);
-    this.showColorPicker = false;
-  }
-
-  addList() {
-    if (this.addListForm.valid) {
-      this.listService.addList(this.buildList()).subscribe({
+  addTask() {
+    if (this.addTaskForm.valid) {
+      this.taskService.addTask(this.buildTask()).subscribe({
         next: () => {
-          this.addListForm.reset();
+          this.addTaskForm.reset();
           this.togglePopUp();
         },
         error: (error) => {
@@ -67,7 +74,41 @@ export class AddTask {
     }
   }
 
-  buildList(): List {
-    return this.addListForm.value;
+  buildTask(): Task {
+    return this.addTaskForm.value;
+  }
+
+  toggleList() {
+    this.showList = !this.showList;
+  }
+
+  togglePriority() {
+    this.showPriority = !this.showPriority;
+  }
+
+  toggleStartTime() {
+    this.showStartTime = !this.showStartTime;
+  }
+
+  toggleDueTime() {
+    this.showDueTime = !this.showDueTime;
+  }
+
+  toggleStartDate() {
+    this.showStartDate = !this.showStartDate;
+  }
+
+  toggleDueDate() {
+    this.showDueDate = !this.showDueDate;
+  }
+
+  selectList(listId: number) {
+    this.addTaskForm.patchValue({ list: listId });
+    this.selectedList.set(this.lists.find(list => list.id === listId)?.name || 'List');
+    this.showList = false;
+  }
+
+  get lists() {
+    return this.listService.lists();
   }
 }

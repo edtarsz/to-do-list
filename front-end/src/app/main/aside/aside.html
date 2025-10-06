@@ -1,5 +1,5 @@
 <div class="bg-[var(--secondary-color)] h-full rounded-2xl p-[1.5vw] flex flex-col justify-between">
-    <div class="flex flex-col gap-[1vw]">
+    <div class="flex flex-col gap-[1vw] flex-1 min-h-0">
         <div class="flex items-center justify-between h-[3rem]">
             @if (interfaceService.isAsideOpen()) {
             <div class="flex items-center gap-[0.5vw]">
@@ -17,9 +17,7 @@
             </div>
             }
         </div>
-
         <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
-
         <app-aside-section [title]="'MENU'" [showText]="interfaceService.isAsideOpen()">
             @for (menuItem of menu; track menuItem.id) {
             <app-aside-item [title]="menuItem.name" [iconSvg]="menuItem.icon" [iconSize]="menuItem.iconSize"
@@ -28,57 +26,56 @@
                 [selected]="interfaceService.selectedMenuId() === menuItem.id"></app-aside-item>
             }
         </app-aside-section>
-
         <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
-
-        <app-aside-section [title]="'LISTS'" [showText]="interfaceService.isAsideOpen()">
-            <div section-buttons class="flex items-center gap-[0.5vw]">
-                <app-icon-text-button [iconSvg]="trashIcon" [borderColor]="'var(--red)'" [color]="'var(--red)'"
-                    [bgColorHover]="'var(--red)'" [colorHover]="'var(--secondary-color)'" [viewBox]="'0 0 17 17'"
-                    [iconSize]="'17'" [isActive]="interfaceService.deleteActive()" (click)="toggleDeleteActive()">
-                </app-icon-text-button>
-                <app-icon-text-button [iconSvg]="addIcon" [borderColor]="'var(--purple)'" [color]="'var(--purple)'"
-                    [bgColorHover]="'var(--purple)'" [colorHover]="'var(--secondary-color)'" [viewBox]="'0 0 21 21'"
-                    [iconSize]="'21'" (click)="togglePopUp()">
-                </app-icon-text-button>
-            </div>
-            <div class="flex flex-col gap-1 mt-1">
-                @for (list of listService.lists$(); track list.id) {
-                <app-aside-item [title]="list.name" [color]="list.color" [showText]="interfaceService.isAsideOpen()"
-                    [bgColorHover]="'var(--primary-color)'" [deleting]="interfaceService.deleteActive()"
-                    (click)="deleteList(+list.id!)"
-                    [selected]="interfaceService.selectedListId() === list.id"></app-aside-item>
-                }
-            </div>
-        </app-aside-section>
-
-        <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
+        <div class="flex flex-col overflow-y-auto overflow-x-hidden flex-1 min-h-0 scrollbar-hide pr-1">
+            <app-aside-section [title]="'LISTS'" [showText]="interfaceService.isAsideOpen()">
+                <div section-buttons class="flex items-center gap-[0.5vw]">
+                    <app-icon-text-button [iconSvg]="trashIcon" [borderColor]="'var(--red)'" [color]="'var(--red)'"
+                        [bgColorHover]="'var(--red)'" [colorHover]="'var(--secondary-color)'" [viewBox]="'0 0 17 17'"
+                        [iconSize]="'17'" [isActive]="interfaceService.deleteActive()" (click)="toggleDeleteActive()">
+                    </app-icon-text-button>
+                    <app-icon-text-button [iconSvg]="addIcon" [borderColor]="'var(--purple)'" [color]="'var(--purple)'"
+                        [bgColorHover]="'var(--purple)'" [colorHover]="'var(--secondary-color)'" [viewBox]="'0 0 21 21'"
+                        [iconSize]="'21'" (click)="togglePopUp()">
+                    </app-icon-text-button>
+                </div>
+                <div class="flex flex-col gap-1 mt-1">
+                    @for (list of listService.lists$(); track list.id) {
+                    <app-aside-item [title]="list.name" [color]="list.color" [showText]="interfaceService.isAsideOpen()"
+                        [bgColorHover]="'var(--primary-color)'" [deleting]="interfaceService.deleteActive()"
+                        (click)="deleteList(+list.id!)"
+                        [selected]="interfaceService.selectedListId() === list.id"></app-aside-item>
+                    }
+                </div>
+            </app-aside-section>
+        </div>
     </div>
-    <div class="w-full flex flex-col gap-[0.5vw]">
+    <div class="w-full flex flex-col gap-[0.5vw] pt-5 shadow-top">
+        <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
         @if (interfaceService.isProfileSettingsOpen()) {
         <ul class="font-family-ubuntu-mono-bold flex flex-col">
             <li class="gap-[1vw] flex items-center py-2 transition-transform duration-200 hover:bg-[var(--primary-color)] rounded-lg hover:cursor-pointer"
                 [ngClass]="{
-                    'hover:translate-x-1 hover:px-[1vw]': interfaceService.isAsideOpen(),
-                    'justify-center text-center': !interfaceService.isAsideOpen(),
-                }" (click)="logOut()">
+          'hover:translate-x-1 hover:px-[1vw]': interfaceService.isAsideOpen(),
+          'justify-center text-center': !interfaceService.isAsideOpen(),
+        }" (click)="logOut()">
                 Sign Out
             </li>
             <li class="gap-[1vw] flex items-center py-2 transition-transform duration-200 hover:bg-[var(--primary-color)] rounded-lg hover:cursor-pointer"
                 [ngClass]="{
-                    'hover:translate-x-1 hover:px-[1vw]': interfaceService.isAsideOpen(),
-                    'justify-center text-center': !interfaceService.isAsideOpen(),
-                }">
+          'hover:translate-x-1 hover:px-[1vw]': interfaceService.isAsideOpen(),
+          'justify-center text-center': !interfaceService.isAsideOpen(),
+        }">
                 Update Profile
             </li>
         </ul>
         <hr class="w-8 border-[var(--purple)] border-t-4 m-auto rounded-4xl">
         }
         <div class="p-2 h-auto flex justify-center items-center gap-[1vw] transition-transform duration-200 hover:bg-[var(--primary-color)] rounded-lg hover:cursor-pointer"
-            [ngClass]="{ 
-            'justify-center px-0': !interfaceService.isAsideOpen(),
-            'bg-[var(--primary-color)]': interfaceService.isProfileSettingsOpen(),
-        }" (click)="toggleProfileSettings()">
+            [ngClass]="{
+        'justify-center px-0': !interfaceService.isAsideOpen(),
+        'bg-[var(--primary-color)]': interfaceService.isProfileSettingsOpen(),
+      }" (click)="toggleProfileSettings()">
             <div class="w-[40px] h-[40px] flex items-center justify-center bg-[var(--pink)] rounded-full">
                 <img src="assets/svgs/user.svg" alt="" class="w-[30px] h-[30px]">
             </div>

@@ -67,6 +67,15 @@ export class IconRegistryService {
       <path d="M16 2v4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
       <rect width="18" height="18" x="3" y="4" rx="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
       <path d="M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      `,
+    arrow_list: `
+      <path d="M1 1.5L7 7.5L13 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+      stroke-linejoin="round" />
+      `,
+    flag: `
+      <path
+        d="M4.5 22.5V4.5C4.5 4.34475 4.53614 4.19164 4.60557 4.05279C4.675 3.91393 4.7758 3.79315 4.9 3.7C5.93858 2.92107 7.20178 2.5 8.5 2.5C11.5 2.5 13.5 4.5 15.833 4.5C17.1663 4.5 18.1887 4.23333 18.9 3.7C19.0486 3.58857 19.2252 3.52072 19.4102 3.50404C19.5952 3.48736 19.7811 3.52252 19.9472 3.60557C20.1133 3.68863 20.253 3.81629 20.3507 3.97427C20.4483 4.13224 20.5 4.31429 20.5 4.5V14.5C20.5 14.6552 20.4639 14.8084 20.3944 14.9472C20.325 15.0861 20.2242 15.2069 20.1 15.3C19.0614 16.0789 17.7982 16.5 16.5 16.5C13.5 16.5 11.5 14.5 8.5 14.5C7.02412 14.5 5.60002 15.044 4.5 16.028"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
       `
   };
 

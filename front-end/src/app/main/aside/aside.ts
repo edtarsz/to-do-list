@@ -7,10 +7,7 @@ import { AuthService } from '../../auth/auth.service';
 import { AuthStateService } from '../../global-services/auth-state.service';
 import { InterfaceService } from '../../global-services/interface.service';
 import { IconTextButton } from '../../global-components/icon-text-button/icon-text-button';
-import { AddList } from '../operations/add-list/add-list';
 import { AsideSection } from './aside-section/aside-section';
-import { AddTask } from "../operations/add-task/add-task";
-import { PopUp } from '../../global-components/pop-up/pop-up';
 
 @Component({
   selector: 'app-aside',
@@ -34,6 +31,7 @@ export class Aside {
   noteIcon = this.iconRegistryService.getIcon('note');
   calendarIcon = this.iconRegistryService.getIcon('calendar');
 
+  // Initialize lists on aside load
   constructor() {
     this.listService.getLists().subscribe();
   }

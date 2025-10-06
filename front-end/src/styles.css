@@ -40,7 +40,7 @@
     /* Colors */
     --primary-color: #F4F4F4;
     --secondary-color: #FFFFFF;
-    
+
     --light: #FFFFFF;
     --dark: #1F1F1F;
     --gray: #8F8F8F;
@@ -60,4 +60,18 @@
 
 body {
     font-family: var(--font-family-ubuntu-mono);
+}
+
+@layer utilities {
+    .scrollbar-hide {
+        /* Firefox */
+        scrollbar-width: none;
+        /* IE and Edge */
+        -ms-overflow-style: none;
+    }
+
+    /* Chrome, Safari and Opera */
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
 }
