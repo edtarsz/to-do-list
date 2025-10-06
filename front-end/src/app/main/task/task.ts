@@ -26,6 +26,7 @@ export class TaskComponent {
 
   addIcon = this.iconRegistryService.getIcon('add');
   sendIcon = this.iconRegistryService.getIcon('send');
+  arrowDownwardsIcon = this.iconRegistryService.getIcon('arrow_downwards');
 
   constructor() {
     this.taskService.getTasks().subscribe();
