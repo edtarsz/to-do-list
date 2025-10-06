@@ -10,6 +10,7 @@ export interface Task {
     startTime: string;
     dueTime?: string;
 
+    listId?: number;
     completed?: boolean;
 }
 

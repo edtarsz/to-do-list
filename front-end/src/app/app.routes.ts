@@ -30,7 +30,7 @@ export const routes: Routes = [
         children: [
             {
                 path: 'tasks',
-                loadComponent: () => import('./main/task/task').then(m => m.Task)
+                loadComponent: () => import('./main/task/task').then(m => m.TaskComponent)
             },
             {
                 path: 'calendar',

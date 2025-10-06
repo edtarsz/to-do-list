@@ -35,4 +35,7 @@ export class CreateTaskDto {
     @IsBoolean()
     @IsOptional()
     completed?: boolean;
+
+    @IsOptional()
+    listId?: number;
 }

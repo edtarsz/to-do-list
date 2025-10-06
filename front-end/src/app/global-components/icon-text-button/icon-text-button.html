@@ -1,10 +1,11 @@
 <button [type]="type"
-  class="w-[35px] h-[35px] rounded-md flex items-center justify-center cursor-pointer transition-colors duration-200 gap-2 outline-none"
+  class="text-nowrap w-[35px] h-[35px] rounded-md flex items-center justify-center cursor-pointer transition-colors duration-200 gap-2 outline-none"
   [ngClass]="{ 
     'border': borderColor, 
     'w-full h-full p-2': text, 
   }" [style.backgroundColor]="currentBgColor || null" [style.color]="currentTextColor || null"
-  [style.borderColor]="borderColor || null" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()" (click)="onClick()">
+  [style.borderColor]="borderColor || null" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()"
+  (click)="onClick()">
 
   @if (text) {
   <span class="font-family-ubuntu-mono-bold">{{ text }}</span>

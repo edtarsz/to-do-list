@@ -1,4 +1,4 @@
-import { IsEnum, IsOptional, IsString, IsDateString, MinLength, MaxLength, Max } from 'class-validator';
+import { IsEnum, IsString, MinLength, MaxLength } from 'class-validator';
 import { Role } from '@prisma/client';
 
 export class CreateUserDto {

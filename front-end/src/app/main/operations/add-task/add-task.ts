@@ -50,7 +50,7 @@ export class AddTask {
   constructor() {
     this.addTaskForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(255)]],
-      description: ['', [Validators.required]],
+      description: [''],
       priority: ['', [Validators.required]],
       startDate: ['', [Validators.required]],
       dueDate: [''],
@@ -97,7 +97,8 @@ export class AddTask {
       dueDate: this.addTaskForm.value.dueDate || null,
       startTime: this.addTaskForm.value.startTime,
       dueTime: this.addTaskForm.value.dueTime || null,
-      completed: false
+      completed: false,
+      listId: this.addTaskForm.value.listId
     }
   }
 

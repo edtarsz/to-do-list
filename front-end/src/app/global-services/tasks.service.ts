@@ -28,9 +28,10 @@ export class TaskService {
         );
     }
 
-    updateTask(id: number, updatedTask: Task): Observable<Task> {
+    // The payload is a partial Task object, meaning it can contain one or more properties to be updated
+    updateTask(id: number, payload: Partial<Task>): Observable<Task> {
         const url = `${this.apiURL}/${id}`;
-        return this.httpClient.patch<Task>(url, updatedTask).pipe(
+        return this.httpClient.patch<Task>(url, payload).pipe(
             tap(() => this.getTasks().subscribe())
         );
     }
