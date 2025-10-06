@@ -26,6 +26,7 @@ export class TaskComponent {
 
   addIcon = this.iconRegistryService.getIcon('add');
   sendIcon = this.iconRegistryService.getIcon('send');
+  calendarIcon = this.iconRegistryService.getIcon('calendar_clean');
   arrowDownwardsIcon = this.iconRegistryService.getIcon('arrow_downwards');
 
   constructor() {

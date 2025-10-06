@@ -9,7 +9,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrl: './icon-text-button.css'
 })
 export class IconTextButton {
-  private sanitizer = inject(DomSanitizer);
+private sanitizer = inject(DomSanitizer);
 
   @Input() bgColor?: string;
   @Input() bgColorHover?: string;
