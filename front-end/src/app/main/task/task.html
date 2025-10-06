@@ -30,43 +30,46 @@
         <div
             class="flex flex-col gap-[0.5vw] overflow-y-auto overflow-x-hidden flex-1 min-h-0 scrollbar-hide pr-1 font-family-ubuntu-mono-bold">
             @for (task of tasks; track task.id) {
-                @if(!task.completed) {
-                    <div class="flex justify-between cursor-pointer gap-[1vw] items-center hover:bg-[var(--primary-color)] p-[1vw] rounded-lg">
-                        <div class="flex gap-4 items-center">
-                            <div class="border border-[var(--gray)] aspect-square h-[1.5vw] rounded-sm cursor-pointer bg-[var(--secondary-color)]"
-                                (click)="completeTask(task)"></div>
-                            <div class="flex flex-col">
-                                @if (task.listId) {
-                                <div class="flex items-center gap-[0.5vw]">
-                                    <div class="rounded-full w-2 h-2 inline-block"
-                                        [style.background-color]="getListById(task.listId)?.color"></div>
-                                    <h4 class="font-family-ubuntu-mono-bold text-sm">{{ getListById(task.listId)?.name }}</h4>
-                                </div>
-                                }
-                                <h3 class="text-xl">{{ task.name }}</h3>
-                                <div>
-                                    <p class="font-family-ubuntu-mono text-[var(--gray)]">{{ task.description }}</p>
-                                </div>
-                            </div>
+            @if(!task.completed) {
+            <div
+                class="flex justify-between cursor-pointer gap-[1vw] items-center hover:bg-[var(--primary-color)] p-[1vw] rounded-lg">
+                <div class="flex gap-4 items-center">
+                    <div class="border border-[var(--gray)] aspect-square h-[1.5vw] rounded-sm cursor-pointer bg-[var(--secondary-color)]"
+                        (click)="completeTask(task)"></div>
+                    <div class="flex flex-col">
+                        @if (task.listId) {
+                        <div class="flex items-center gap-[0.5vw]">
+                            <div class="rounded-full w-2 h-2 inline-block"
+                                [style.background-color]="getListById(task.listId)?.color"></div>
+                            <h4 class="font-family-ubuntu-mono-bold text-sm">{{ getListById(task.listId)?.name }}</h4>
                         </div>
-                        <div class="flex gap-2 h-[5vh]">
-                            <div class="w-full">
-                                <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'"
-                                    [iconSvg]="sendIcon" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
-                                    [borderColor]="'var(--purple)'" [viewBox]="'0 0 24 25'" [iconSize]="'20'" [text]="'High'">
-                                </app-icon-text-button>
-                            </div>
+                        }
+                        <h3 class="text-xl">{{ task.name }}</h3>
+                        <div>
+                            <p class="font-family-ubuntu-mono text-[var(--gray)]">{{ task.description }}</p>
                         </div>
                     </div>
-                    <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
-                }
+                </div>
+                <div class="flex gap-2 h-[5vh]">
+                    <div class="w-full">
+                        <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'"
+                            [iconSvg]="sendIcon" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
+                            [borderColor]="'var(--purple)'" [viewBox]="'0 0 24 25'" [iconSize]="'20'" [text]="'High'">
+                        </app-icon-text-button>
+                    </div>
+                </div>
+            </div>
+            <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
+            }
             }
         </div>
 
-        <div class="w-[20%] min-w-[150px]">
-            <app-icon-text-button [colorHover]="'var(--secondary-color)'" [color]="'var(--purple)'" icon="add"
-                text="New Task" [borderColor]="'var(--purple)'" [bgColorHover]="'var(--purple)'" [iconSvg]="addIcon"
-                (click)="togglePopUp()"></app-icon-text-button>
+        <div class="flex justify-end">
+            <div class="w-[20%] min-w-[150px]">
+                <app-icon-text-button [colorHover]="'var(--secondary-color)'" [color]="'var(--purple)'" icon="add"
+                    text="New Task" [borderColor]="'var(--purple)'" [bgColorHover]="'var(--purple)'" [iconSvg]="addIcon"
+                    (click)="togglePopUp()"></app-icon-text-button>
+            </div>
         </div>
     </div>
 </div>
