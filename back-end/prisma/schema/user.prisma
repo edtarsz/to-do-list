@@ -6,6 +6,7 @@ model User {
     password String
     role     Role   @default(USER)
 
+    // Relacion de uno a muchos con Task y List
     tasks   Task[]
     lists   List[]
     

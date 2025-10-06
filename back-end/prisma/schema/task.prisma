@@ -1,20 +1,24 @@
 model Task {
   id          Int      @id @default(autoincrement())
-  title       String
+  name       String
   description String?
   priority    Priority @default(MEDIUM)
 
   startDate String?
-  dueDate String?
+  dueDate   String?
 
   startTime String?
-  dueTime String?
+  dueTime   String?
 
   completed Boolean @default(false)
 
   // Relacion de muchos a uno con User
   userId Int
   user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Relacion de muchos a uno con List (opcional)
+  listId Int?
+  list   List? @relation("ListTasks", fields: [listId], references: [id])
 
   @@map("tasks")
 }

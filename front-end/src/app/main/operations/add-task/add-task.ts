@@ -5,9 +5,9 @@ import { IconTextButton } from '../../../global-components/icon-text-button/icon
 import { IconRegistryService } from '../../../global-services/icon-registry.service';
 import { InterfaceService } from '../../../global-services/interface.service';
 import { TaskService } from '../../../global-services/tasks.service';
-import { Task } from '../../task/task';
 import { ListService } from '../../../global-services/lists.service';
 import { AsideItem } from "../../aside/aside-item/aside-item";
+import { Priority, Task } from '../../../models/task';
 
 @Component({
   selector: 'app-add-task',
@@ -23,27 +23,41 @@ export class AddTask {
 
   private fb = inject(FormBuilder);
 
+  addTaskForm!: FormGroup;
+
   showList = false;
   showPriority = false;
   showStartTime = false;
   showDueTime = false;
   showStartDate = false;
   showDueDate = false;
-  
-  selectedList = signal<string>('List');
 
-  addTaskForm!: FormGroup;
+  selectedList = signal<string>('List');
+  selectedPriority = signal<string>('Priority');
+  selectedStartTime = signal<string>('Start Time');
+  selectedDueTime = signal<string>('Due Time');
+  selectedStartDate = signal<string>('Start Date');
+  selectedDueDate = signal<string>('Due Date');
+
+  openDropdown = signal<null | 'list' | 'priority' | 'startTime' | 'dueTime' | 'startDate' | 'dueDate'>(null);
+
+  prioritys = [
+    { name: Priority[Priority.LOW], color: 'var(--low)', value: Priority.LOW },
+    { name: Priority[Priority.MEDIUM], color: 'var(--medium)', value: Priority.MEDIUM },
+    { name: Priority[Priority.HIGH], color: 'var(--high)', value: Priority.HIGH }
+  ];
 
   constructor() {
     this.addTaskForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(255)]],
       description: ['', [Validators.required]],
-      list: ['', [Validators.required]],
       priority: ['', [Validators.required]],
-      startTime: ['', [Validators.required]],
-      dueTime: ['', [Validators.required]],
       startDate: ['', [Validators.required]],
-      dueDate: ['', [Validators.required]],
+      dueDate: [''],
+      startTime: ['', [Validators.required]],
+      dueTime: [''],
+      listId: ['', [Validators.required]],
+      completed: [false]
     });
   }
 
@@ -75,37 +89,61 @@ export class AddTask {
   }
 
   buildTask(): Task {
-    return this.addTaskForm.value;
+    return {
+      name: this.addTaskForm.value.name,
+      description: this.addTaskForm.value.description,
+      priority: this.addTaskForm.value.priority,
+      startDate: this.addTaskForm.value.startDate,
+      dueDate: this.addTaskForm.value.dueDate || null,
+      startTime: this.addTaskForm.value.startTime,
+      dueTime: this.addTaskForm.value.dueTime || null,
+      completed: false
+    }
   }
 
-  toggleList() {
-    this.showList = !this.showList;
+  toggleDropdown(type: 'list' | 'priority' | 'startTime' | 'dueTime' | 'startDate' | 'dueDate') {
+    this.openDropdown.set(this.openDropdown() === type ? null : type);
   }
 
-  togglePriority() {
-    this.showPriority = !this.showPriority;
-  }
-
-  toggleStartTime() {
-    this.showStartTime = !this.showStartTime;
-  }
-
-  toggleDueTime() {
-    this.showDueTime = !this.showDueTime;
-  }
-
-  toggleStartDate() {
-    this.showStartDate = !this.showStartDate;
-  }
-
-  toggleDueDate() {
-    this.showDueDate = !this.showDueDate;
-  }
 
   selectList(listId: number) {
-    this.addTaskForm.patchValue({ list: listId });
+    this.addTaskForm.patchValue({ listId: listId });
     this.selectedList.set(this.lists.find(list => list.id === listId)?.name || 'List');
-    this.showList = false;
+    this.openDropdown.set(null);
+  }
+
+  selectPriority(priority: string) {
+    this.addTaskForm.patchValue({ priority: priority });
+    this.selectedPriority.set(priority);
+    this.openDropdown.set(null);
+  }
+
+  onStartTimeChange(event: any) {
+    const time = event.target.value;
+    this.addTaskForm.patchValue({ startTime: time });
+    this.selectedStartTime.set(time);
+    this.openDropdown.set(null);
+  }
+
+  onDueTimeChange(event: any) {
+    const time = event.target.value;
+    this.addTaskForm.patchValue({ dueTime: time });
+    this.selectedDueTime.set(time);
+    this.openDropdown.set(null);
+  }
+
+  onStartDateChange(event: any) {
+    const date = event.target.value;
+    this.addTaskForm.patchValue({ startDate: date });
+    this.selectedStartDate.set(date);
+    this.openDropdown.set(null);
+  }
+
+  onDueDateChange(event: any) {
+    const date = event.target.value;
+    this.addTaskForm.patchValue({ dueDate: date });
+    this.selectedDueDate.set(date);
+    this.openDropdown.set(null);
   }
 
   get lists() {

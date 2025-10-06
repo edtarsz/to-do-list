@@ -5,6 +5,9 @@ model List {
 
     userId   Int    
     user     User   @relation(fields: [userId], references: [id])
-    
+
+    // Relacion de uno a muchos con Task
+    tasks  Task[] @relation("ListTasks")
+
     @@map("lists")
 }

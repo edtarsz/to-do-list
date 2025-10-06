@@ -2,7 +2,7 @@ import { inject, Injectable, signal } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { tap } from "rxjs/internal/operators/tap";
 import { Observable } from "rxjs";
-import { Task } from "../main/task/task";
+import { Task } from "../models/task";
 
 @Injectable({
     providedIn: 'root'

@@ -5,7 +5,7 @@ export class CreateTaskDto {
     @IsString()
     @MinLength(1)
     @MaxLength(100)
-    title: string;
+    name: string;
 
     @IsString()
     @IsOptional()
@@ -16,19 +16,19 @@ export class CreateTaskDto {
     @IsOptional()
     priority?: Priority;
 
-    @IsDateString()
+    @IsString()
     @IsOptional()
     startDate?: string;
 
-    @IsDateString()
+    @IsString()
     @IsOptional()
     dueDate?: string;
 
-    @IsDateString()
+    @IsString()
     @IsOptional()
     startTime?: string;
 
-    @IsDateString()
+    @IsString()
     @IsOptional()
     dueTime?: string;
 
