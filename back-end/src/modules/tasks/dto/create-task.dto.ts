@@ -13,27 +13,21 @@ export class CreateTaskDto {
     description?: string;
 
     @IsEnum(Priority)
-    @IsOptional()
-    priority?: Priority;
+    priority: Priority;
 
     @IsString()
-    @IsOptional()
-    startDate?: string;
+    startDate: string;
 
     @IsString()
-    @IsOptional()
-    dueDate?: string;
+    dueDate: string;
 
     @IsString()
-    @IsOptional()
-    startTime?: string;
+    startTime: string;
 
     @IsString()
-    @IsOptional()
-    dueTime?: string;
+    dueTime: string;
 
     @IsBoolean()
-    @IsOptional()
     completed?: boolean;
 
     @IsOptional()

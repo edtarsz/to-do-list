@@ -5,13 +5,13 @@ export interface Task {
     priority: Priority;
 
     startDate: string;
-    dueDate?: string;
-
+    dueDate: string;
+    
     startTime: string;
-    dueTime?: string;
+    dueTime: string;
 
     listId?: number;
-    completed?: boolean;
+    completed: boolean;
 }
 
 export enum Priority {

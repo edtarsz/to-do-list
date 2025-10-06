@@ -28,9 +28,27 @@ async function main() {
 
     await prisma.task.createMany({
         data: [
-            { name: 'Task 1', description: 'Description for Task 1', priority: 'HIGH', userId: adminUser.id },
-            { name: 'Task 2', description: 'Description for Task 2', priority: 'MEDIUM', userId: regularUser.id },
-            { name: 'Task 3', description: 'Description for Task 3', priority: 'LOW', userId: regularUser.id }
+            {
+                name: 'Task 1', description: 'Description for Task 1', priority: 'HIGH', userId: adminUser.id,
+                startDate: '',
+                dueDate: '',
+                startTime: '',
+                dueTime: ''
+            },
+            {
+                name: 'Task 2', description: 'Description for Task 2', priority: 'MEDIUM', userId: regularUser.id,
+                startDate: '',
+                dueDate: '',
+                startTime: '',
+                dueTime: ''
+            },
+            {
+                name: 'Task 3', description: 'Description for Task 3', priority: 'LOW', userId: regularUser.id,
+                startDate: '',
+                dueDate: '',
+                startTime: '',
+                dueTime: ''
+            }
         ],
         skipDuplicates: true
     });

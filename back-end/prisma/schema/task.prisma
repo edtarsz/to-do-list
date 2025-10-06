@@ -4,11 +4,11 @@ model Task {
   description String?
   priority    Priority @default(MEDIUM)
 
-  startDate String?
-  dueDate   String?
+  startDate String
+  dueDate   String
 
-  startTime String?
-  dueTime   String?
+  startTime String
+  dueTime   String
 
   completed Boolean @default(false)
 

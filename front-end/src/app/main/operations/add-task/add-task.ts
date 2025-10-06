@@ -51,12 +51,12 @@ export class AddTask {
     this.addTaskForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(255)]],
       description: [''],
-      priority: ['', [Validators.required]],
-      startDate: ['', [Validators.required]],
+      priority: [''],
+      startDate: [''],
       dueDate: [''],
-      startTime: ['', [Validators.required]],
+      startTime: [''],
       dueTime: [''],
-      listId: ['', [Validators.required]],
+      listId: [''],
       completed: [false]
     });
   }
@@ -92,13 +92,13 @@ export class AddTask {
     return {
       name: this.addTaskForm.value.name,
       description: this.addTaskForm.value.description,
-      priority: this.addTaskForm.value.priority,
-      startDate: this.addTaskForm.value.startDate,
-      dueDate: this.addTaskForm.value.dueDate || null,
-      startTime: this.addTaskForm.value.startTime,
-      dueTime: this.addTaskForm.value.dueTime || null,
+      priority: this.addTaskForm.value.priority || "MEDIUM",
+      startDate: this.addTaskForm.value.startDate || new Date().toISOString().split('T')[0],
+      dueDate: this.addTaskForm.value.dueDate || new Date().toISOString().split('T')[0],
+      startTime: this.addTaskForm.value.startTime || "00:00",
+      dueTime: this.addTaskForm.value.dueTime || "23:59",
       completed: false,
-      listId: this.addTaskForm.value.listId
+      listId: this.addTaskForm.value.listId || null
     }
   }
 
