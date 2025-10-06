@@ -28,10 +28,10 @@
 
         <!-- Scroll container -->
         <div
-            class="flex flex-col gap-[1vw] overflow-y-auto overflow-x-hidden flex-1 min-h-0 scrollbar-hide pr-1 font-family-ubuntu-mono-bold">
+            class="flex flex-col gap-[0.5vw] overflow-y-auto overflow-x-hidden flex-1 min-h-0 scrollbar-hide pr-1 font-family-ubuntu-mono-bold">
             @for (task of tasks; track task.id) {
                 @if(!task.completed) {
-                    <div class="flex justify-between cursor-pointer gap-[2vw] items-center hover:bg-[var(--primary-color)] p-[1vw] rounded-lg">
+                    <div class="flex justify-between cursor-pointer gap-[1vw] items-center hover:bg-[var(--primary-color)] p-[1vw] rounded-lg">
                         <div class="flex gap-4 items-center">
                             <div class="border border-[var(--gray)] aspect-square h-[1.5vw] rounded-sm cursor-pointer bg-[var(--secondary-color)]"
                                 (click)="completeTask(task)"></div>
