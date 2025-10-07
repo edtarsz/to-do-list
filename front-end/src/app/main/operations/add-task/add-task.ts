@@ -77,6 +77,7 @@ export class AddTask {
       this.taskService.addTask(this.buildTask()).subscribe({
         next: () => {
           this.addTaskForm.reset();
+          this.resetSelections();
           this.togglePopUp();
         },
         error: (error) => {
@@ -88,24 +89,32 @@ export class AddTask {
     }
   }
 
+  private getLocalDateString(date: Date = new Date()): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   buildTask(): Task {
+    const formValue = this.addTaskForm.value;
+
     return {
-      name: this.addTaskForm.value.name,
-      description: this.addTaskForm.value.description,
-      priority: this.addTaskForm.value.priority || "MEDIUM",
-      startDate: this.addTaskForm.value.startDate || new Date().toISOString().split('T')[0],
-      dueDate: this.addTaskForm.value.dueDate || new Date().toISOString().split('T')[0],
-      startTime: this.addTaskForm.value.startTime || "00:00",
-      dueTime: this.addTaskForm.value.dueTime || "23:59",
+      name: formValue.name,
+      description: formValue.description || '',
+      priority: formValue.priority || Priority[Priority.MEDIUM],
+      startDate: formValue.startDate || this.getLocalDateString(),
+      dueDate: formValue.dueDate || this.getLocalDateString(),
+      startTime: formValue.startTime || "00:00",
+      dueTime: formValue.dueTime || "23:59",
       completed: false,
-      listId: this.addTaskForm.value.listId || null
+      listId: formValue.listId || null
     }
   }
 
   toggleDropdown(type: 'list' | 'priority' | 'startTime' | 'dueTime' | 'startDate' | 'dueDate') {
     this.openDropdown.set(this.openDropdown() === type ? null : type);
   }
-
 
   selectList(listId: number) {
     this.addTaskForm.patchValue({ listId: listId });
@@ -145,6 +154,15 @@ export class AddTask {
     this.addTaskForm.patchValue({ dueDate: date });
     this.selectedDueDate.set(date);
     this.openDropdown.set(null);
+  }
+
+  private resetSelections() {
+    this.selectedList.set('List');
+    this.selectedPriority.set('Priority');
+    this.selectedStartTime.set('Start Time');
+    this.selectedDueTime.set('Due Time');
+    this.selectedStartDate.set('Start Date');
+    this.selectedDueDate.set('Due Date');
   }
 
   get lists() {

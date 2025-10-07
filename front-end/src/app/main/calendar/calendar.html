@@ -1,18 +1,84 @@
-<div class="w-full h-full bg-amber-200 rounded-2xl p-[1.5vw] flex flex-col">
-    <div class="flex items-center justify-between">
-        <h1>September, 2025</h1>
-        <div class="flex items-center gap-[0.5vw]">
-            <div>
-                <app-icon-text-button [text]="'dasdsa'" [color]="'black'" [iconSvg]="arrowBackIcon.svg" [viewBox]="'0 0 12 8'" [iconSize]="'14'"></app-icon-text-button>
+<div class="w-full h-full rounded-2xl p-[1.5vw] flex flex-col gap-[1vw]">
+    <div class="flex items-center justify-between font-family-ubuntu-mono-bold">
+        <h1 class="text-2xl lg:text-[2vw]">{{ currentMonth }}, {{ currentYear }}</h1>
+        <div class="flex items-center gap-[1vw]">
+            <app-icon-text-button (click)="previousWeek()" [color]="'black'" [iconSvg]="arrowBackIcon.svg"
+                [viewBox]="'0 0 12 8'" [iconSize]="'14'" [bgColor]="'var(--secondary-color)'">
+            </app-icon-text-button>
+
+            <app-icon-text-button [text]="weekNumber" [color]="'black'" [bgColor]="'var(--secondary-color)'">
+            </app-icon-text-button>
+
+            <app-icon-text-button (click)="nextWeek()" [color]="'black'" [iconSvg]="arrowNextIcon.svg"
+                [viewBox]="'0 0 12 8'" [iconSize]="'14'" [bgColor]="'var(--secondary-color)'">
+            </app-icon-text-button>
+        </div>
+    </div>
+
+    <!-- days -->
+    <div class="grid grid-cols-8 items-center gap-[0.5vw]">
+        <div class="m-auto">
+            <app-icon-text-button [color]="'black'" [iconSvg]="arrowBackIcon.svg" [viewBox]="'0 0 12 8'"
+                [iconSize]="'14'" [bgColor]="'var(--secondary-color)'">
+            </app-icon-text-button>
+        </div>
+        @for (day of weekDays; track $index) {
+        <div class="flex flex-col text-center bg-[var(--secondary-color)] rounded-lg py-[0.5vw]">
+            <span class="text-[var(--gray)] block text-xs">{{ day.name }}</span>
+            <h2 class="text-[1.8vw] font-family-ubuntu-mono-bold">{{ day.date }}</h2>
+        </div>
+        }
+    </div>
+
+    <hr class="border-[#1f1f1f20] border-t-2 border-dashed" />
+
+    <!-- main grid -->
+    <div class="relative w-full h-full overflow-auto scrollbar-hide">
+        <div class="grid grid-cols-8 w-full h-full gap-[0.5vw] relative">
+            <div class="relative top-3 flex flex-col text-[var(--gray)] text-sm font-family-ubuntu-mono items-center">
+                @for (hour of hours; track $index) {
+                <div class="h-[10vh] flex items-start font-family-ubuntu-mono-bold">{{ hour }}</div>
+                }
             </div>
-            <div>
-                <app-icon-text-button [text]="'Tercer Semana'" [color]="'black'"></app-icon-text-button>
-            </div>
-            <div>
-                <app-icon-text-button [text]="'dasdsa'" [color]="'black'" [iconSvg]="arrowBackIcon.svg" [viewBox]="'0 0 12 8'" [iconSize]="'14'"></app-icon-text-button>
+
+            <div class="col-span-7 relative">
+                <div class="w-full relative top-5">
+                    @for (hour of hours; track $index) {
+                    <div class="absolute left-0 right-0 border-t-1 border-[#1f1f1f15]"
+                        [ngStyle]="{ top: 'calc(' + $index * 10 + 'vh)' }">
+                    </div>
+                    }
+                </div>
+
+                <div class="grid grid-cols-7 h-full relative">
+                    @for (day of weekDays; track $index) {
+                    <div class="relative h-full">
+                        @for (group of getTaskGroups(day); track $index) {
+                        <div class="absolute left-[5%] right-[5%] rounded-lg text-white text-xs p-2 shadow-md"
+                            [class]="getPriorityColor(group[0].priority)"
+                            [style.top]="getTaskTopPosition(getGroupStartTime(group))"
+                            [style.height]="getTaskHeight(getGroupStartTime(group), getGroupEndTime(group))">
+
+                            <div class="flex flex-col gap-1 h-full overflow-hidden">
+                                @for (task of group; track task.id) {
+                                <div class="p-1.5 rounded" [class]="getPriorityColor(task.priority)">
+                                    <div class="font-bold truncate">{{ task.name }}</div>
+                                    <div class="text-[10px]">
+                                        @if (isAllDayTask(task)) {
+                                        All day
+                                        } @else {
+                                        {{ task.startTime }} - {{ task.dueTime }}
+                                        }
+                                    </div>
+                                </div>
+                                }
+                            </div>
+                        </div>
+                        }
+                    </div>
+                    }
+                </div>
             </div>
         </div>
     </div>
-    <p>calendar works!</p>
-
 </div>

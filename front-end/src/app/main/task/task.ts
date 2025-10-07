@@ -1,14 +1,14 @@
+import { AsyncPipe } from "@angular/common";
 import { Component, inject } from "@angular/core";
+import { IconTextButton } from "../../global-components/icon-text-button/icon-text-button";
 import { AuthStateService } from "../../global-services/auth-state.service";
 import { IconRegistryService } from "../../global-services/icon-registry.service";
 import { InterfaceService } from "../../global-services/interface.service";
-import { IconTextButton } from "../../global-components/icon-text-button/icon-text-button";
+import { ListService } from "../../global-services/lists.service";
 import { RelojService } from "../../global-services/reloj-service";
-import { AsyncPipe } from "@angular/common";
 import { TaskService } from "../../global-services/tasks.service";
 import { List } from "../../models/list";
-import { ListService } from "../../global-services/lists.service";
-import { Task } from "../../models/task";
+import { Priority, Task } from "../../models/task";
 
 @Component({
   selector: 'app-task',
@@ -48,6 +48,51 @@ export class TaskComponent {
     this.taskService.updateTask(task.id, payload).subscribe();
   }
 
+  formatTimeTo12Hour(time24: string): string {
+    if (!time24) return '';
+
+    const [hours, minutes] = time24.split(':').map(Number);
+    const period = hours >= 12 ? 'PM' : 'AM';
+    const hours12 = hours % 12 || 12; // 0 a 12, and 13-23 to 1-11
+
+    return `${hours12}:${String(minutes).padStart(2, '0')} ${period}`;
+  }
+
+  formatDate(dateStr: string): string {
+    if (!dateStr) return '';
+
+    const date = new Date(dateStr + 'T00:00:00');
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
+    today.setHours(0, 0, 0, 0);
+    tomorrow.setHours(0, 0, 0, 0);
+    const compareDate = new Date(date);
+    compareDate.setHours(0, 0, 0, 0);
+
+    if (compareDate.getTime() === today.getTime()) {
+      return 'Today';
+    } else if (compareDate.getTime() === tomorrow.getTime()) {
+      return 'Tomorrow';
+    } else {
+      const options: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric' };
+      return date.toLocaleDateString('en-US', options);
+    }
+  }
+
+  getPriorityText(priority: string | Priority | undefined): string {
+    if (priority === undefined || priority === null) return 'Medium';
+
+    const priorityStr = String(priority);
+
+    if (!isNaN(Number(priorityStr))) {
+      return Priority[Number(priorityStr)];
+    }
+    
+    return priorityStr.charAt(0).toUpperCase() + priorityStr.slice(1).toLowerCase();
+  }
+
   get title() {
     return this.iconRegistryService.getMenu()[this.interfaceService.selectedMenuId() - 1].name;
   }
@@ -63,5 +108,4 @@ export class TaskComponent {
   get username() {
     return this.authStateService.user()?.username;
   }
-
 }

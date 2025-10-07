@@ -5,7 +5,7 @@
             </h1>
             <p class="text-[var(--gray)]">What do you plan to accomplish today?</p>
         </div>
-        <div class="flex p-[1.5vw] rounded-2xl bg-[var(--secondary-color)] w-auto flex-col justify-center">
+        <div class="hidden sm:flex p-[1.5vw] rounded-2xl bg-[var(--secondary-color)] w-auto flex-col justify-center">
             <h2 class="lg:whitespace-nowrap font-family-ubuntu-mono-bold text-xl">{{ dateAndTime | async }}</h2>
         </div>
     </div>
@@ -56,24 +56,24 @@
                 </div>
                 <div class="w-auto flex gap-2 h-[5vh] justify-end">
                     <div class="w-auto">
-                        <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'"
+                        <app-icon-text-button [type]="'button'" [colorHover]="'var(--secondary-color)'"
                             [iconSvg]="calendarIcon.svg" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
                             [borderColor]="'var(--purple)'" [viewBox]="calendarIcon.viewBox" [iconSize]="'20'"
-                            [text]="'Today'">
+                            [text]="formatDate(task.startDate)">
                         </app-icon-text-button>
                     </div>
                     <div class="w-auto">
-                        <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'"
+                        <app-icon-text-button [type]="'button'" [colorHover]="'var(--secondary-color)'"
                             [iconSvg]="calendarIcon.svg" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
                             [borderColor]="'var(--purple)'" [viewBox]="calendarIcon.viewBox" [iconSize]="'20'"
-                            [text]="'11:59 PM'">
+                            [text]="formatTimeTo12Hour(task.dueTime)">
                         </app-icon-text-button>
                     </div>
                     <div class="w-auto">
-                        <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'"
+                        <app-icon-text-button [type]="'button'" [colorHover]="'var(--secondary-color)'"
                             [iconSvg]="calendarIcon.svg" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
                             [borderColor]="'var(--purple)'" [viewBox]="calendarIcon.viewBox" [iconSize]="'20'"
-                            [text]="'High'">
+                            [text]="getPriorityText(task.priority)">
                         </app-icon-text-button>
                     </div>
                 </div>
