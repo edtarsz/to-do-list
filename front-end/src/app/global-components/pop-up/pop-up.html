@@ -4,8 +4,8 @@
         <div class="flex flex-col w-full h-full p-[2vw] gap-4">
             <div class="flex items-center justify-between">
                 <h3 class="font-family-ubuntu-mono-bold text-2xl">{{ title }}</h3>
-                <app-icon-text-button [iconSvg]="closeIcon" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'" [colorHover]="'var(--secondary-color)'"
-                    [viewBox]="'0 0 24 24'" [iconSize]="'24'" (click)="togglePopUp()">
+                <app-icon-text-button [iconSvg]="closeIcon.svg" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'" [colorHover]="'var(--secondary-color)'"
+                    [viewBox]="closeIcon.viewBox" [iconSize]="closeIcon.size" (click)="togglePopUp()">
                 </app-icon-text-button>
             </div>
             <hr class="border-[#1f1f1f20] border-t-2 border-dashed">

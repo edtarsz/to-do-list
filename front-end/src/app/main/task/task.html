@@ -16,12 +16,14 @@
             <h1 class="text-[2vw] font-family-ubuntu-mono-bold">{{ title }} Tasks</h1>
             <ul class="flex gap-2">
                 <div class="flex h-full">
-                    <app-icon-text-button icon="add" text="Date" [iconSvg]="arrowDownwardsIcon.svg" [color]="'var(--dark)'"
-                        [viewBox]="arrowDownwardsIcon.viewBox" [iconSize]="arrowDownwardsIcon.size"></app-icon-text-button>
+                    <app-icon-text-button icon="add" text="Date" [iconSvg]="arrowDownwardsIcon.svg"
+                        [color]="'var(--dark)'" [viewBox]="arrowDownwardsIcon.viewBox"
+                        [iconSize]="arrowDownwardsIcon.size"></app-icon-text-button>
                 </div>
                 <div class="flex h-full">
                     <app-icon-text-button icon="add" text="Priority" [iconSvg]="arrowDownwardsIcon.svg"
-                        [color]="'var(--dark)'" [viewBox]="arrowDownwardsIcon.viewBox" [iconSize]="arrowDownwardsIcon.size"></app-icon-text-button>
+                        [color]="'var(--dark)'" [viewBox]="arrowDownwardsIcon.viewBox"
+                        [iconSize]="arrowDownwardsIcon.size"></app-icon-text-button>
                 </div>
             </ul>
         </div>
@@ -34,7 +36,7 @@
             <div
                 class="flex justify-between cursor-pointer gap-[1vw] items-center hover:bg-[var(--primary-color)] p-[1vw] rounded-lg">
                 <div class="flex gap-4 items-center">
-                    <div class="border border-[var(--gray)] aspect-square h-[1.5vw] rounded-sm cursor-pointer bg-[var(--secondary-color)]"
+                    <div class="border border-[var(--gray)] aspect-square h-[1.5vw] min-h-[20px] rounded-sm cursor-pointer bg-[var(--secondary-color)]"
                         (click)="completeTask(task)"></div>
                     <div class="flex flex-col">
                         @if (task.listId) {
@@ -45,8 +47,10 @@
                         </div>
                         }
                         <h3 class="text-xl">{{ task.name }}</h3>
-                        <div>
-                            <p class="font-family-ubuntu-mono text-[var(--gray)]">{{ task.description }}</p>
+                        <div class="w-full">
+                            <p class="font-family-ubuntu-mono text-[var(--gray)] break-all whitespace-normal">
+                                {{ task.description }}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -54,19 +58,22 @@
                     <div class="w-full">
                         <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'"
                             [iconSvg]="calendarIcon.svg" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
-                            [borderColor]="'var(--purple)'" [viewBox]="calendarIcon.viewBox" [iconSize]="'20'" [text]="'Today'">
+                            [borderColor]="'var(--purple)'" [viewBox]="calendarIcon.viewBox" [iconSize]="'20'"
+                            [text]="'Today'">
                         </app-icon-text-button>
                     </div>
                     <div class="w-full">
                         <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'"
                             [iconSvg]="calendarIcon.svg" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
-                            [borderColor]="'var(--purple)'" [viewBox]="calendarIcon.viewBox" [iconSize]="'20'" [text]="'11:59 PM'">
+                            [borderColor]="'var(--purple)'" [viewBox]="calendarIcon.viewBox" [iconSize]="'20'"
+                            [text]="'11:59 PM'">
                         </app-icon-text-button>
                     </div>
                     <div class="w-full">
                         <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'"
                             [iconSvg]="calendarIcon.svg" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
-                            [borderColor]="'var(--purple)'" [viewBox]="calendarIcon.viewBox" [iconSize]="'20'" [text]="'High'">
+                            [borderColor]="'var(--purple)'" [viewBox]="calendarIcon.viewBox" [iconSize]="'20'"
+                            [text]="'High'">
                         </app-icon-text-button>
                     </div>
                 </div>
@@ -79,8 +86,8 @@
         <div class="flex justify-end">
             <div class="w-[20%] min-w-[150px]">
                 <app-icon-text-button [colorHover]="'var(--secondary-color)'" [color]="'var(--purple)'" icon="add"
-                    text="New Task" [borderColor]="'var(--purple)'" [bgColorHover]="'var(--purple)'" [iconSvg]="addIcon.svg"
-                    (click)="togglePopUp()"></app-icon-text-button>
+                    text="New Task" [borderColor]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
+                    [iconSvg]="addIcon.svg" (click)="togglePopUp()"></app-icon-text-button>
             </div>
         </div>
     </div>
