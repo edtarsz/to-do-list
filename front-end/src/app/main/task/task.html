@@ -34,7 +34,7 @@
             @for (task of tasks; track task.id) {
             @if(!task.completed) {
             <div
-                class="flex flex-col lg:flex-row justify-between cursor-pointer gap-[1vw] items-end lg:items-center hover:bg-[var(--primary-color)] p-[1vw] rounded-lg">
+                class="flex flex-col lg:flex-row justify-between cursor-pointer gap-[1vw] lg:items-center hover:bg-[var(--primary-color)] p-[1vw] rounded-lg">
                 <div class="flex gap-4 items-center">
                     <div class="border border-[var(--gray)] aspect-square h-[1.5vw] min-h-[20px] rounded-sm cursor-pointer bg-[var(--secondary-color)]"
                         (click)="completeTask(task)"></div>
@@ -54,22 +54,22 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex gap-2 h-[5vh]">
-                    <div class="w-full">
+                <div class="w-auto flex gap-2 h-[5vh] justify-end">
+                    <div class="w-auto">
                         <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'"
                             [iconSvg]="calendarIcon.svg" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
                             [borderColor]="'var(--purple)'" [viewBox]="calendarIcon.viewBox" [iconSize]="'20'"
                             [text]="'Today'">
                         </app-icon-text-button>
                     </div>
-                    <div class="w-full">
+                    <div class="w-auto">
                         <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'"
                             [iconSvg]="calendarIcon.svg" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
                             [borderColor]="'var(--purple)'" [viewBox]="calendarIcon.viewBox" [iconSize]="'20'"
                             [text]="'11:59 PM'">
                         </app-icon-text-button>
                     </div>
-                    <div class="w-full">
+                    <div class="w-auto">
                         <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'"
                             [iconSvg]="calendarIcon.svg" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
                             [borderColor]="'var(--purple)'" [viewBox]="calendarIcon.viewBox" [iconSize]="'20'"
