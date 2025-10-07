@@ -228,7 +228,7 @@ export class Calendar implements OnInit {
   }
 
   getListColor(task: Task): string {
-    let color = '#60A5FA';
+    let color = '#B6E7F2';
 
     if (task.listId) {
       this.listService.getListById(task.listId).subscribe(list => {
@@ -268,11 +268,6 @@ export class Calendar implements OnInit {
   }
 
   getPriorityColor(priority: number): string {
-    switch (priority) {
-      case 0: return 'bg-green-400';
-      case 1: return 'bg-yellow-400';
-      case 2: return 'bg-red-400';
-      default: return 'bg-blue-400';
-    }
+    return 'bg-[var(--profile)]';
   }
 }
