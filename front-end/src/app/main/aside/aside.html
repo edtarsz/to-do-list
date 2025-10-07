@@ -20,8 +20,8 @@
         <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
         <app-aside-section [title]="'MENU'" [showText]="interfaceService.isAsideOpen()">
             @for (menuItem of menu; track menuItem.id) {
-            <app-aside-item [title]="menuItem.name" [iconSvg]="menuItem.icon" [iconSize]="menuItem.iconSize"
-                [viewBox]="menuItem.viewBox" [showText]="interfaceService.isAsideOpen()"
+            <app-aside-item [title]="menuItem.name" [iconSvg]="menuItem.icon.svg" [iconSize]="menuItem.icon.size"
+                [viewBox]="menuItem.icon.viewBox" [showText]="interfaceService.isAsideOpen()"
                 [bgColorHover]="menuItem.bgColorHover" (click)="toggleMenuSelection(menuItem.id)"
                 [selected]="interfaceService.selectedMenuId() === menuItem.id"></app-aside-item>
             }
@@ -30,11 +30,11 @@
         <div class="flex flex-col overflow-y-auto overflow-x-hidden flex-1 min-h-0 scrollbar-hide px-1">
             <app-aside-section [title]="'LISTS'" [showText]="interfaceService.isAsideOpen()">
                 <div section-buttons class="flex items-center gap-[0.5vw]">
-                    <app-icon-text-button [iconSvg]="trashIcon" [borderColor]="'var(--red)'" [color]="'var(--red)'"
+                    <app-icon-text-button [iconSvg]="trashIcon.svg" [borderColor]="'var(--red)'" [color]="'var(--red)'"
                         [bgColorHover]="'var(--red)'" [colorHover]="'var(--secondary-color)'" [viewBox]="'0 0 17 17'"
                         [iconSize]="'17'" [isActive]="interfaceService.deleteActive()" (click)="toggleDeleteActive()">
                     </app-icon-text-button>
-                    <app-icon-text-button [iconSvg]="addIcon" [borderColor]="'var(--purple)'" [color]="'var(--purple)'"
+                    <app-icon-text-button [iconSvg]="addIcon.svg" [borderColor]="'var(--purple)'" [color]="'var(--purple)'"
                         [bgColorHover]="'var(--purple)'" [colorHover]="'var(--secondary-color)'" [viewBox]="'0 0 21 21'"
                         [iconSize]="'21'" (click)="togglePopUp()">
                     </app-icon-text-button>

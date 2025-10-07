@@ -8,6 +8,7 @@ import { AuthStateService } from '../../global-services/auth-state.service';
 import { InterfaceService } from '../../global-services/interface.service';
 import { IconTextButton } from '../../global-components/icon-text-button/icon-text-button';
 import { AsideSection } from './aside-section/aside-section';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-aside',
@@ -23,6 +24,7 @@ export class Aside {
 
   public authStateService = inject(AuthStateService);
   private authService = inject(AuthService);
+  private router = inject(Router);
 
   menu = this.iconRegistryService.getMenu();
 
@@ -68,6 +70,21 @@ export class Aside {
   toggleMenuSelection(menuId: number): void {
     if (this.interfaceService.selectedMenuId() !== menuId) {
       this.interfaceService.selectedMenuId.set(menuId);
+    }
+    switch (menuId) {
+      case 1:
+        this.router.navigate(['/index/tasks']);
+        break;
+      case 2:
+        this.router.navigate(['/index/tasks']);
+        break;
+      // filter using params ?upcoming=true
+      case 3:
+        this.router.navigate(['/index/calendar']);
+        break;
+      default:
+        this.router.navigate(['/index/tasks']);
+        break;
     }
   }
 
