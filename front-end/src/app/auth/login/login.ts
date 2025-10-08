@@ -30,8 +30,8 @@ export class Login {
       const { username, password } = this.loginForm.value;
       this.authService.login(username, password).subscribe({
         next: () => this.router.navigate(['/index/tasks']),
-        error: (err) => {
-          this.errorMessage = err.message || 'Error al iniciar sesión';
+        error: (error) => {
+          this.errorMessage = error.message || 'Error al iniciar sesión';
         }
       });
     } else {

@@ -1,10 +1,9 @@
-import { Component, inject, ElementRef, ViewChild, effect } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AuthSection } from "../auth-section/auth-section";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { AuthStateService } from '../../global-services/auth-state.service';
-import gsap from 'gsap';
 
 @Component({
   selector: 'app-register',
@@ -13,17 +12,7 @@ import gsap from 'gsap';
   styleUrl: './register.css'
 })
 export class Register {
-  @ViewChild('loadingSvg') set loadingSvg(element: ElementRef | undefined) {
-    if (element) {
-      this._loadingSvg = element;
-      this.startLoadingAnimation();
-    }
-  }
-
-  private _loadingSvg?: ElementRef;
-
   private authService = inject(AuthService);
-  private authStateService = inject(AuthStateService);
   private fb = inject(FormBuilder);
   private router = inject(Router);
 
@@ -37,29 +26,6 @@ export class Register {
       lastName: ['', [Validators.required, Validators.minLength(2)]],
       username: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(8)]]
-    });
-  }
-
-  startLoadingAnimation() {
-    if (!this._loadingSvg) return;
-
-    const svg = this._loadingSvg.nativeElement;
-    const circles = svg.querySelectorAll('circle');
-
-    gsap.to(svg, {
-      rotation: 360,
-      duration: 2,
-      repeat: -1,
-      ease: 'linear',
-      transformOrigin: '50% 50%'
-    });
-
-    gsap.to(circles, {
-      strokeDashoffset: -205,
-      duration: 2,
-      repeat: -1,
-      ease: 'linear',
-      stagger: 0.2
     });
   }
 
@@ -99,9 +65,5 @@ export class Register {
     }
 
     return 'Campo inválido';
-  }
-
-  get isLoading(): boolean {
-    return this.authStateService.isLoading();
   }
 }

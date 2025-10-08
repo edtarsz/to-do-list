@@ -45,11 +45,12 @@ export class TaskComponent implements OnInit, OnDestroy {
   ascHour = signal<boolean>(false);
   ascPriority = signal<boolean>(false);
 
-  constructor() {
-    this.taskService.getTasks().subscribe();
-  }
+  constructor() { }
 
   ngOnInit() {
+    this.taskService.getTasks().subscribe();
+    this.relojService.getFechaHora().subscribe();
+
     // Suscribirse a los cambios en los query params hasta que el componente se destruya
     this.route.queryParams
       .pipe(takeUntil(this.destroy$))

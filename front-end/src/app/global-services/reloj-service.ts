@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, interval, map, shareReplay } from 'rxjs';
+import { Observable, interval, map, shareReplay, startWith } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -7,6 +7,8 @@ import { Observable, interval, map, shareReplay } from 'rxjs';
 export class RelojService {
 
   private fechaHora$: Observable<string> = interval(1000).pipe(
+    // Emit the current date and time every second
+    startWith(0),
     map(() => {
       const now = new Date();
 
