@@ -1,5 +1,5 @@
-import { AsyncPipe } from "@angular/common";
-import { Component, inject } from "@angular/core";
+import { AsyncPipe, CommonModule } from "@angular/common";
+import { Component, inject, signal } from "@angular/core";
 import { IconTextButton } from "../../global-components/icon-text-button/icon-text-button";
 import { AuthStateService } from "../../global-services/auth-state.service";
 import { IconRegistryService } from "../../global-services/icon-registry.service";
@@ -12,7 +12,7 @@ import { Priority, Task } from "../../models/task";
 
 @Component({
   selector: 'app-task',
-  imports: [IconTextButton, AsyncPipe],
+  imports: [IconTextButton, AsyncPipe, CommonModule],
   templateUrl: './task.html',
   styleUrl: './task.css'
 })
@@ -27,13 +27,26 @@ export class TaskComponent {
   addIcon = this.iconRegistryService.getIcon('add');
   sendIcon = this.iconRegistryService.getIcon('send');
   calendarIcon = this.iconRegistryService.getIcon('calendar_clean');
+
   arrowDownwardsIcon = this.iconRegistryService.getIcon('arrow_downwards');
+  arrowUpwardsIcon = this.iconRegistryService.getIcon('arrow_upwards');
+
+  clockIcon = this.iconRegistryService.getIcon('clock');
+  flagIcon = this.iconRegistryService.getIcon('flag');
+
+  filter = signal<'hour' | 'priority' | null>(null);
+  ascHour = signal<boolean>(false);
+  ascPriority = signal<boolean>(false);
 
   constructor() {
     this.taskService.getTasks().subscribe();
   }
 
   togglePopUp() {
+    if (this.interfaceService.isPopUpOpen() == false) {
+      this.interfaceService.togglePopUp();
+    }
+
     this.interfaceService.setCurrentOperation('Add Task');
   }
 
@@ -93,11 +106,55 @@ export class TaskComponent {
     return priorityStr.charAt(0).toUpperCase() + priorityStr.slice(1).toLowerCase();
   }
 
+  getPriorityColor(priority: Priority): string {
+    const priorityString = priority.toString();
+
+    switch (priorityString) {
+      case 'HIGH':
+        return 'var(--high)';
+      case 'MEDIUM':
+        return 'var(--medium)';
+      case 'LOW':
+        return 'var(--low)';
+      default:
+        return 'var(--purple)';
+    }
+  }
+
   openTaskDetails(task: Task) {
     if (!task.id) return;
     this.interfaceService.setShowingDetailsTask(true);
     this.interfaceService.setCurrentOperation('Add Task');
+    this.interfaceService.togglePopUp();
     this.interfaceService.selectedTaskId.set(task.id || null);
+  }
+
+  filterByHour() {
+    if (this.filter() === 'hour') {
+      this.ascHour.set(!this.ascHour());
+      return;
+    }
+
+    this.cleanFilters();
+    this.ascHour.set(!this.ascHour());
+    this.filter.set('hour');
+  }
+
+  filterByPriority() {
+    if (this.filter() === 'priority') {
+      this.ascPriority.set(!this.ascPriority());
+      return;
+    }
+
+    this.cleanFilters();
+    this.ascPriority.set(!this.ascPriority());
+    this.filter.set('priority');
+  }
+
+  private cleanFilters() {
+    this.filter.set(null);
+    this.ascHour.set(false);
+    this.ascPriority.set(false);
   }
 
   get title() {
@@ -109,12 +166,65 @@ export class TaskComponent {
   }
 
   get tasks() {
-    if (this.selectedListId) {
-      return this.taskService.tasks$().filter(t => t.listId === this.selectedListId && !t.completed);
+    let tasks = this.taskService.tasks$();
+    const selectedMenu = this.interfaceService.selectedMenuId();
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+
+    // Filtrar solo tareas no completadas
+    tasks = tasks.filter(t => !t.completed);
+
+    // Filtrar por menú (Today o Upcoming)
+    if (selectedMenu === 1) {
+      tasks = tasks.filter(t => {
+        if (!t.dueDate) return false;
+        const taskDate = new Date(t.dueDate);
+        taskDate.setHours(0, 0, 0, 0);
+
+        return taskDate.getTime() <= now.getTime();
+      });
+    } else if (selectedMenu === 2) {
+      tasks = tasks.filter(t => {
+        if (!t.dueDate) return false;
+        const taskDate = new Date(t.dueDate);
+        taskDate.setHours(0, 0, 0, 0);
+
+        return taskDate.getTime() > now.getTime();
+      });
     }
 
-    return this.taskService.tasks$().filter(t => !t.completed);
+    // Filtrar por lista seleccionada
+    if (this.selectedListId) {
+      tasks = tasks.filter(t => t.listId === this.selectedListId);
+    }
+
+    // Ordenar según el filtro seleccionado
+    if (this.filter() === 'hour') {
+      tasks = tasks.sort((a, b) => {
+        // Combinar fecha y hora para comparación completa
+        const dateTimeA = new Date(`${a.dueDate}T${a.dueTime || '23:59'}`);
+        const dateTimeB = new Date(`${b.dueDate}T${b.dueTime || '23:59'}`);
+
+        return this.ascHour()
+          ? dateTimeA.getTime() - dateTimeB.getTime()  // Ascendente: más temprano primero
+          : dateTimeB.getTime() - dateTimeA.getTime(); // Descendente: más tarde primero
+      });
+    } else if (this.filter() === 'priority') {
+      const priorityOrder = { 'HIGH': 3, 'MEDIUM': 2, 'LOW': 1 };
+
+      tasks = tasks.sort((a, b) => {
+        const priorityA = priorityOrder[a.priority as unknown as keyof typeof priorityOrder] || 2;
+        const priorityB = priorityOrder[b.priority as unknown as keyof typeof priorityOrder] || 2;
+
+        return this.ascPriority()
+          ? priorityA - priorityB  // Ascendente: LOW -> MEDIUM -> HIGH
+          : priorityB - priorityA; // Descendente: HIGH -> MEDIUM -> LOW
+      });
+    }
+
+    return tasks;
   }
+
 
   get username() {
     return this.authStateService.user()?.username;

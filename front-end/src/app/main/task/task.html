@@ -16,14 +16,28 @@
             <h1 class="lg:text-[2vw] text-2xl font-family-ubuntu-mono-bold">{{ title }} Tasks</h1>
             <ul class="flex gap-2">
                 <div class="flex h-full">
-                    <app-icon-text-button icon="add" text="Date" [iconSvg]="arrowDownwardsIcon.svg"
+                    @if (ascHour()) {
+                    <app-icon-text-button icon="add" text="Hour" [iconSvg]="arrowUpwardsIcon.svg"
+                        [color]="'var(--dark)'" [viewBox]="arrowUpwardsIcon.viewBox" [iconSize]="arrowUpwardsIcon.size"
+                        (click)="filterByHour()"></app-icon-text-button>
+                    }
+                    @else{
+                    <app-icon-text-button icon="add" text="Hour" [iconSvg]="arrowDownwardsIcon.svg"
                         [color]="'var(--dark)'" [viewBox]="arrowDownwardsIcon.viewBox"
-                        [iconSize]="arrowDownwardsIcon.size"></app-icon-text-button>
+                        [iconSize]="arrowDownwardsIcon.size" (click)="filterByHour()"></app-icon-text-button>
+                    }
                 </div>
                 <div class="flex h-full">
+                    @if (ascPriority()) {
+                    <app-icon-text-button icon="add" text="Priority" [iconSvg]="arrowUpwardsIcon.svg"
+                        [color]="'var(--dark)'" [viewBox]="arrowUpwardsIcon.viewBox" [iconSize]="arrowUpwardsIcon.size"
+                        (click)="filterByPriority()"></app-icon-text-button>
+                    }
+                    @else{
                     <app-icon-text-button icon="add" text="Priority" [iconSvg]="arrowDownwardsIcon.svg"
                         [color]="'var(--dark)'" [viewBox]="arrowDownwardsIcon.viewBox"
-                        [iconSize]="arrowDownwardsIcon.size"></app-icon-text-button>
+                        [iconSize]="arrowDownwardsIcon.size" (click)="filterByPriority()"></app-icon-text-button>
+                    }
                 </div>
             </ul>
         </div>
@@ -56,18 +70,17 @@
                 <div class="w-auto flex gap-2 h-[5vh] justify-end">
                     <div class="w-auto">
                         <app-icon-text-button [type]="'button'" [iconSvg]="calendarIcon.svg" [color]="'var(--purple)'"
-                            [viewBox]="calendarIcon.viewBox" [iconSize]="'20'" [text]="formatDate(task.startDate)">
+                            [viewBox]="calendarIcon.viewBox" [iconSize]="'20'" [text]="formatDate(task.dueDate)">
                         </app-icon-text-button>
                     </div>
                     <div class="w-auto">
-                        <app-icon-text-button [type]="'button'" [iconSvg]="calendarIcon.svg" [color]="'var(--purple)'"
-                            [viewBox]="calendarIcon.viewBox" [iconSize]="'20'"
-                            [text]="formatTimeTo12Hour(task.dueTime)">
+                        <app-icon-text-button [type]="'button'" [iconSvg]="clockIcon.svg" [color]="'var(--purple)'"
+                            [viewBox]="clockIcon.viewBox" [iconSize]="'20'" [text]="formatTimeTo12Hour(task.dueTime)">
                         </app-icon-text-button>
                     </div>
                     <div class="w-auto">
-                        <app-icon-text-button [type]="'button'" [iconSvg]="calendarIcon.svg" [color]="'var(--purple)'"
-                            [viewBox]="calendarIcon.viewBox" [iconSize]="'20'" [text]="getPriorityText(task.priority)">
+                        <app-icon-text-button [type]="'button'" [iconSvg]="flagIcon.svg" [color]="getPriorityColor(task.priority)"
+                            [viewBox]="flagIcon.viewBox" [iconSize]="'20'" [text]="getPriorityText(task.priority)">
                         </app-icon-text-button>
                     </div>
                 </div>

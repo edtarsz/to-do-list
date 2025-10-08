@@ -3,7 +3,7 @@
         class="w-full bg-[var(--secondary-color)] rounded-lg p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200 placeholder-[var(--gray)] text-sm">
 
     <textarea name="description" id="" formControlName="description" placeholder="Task's description" rows="6"
-        class="w-full max-h-[30vh] min-h-[6rem] bg-[var(--secondary-color)] rounded-lg p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-colors duration-200 placeholder-[var(--gray)] text-sm"></textarea>
+        class="w-full max-h-[30vh] min-h-[6rem] bg-[var(--secondary-color)] rounded-lg p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-colors duration-200 placeholder-[var(--gray)] text-sm scrollbar-hide"></textarea>
 
     <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
 
@@ -137,7 +137,7 @@
 
         <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'" [iconSvg]="sendIcon.svg"
             [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'" [borderColor]="'var(--purple)'"
-            [viewBox]="sendIcon.viewBox" [iconSize]="sendIcon.size" [text]="'Add Task'">
+            [viewBox]="sendIcon.viewBox" [iconSize]="sendIcon.size" [text]="textButton">
         </app-icon-text-button>
     </div>
 </form>

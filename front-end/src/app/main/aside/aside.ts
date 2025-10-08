@@ -50,6 +50,7 @@ export class Aside {
   }
 
   togglePopUp() {
+    this.interfaceService.togglePopUp();
     this.interfaceService.setCurrentOperation('Add List');
   }
 

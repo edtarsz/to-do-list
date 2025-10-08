@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard, publicGuard } from './auth/auth.guard';
+import { Calendar } from './main/calendar/calendar';
 
 export const routes: Routes = [
     {
@@ -34,7 +35,7 @@ export const routes: Routes = [
             },
             {
                 path: 'calendar',
-                loadComponent: () => import('./main/calendar/calendar').then(m => m.Calendar)
+                component: Calendar
             },
             {
                 path: '',

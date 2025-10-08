@@ -1,18 +1,18 @@
 @if (isPopUpOpen) {
 <app-pop-up [title]="currentOperation">
     @if (currentOperation === 'Add List') {
-        <app-add-list></app-add-list>
+    <app-add-list></app-add-list>
     } @else if (currentOperation === 'Add Task') {
-        <app-add-task></app-add-task>
+    <app-add-task></app-add-task>
     }
-    
+
 </app-pop-up>
 }
 <main class="h-screen w-screen flex gap-[1vw] bg-[var(--primary-color)] p-[2vw]">
     <!-- min width provisional not deployment -->
     <app-aside class="aside" [ngClass]="{
-        'w-[20%] min-w-[250px]': interfaceService.isAsideOpen(),
-        'w-[7rem] min-w-0': !interfaceService.isAsideOpen()
+        'w-[20%] min-w-[250px]': isAsideOpen,
+        'w-[7rem] min-w-0': !isAsideOpen
     }"></app-aside>
     <div class="flex-1 h-full">
         <router-outlet></router-outlet>

@@ -55,7 +55,6 @@ export class InterfaceService {
 
     setCurrentOperation(operation: 'Add List' | 'Add Task') {
         // you always set the operation, so if the pop-up is closed, open it and also set the operation
-        this.togglePopUp();
         this.currentOperation.set(operation);
     }
 
