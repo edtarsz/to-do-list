@@ -3,6 +3,7 @@ import { AuthSection } from "../auth-section/auth-section";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
+import { AuthStateService } from '../../global-services/auth-state.service';
 
 @Component({
   selector: 'app-register',
@@ -11,7 +12,8 @@ import { AuthService } from '../auth.service';
   styleUrl: './register.css'
 })
 export class Register {
-  authService = inject(AuthService);
+  private authService = inject(AuthService);
+  private authStateService = inject(AuthStateService);
   private fb = inject(FormBuilder);
   private router = inject(Router);
 
@@ -66,5 +68,9 @@ export class Register {
     }
 
     return 'Campo inválido';
+  }
+
+  get isLoading(): boolean {
+    return this.authStateService.isLoading();
   }
 }
