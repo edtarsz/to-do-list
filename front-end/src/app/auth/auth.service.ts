@@ -1,9 +1,9 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { tap, catchError } from 'rxjs/operators';
+import { tap, catchError, delay } from 'rxjs/operators';
 import { firstValueFrom, throwError } from 'rxjs';
-import { Role, UserDTO } from '../models/user';
+import { UserDTO } from '../models/user';
 import { AuthStateService } from '../global-services/auth-state.service';
 import { ListService } from '../global-services/lists.service';
 
