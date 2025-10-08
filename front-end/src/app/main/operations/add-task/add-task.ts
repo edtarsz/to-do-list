@@ -59,6 +59,32 @@ export class AddTask {
       listId: [''],
       completed: [false]
     });
+
+    const taskId = this.interfaceService.selectedTaskId();
+    if (taskId) {
+      this.taskService.getTaskById(taskId).subscribe(task => {
+        if (task) {
+          this.addTaskForm.patchValue({
+            name: task.name,
+            description: task.description,
+            priority: task.priority,
+            startDate: task.startDate,
+            dueDate: task.dueDate,
+            startTime: task.startTime,
+            dueTime: task.dueTime,
+            listId: task.listId,
+            completed: task.completed
+          });
+
+          this.selectedList.set(this.listService.lists().find(list => list.id === task.listId)?.name || 'List');
+          this.selectedPriority.set(task.priority.toString() || 'Priority');
+          this.selectedStartTime.set(task.startTime || 'Start Time');
+          this.selectedDueTime.set(task.dueTime || 'Due Time');
+          this.selectedStartDate.set(task.startDate || 'Start Date');
+          this.selectedDueDate.set(task.dueDate || 'Due Date');
+        }
+      });
+    }
   }
 
   closeIcon = this.iconRegistryService.getIcon('close');
@@ -73,19 +99,30 @@ export class AddTask {
   }
 
   addTask() {
-    if (this.addTaskForm.valid) {
+    if (!this.addTaskForm.valid) {
+      console.error('Please fill in all required fields.');
+      return;
+    }
+
+    if (this.interfaceService.selectedTaskId()) {
+      const id = this.interfaceService.selectedTaskId();
+      if (!id) return;
+
+      this.taskService.updateTask(id, this.buildTask()).subscribe({
+        next: () => {
+          this.addTaskForm.reset();
+          this.resetSelections();
+          this.togglePopUp();
+        }
+      });
+    } else {
       this.taskService.addTask(this.buildTask()).subscribe({
         next: () => {
           this.addTaskForm.reset();
           this.resetSelections();
           this.togglePopUp();
-        },
-        error: (error) => {
-          console.error(error);
         }
       });
-    } else {
-      console.error('Please fill in all required fields.');
     }
   }
 

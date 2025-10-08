@@ -32,12 +32,11 @@
         <div
             class="flex flex-col gap-[0.5vw] overflow-y-auto overflow-x-hidden flex-1 min-h-0 scrollbar-hide pr-1 font-family-ubuntu-mono-bold">
             @for (task of tasks; track task.id) {
-            @if(!task.completed) {
-            <div
-                class="flex flex-col lg:flex-row justify-between cursor-pointer gap-[1vw] lg:items-center hover:bg-[var(--primary-color)] p-[1vw] rounded-lg">
+            <div class="flex flex-col lg:flex-row justify-between cursor-pointer gap-[1vw] lg:items-center hover:bg-[var(--primary-color)] p-[1vw] rounded-lg"
+                (click)="openTaskDetails(task)">
                 <div class="flex gap-4 items-center">
                     <div class="border border-[var(--gray)] aspect-square h-[1.5vw] min-h-[20px] rounded-sm cursor-pointer bg-[var(--secondary-color)]"
-                        (click)="completeTask(task)"></div>
+                        (click)="completeTask(task)" (click)="$event.stopPropagation()"></div>
                     <div class="flex flex-col">
                         @if (task.listId) {
                         <div class="flex items-center gap-[0.5vw]">
@@ -56,30 +55,24 @@
                 </div>
                 <div class="w-auto flex gap-2 h-[5vh] justify-end">
                     <div class="w-auto">
-                        <app-icon-text-button [type]="'button'" [colorHover]="'var(--secondary-color)'"
-                            [iconSvg]="calendarIcon.svg" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
-                            [borderColor]="'var(--purple)'" [viewBox]="calendarIcon.viewBox" [iconSize]="'20'"
-                            [text]="formatDate(task.startDate)">
+                        <app-icon-text-button [type]="'button'" [iconSvg]="calendarIcon.svg" [color]="'var(--purple)'"
+                            [viewBox]="calendarIcon.viewBox" [iconSize]="'20'" [text]="formatDate(task.startDate)">
                         </app-icon-text-button>
                     </div>
                     <div class="w-auto">
-                        <app-icon-text-button [type]="'button'" [colorHover]="'var(--secondary-color)'"
-                            [iconSvg]="calendarIcon.svg" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
-                            [borderColor]="'var(--purple)'" [viewBox]="calendarIcon.viewBox" [iconSize]="'20'"
+                        <app-icon-text-button [type]="'button'" [iconSvg]="calendarIcon.svg" [color]="'var(--purple)'"
+                            [viewBox]="calendarIcon.viewBox" [iconSize]="'20'"
                             [text]="formatTimeTo12Hour(task.dueTime)">
                         </app-icon-text-button>
                     </div>
                     <div class="w-auto">
-                        <app-icon-text-button [type]="'button'" [colorHover]="'var(--secondary-color)'"
-                            [iconSvg]="calendarIcon.svg" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
-                            [borderColor]="'var(--purple)'" [viewBox]="calendarIcon.viewBox" [iconSize]="'20'"
-                            [text]="getPriorityText(task.priority)">
+                        <app-icon-text-button [type]="'button'" [iconSvg]="calendarIcon.svg" [color]="'var(--purple)'"
+                            [viewBox]="calendarIcon.viewBox" [iconSize]="'20'" [text]="getPriorityText(task.priority)">
                         </app-icon-text-button>
                     </div>
                 </div>
             </div>
             <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
-            }
             }
         </div>
 

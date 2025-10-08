@@ -34,6 +34,7 @@ export class TaskComponent {
   }
 
   togglePopUp() {
+    this.interfaceService.selectedTaskId.set(null);
     this.interfaceService.setCurrentOperation('Add Task');
   }
 
@@ -89,8 +90,15 @@ export class TaskComponent {
     if (!isNaN(Number(priorityStr))) {
       return Priority[Number(priorityStr)];
     }
-    
+
     return priorityStr.charAt(0).toUpperCase() + priorityStr.slice(1).toLowerCase();
+  }
+
+  openTaskDetails(task: Task) {
+    if (!task.id) return;
+    this.interfaceService.setShowingDetailsTask(true);
+    this.interfaceService.setCurrentOperation('Add Task');
+    this.interfaceService.selectedTaskId.set(task.id || null);
   }
 
   get title() {
@@ -102,10 +110,18 @@ export class TaskComponent {
   }
 
   get tasks() {
-    return this.taskService.tasks$();
+    if (this.selectedListId) {
+      return this.taskService.tasks$().filter(t => t.listId === this.selectedListId && !t.completed);
+    }
+
+    return this.taskService.tasks$().filter(t => !t.completed);
   }
 
   get username() {
     return this.authStateService.user()?.username;
+  }
+
+  get selectedListId() {
+    return this.interfaceService.selectedListId();
   }
 }

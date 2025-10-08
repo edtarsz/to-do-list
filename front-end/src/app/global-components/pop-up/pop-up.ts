@@ -20,4 +20,11 @@ export class PopUp {
   togglePopUp() {
     this.interfaceService.togglePopUp();
   }
+
+  get titleText() {
+    if (this.interfaceService.selectedListId()) {
+      this.title = 'Edit List';
+    }
+    return this.title;
+  }
 }

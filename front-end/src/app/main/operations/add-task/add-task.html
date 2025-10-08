@@ -16,8 +16,8 @@
                 <div class="w-full h-full relative">
                     <app-icon-text-button [type]="'button'" [colorHover]="'var(--secondary-color)'"
                         [iconSvg]="arrowListIcon.svg" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
-                        [borderColor]="'var(--purple)'" [viewBox]="arrowListIcon.viewBox" [iconSize]="arrowListIcon.size" [text]="selectedList()"
-                        (click)="toggleDropdown('list')">
+                        [borderColor]="'var(--purple)'" [viewBox]="arrowListIcon.viewBox"
+                        [iconSize]="arrowListIcon.size" [text]="selectedList()" (click)="toggleDropdown('list')">
                     </app-icon-text-button>
 
                     @if (openDropdown() === 'list') {
@@ -34,10 +34,10 @@
                 </div>
 
                 <div class="h-full w-full relative">
-                    <app-icon-text-button [type]="'button'" [colorHover]="'var(--secondary-color)'" [iconSvg]="flagIcon.svg"
-                        [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'" [borderColor]="'var(--purple)'"
-                        [viewBox]="flagIcon.viewBox" [iconSize]="flagIcon.size" [text]="selectedPriority()"
-                        (click)="toggleDropdown('priority')">
+                    <app-icon-text-button [type]="'button'" [colorHover]="'var(--secondary-color)'"
+                        [iconSvg]="flagIcon.svg" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
+                        [borderColor]="'var(--purple)'" [viewBox]="flagIcon.viewBox" [iconSize]="flagIcon.size"
+                        [text]="selectedPriority()" (click)="toggleDropdown('priority')">
                     </app-icon-text-button>
 
                     @if (openDropdown() === 'priority') {
@@ -62,8 +62,9 @@
                         <div class="h-full relative">
                             <app-icon-text-button [type]="'button'" [colorHover]="'var(--secondary-color)'"
                                 [iconSvg]="clockIcon.svg" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
-                                [borderColor]="'var(--purple)'" [viewBox]="clockIcon.viewBox" [iconSize]="clockIcon.size"
-                                [text]="selectedStartTime() || 'Start'" (click)="toggleDropdown('startTime')">
+                                [borderColor]="'var(--purple)'" [viewBox]="clockIcon.viewBox"
+                                [iconSize]="clockIcon.size" [text]="selectedStartTime() || 'Start'"
+                                (click)="toggleDropdown('startTime')">
                             </app-icon-text-button>
 
                             @if (openDropdown() === 'startTime') {
@@ -78,8 +79,9 @@
                         <div class="h-full relative">
                             <app-icon-text-button [type]="'button'" [colorHover]="'var(--secondary-color)'"
                                 [iconSvg]="clockIcon.svg" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
-                                [borderColor]="'var(--purple)'" [viewBox]="clockIcon.viewBox" [iconSize]="clockIcon.size"
-                                [text]="selectedDueTime() || 'Due'" (click)="toggleDropdown('dueTime')">
+                                [borderColor]="'var(--purple)'" [viewBox]="clockIcon.viewBox"
+                                [iconSize]="clockIcon.size" [text]="selectedDueTime() || 'Due'"
+                                (click)="toggleDropdown('dueTime')">
                             </app-icon-text-button>
 
                             @if (openDropdown() === 'dueTime') {
@@ -96,8 +98,9 @@
                         <!-- Start Date -->
                         <div class="h-full relative">
                             <app-icon-text-button [type]="'button'" [colorHover]="'var(--secondary-color)'"
-                                [iconSvg]="calendarCleanIcon.svg" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
-                                [borderColor]="'var(--purple)'" [viewBox]="calendarCleanIcon.viewBox" [iconSize]="calendarCleanIcon.size"
+                                [iconSvg]="calendarCleanIcon.svg" [color]="'var(--purple)'"
+                                [bgColorHover]="'var(--purple)'" [borderColor]="'var(--purple)'"
+                                [viewBox]="calendarCleanIcon.viewBox" [iconSize]="calendarCleanIcon.size"
                                 [text]="selectedStartDate() || 'Start'" (click)="toggleDropdown('startDate')">
                             </app-icon-text-button>
 
@@ -112,8 +115,9 @@
                         <!-- Due Date -->
                         <div class="h-full relative">
                             <app-icon-text-button [type]="'button'" [colorHover]="'var(--secondary-color)'"
-                                [iconSvg]="calendarCleanIcon.svg" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
-                                [borderColor]="'var(--purple)'" [viewBox]="calendarCleanIcon.viewBox" [iconSize]="calendarCleanIcon.size"
+                                [iconSvg]="calendarCleanIcon.svg" [color]="'var(--purple)'"
+                                [bgColorHover]="'var(--purple)'" [borderColor]="'var(--purple)'"
+                                [viewBox]="calendarCleanIcon.viewBox" [iconSize]="calendarCleanIcon.size"
                                 [text]="selectedDueDate() || 'Due'" (click)="toggleDropdown('dueDate')">
                             </app-icon-text-button>
 

@@ -5,6 +5,7 @@ interface InterfaceState {
     isProfileSettingsOpen: boolean;
     deleteActive: boolean;
     isPopUpOpen: boolean;
+    isShowingDetailsTask: boolean;
 }
 
 @Injectable({
@@ -15,7 +16,8 @@ export class InterfaceService {
         isAsideOpen: true,
         isProfileSettingsOpen: false,
         deleteActive: false,
-        isPopUpOpen: false
+        isPopUpOpen: false,
+        isShowingDetailsTask: false
     });
 
     isAsideOpen = computed(() => this.state().isAsideOpen);
@@ -23,9 +25,12 @@ export class InterfaceService {
     deleteActive = computed(() => this.state().deleteActive);
     isPopUpOpen = computed(() => this.state().isPopUpOpen);
 
+    isShowingDetailsTask = computed(() => this.state().isShowingDetailsTask);
+
     currentOperation = signal<'Add List' | 'Add Task'>('Add List');
 
     selectedListId = signal<number | null>(null);
+    selectedTaskId = signal<number | null>(null);
     selectedMenuId = signal<number>(1);
 
     toggleAside() {
@@ -44,7 +49,12 @@ export class InterfaceService {
         this.state.update(v => ({ ...v, isPopUpOpen: !v.isPopUpOpen }));
     }
 
+    setShowingDetailsTask(show: boolean) {
+        this.state.update(v => ({ ...v, isShowingDetailsTask: show }));
+    }
+
     setCurrentOperation(operation: 'Add List' | 'Add Task') {
+        // you always set the operation, so if the pop-up is closed, open it and also set the operation
         this.togglePopUp();
         this.currentOperation.set(operation);
     }
@@ -55,7 +65,8 @@ export class InterfaceService {
             isAsideOpen: true,
             isProfileSettingsOpen: false,
             deleteActive: false,
-            isPopUpOpen: false
+            isPopUpOpen: false,
+            isShowingDetailsTask: false
         });
 
         this.selectedListId.set(null);
