@@ -34,7 +34,6 @@ export class TaskComponent {
   }
 
   togglePopUp() {
-    this.interfaceService.selectedTaskId.set(null);
     this.interfaceService.setCurrentOperation('Add Task');
   }
 
