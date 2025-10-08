@@ -22,8 +22,8 @@ export class PopUp {
   }
 
   get titleText() {
-    if (this.interfaceService.selectedListId()) {
-      this.title = 'Edit List';
+    if (this.interfaceService.selectedTaskId()) {
+      this.title = 'Edit Task';
     }
     return this.title;
   }
