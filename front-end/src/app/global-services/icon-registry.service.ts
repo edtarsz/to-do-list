@@ -116,6 +116,11 @@ export class IconRegistryService {
       svg: `<path d="M1 6.5 6 1.5 11 6.5" stroke="#1F1F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
       viewBox: '0 0 12 8',
       size: '12'
+    },
+    line: {
+      svg: `<path d="M1 1.00006L6 0.999961L11 1.00006" stroke="#1F1F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
+      viewBox: '0 0 12 2',
+      size: '12'
     }
   };
 

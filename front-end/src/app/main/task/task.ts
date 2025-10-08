@@ -30,6 +30,7 @@ export class TaskComponent {
 
   arrowDownwardsIcon = this.iconRegistryService.getIcon('arrow_downwards');
   arrowUpwardsIcon = this.iconRegistryService.getIcon('arrow_upwards');
+  lineIcon = this.iconRegistryService.getIcon('line');
 
   clockIcon = this.iconRegistryService.getIcon('clock');
   flagIcon = this.iconRegistryService.getIcon('flag');
@@ -136,7 +137,7 @@ export class TaskComponent {
     }
 
     this.cleanFilters();
-    this.ascHour.set(!this.ascHour());
+    this.ascHour.set(true);
     this.filter.set('hour');
   }
 
@@ -147,7 +148,7 @@ export class TaskComponent {
     }
 
     this.cleanFilters();
-    this.ascPriority.set(!this.ascPriority());
+    this.ascPriority.set(true);
     this.filter.set('priority');
   }
 
@@ -232,5 +233,15 @@ export class TaskComponent {
 
   get selectedListId() {
     return this.interfaceService.selectedListId();
+  }
+
+  get iconHour() {
+    if (this.filter() !== 'hour') return this.lineIcon;
+    return this.ascHour() ? this.arrowUpwardsIcon : this.arrowDownwardsIcon;
+  }
+
+  get iconPriority() {
+    if (this.filter() !== 'priority') return this.lineIcon;
+    return this.ascPriority() ? this.arrowUpwardsIcon : this.arrowDownwardsIcon;
   }
 }
