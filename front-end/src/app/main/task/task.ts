@@ -1,5 +1,7 @@
 import { AsyncPipe, CommonModule } from "@angular/common";
-import { Component, inject, signal } from "@angular/core";
+import { Component, inject, signal, OnInit, OnDestroy } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { Subject, takeUntil } from "rxjs";
 import { IconTextButton } from "../../global-components/icon-text-button/icon-text-button";
 import { AuthStateService } from "../../global-services/auth-state.service";
 import { IconRegistryService } from "../../global-services/icon-registry.service";
@@ -16,13 +18,17 @@ import { Priority, Task } from "../../models/task";
   templateUrl: './task.html',
   styleUrl: './task.css'
 })
-export class TaskComponent {
+export class TaskComponent implements OnInit, OnDestroy {
   private authStateService = inject(AuthStateService);
   private iconRegistryService = inject(IconRegistryService);
   private interfaceService = inject(InterfaceService);
   private relojService = inject(RelojService);
   private taskService = inject(TaskService);
   private listService = inject(ListService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+
+  private destroy$ = new Subject<void>();
 
   addIcon = this.iconRegistryService.getIcon('add');
   sendIcon = this.iconRegistryService.getIcon('send');
@@ -41,6 +47,32 @@ export class TaskComponent {
 
   constructor() {
     this.taskService.getTasks().subscribe();
+  }
+
+  ngOnInit() {
+    // Suscribirse a los cambios en los query params hasta que el componente se destruya
+    this.route.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        // Leer el filtro de los query params
+        const filterType = params['filter'] as 'hour' | 'priority' | null;
+        const ascending = params['asc'] === 'true';
+
+        if (filterType === 'hour') {
+          this.filter.set('hour');
+          this.ascHour.set(ascending);
+        } else if (filterType === 'priority') {
+          this.filter.set('priority');
+          this.ascPriority.set(ascending);
+        } else {
+          this.cleanFilters();
+        }
+      });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   togglePopUp() {
@@ -67,7 +99,7 @@ export class TaskComponent {
 
     const [hours, minutes] = time24.split(':').map(Number);
     const period = hours >= 12 ? 'PM' : 'AM';
-    const hours12 = hours % 12 || 12; // 0 a 12, and 13-23 to 1-11
+    const hours12 = hours % 12 || 12;
 
     return `${hours12}:${String(minutes).padStart(2, '0')} ${period}`;
   }
@@ -132,24 +164,42 @@ export class TaskComponent {
 
   filterByHour() {
     if (this.filter() === 'hour') {
-      this.ascHour.set(!this.ascHour());
+      const newAsc = !this.ascHour();
+      this.ascHour.set(newAsc);
+      this.updateQueryParams('hour', newAsc);
       return;
     }
 
+    // Activar filtro por primera vez
     this.cleanFilters();
     this.ascHour.set(true);
     this.filter.set('hour');
+    this.updateQueryParams('hour', true);
   }
 
   filterByPriority() {
     if (this.filter() === 'priority') {
-      this.ascPriority.set(!this.ascPriority());
+      const newAsc = !this.ascPriority();
+      this.ascPriority.set(newAsc);
+      this.updateQueryParams('priority', newAsc);
       return;
     }
 
+    // Activar filtro por primera vez
     this.cleanFilters();
     this.ascPriority.set(true);
     this.filter.set('priority');
+    this.updateQueryParams('priority', true);
+  }
+
+  private updateQueryParams(filterType: 'hour' | 'priority', ascending: boolean) {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        filter: filterType,
+        asc: ascending
+      }
+    });
   }
 
   private cleanFilters() {
@@ -172,10 +222,8 @@ export class TaskComponent {
     const now = new Date();
     now.setHours(0, 0, 0, 0);
 
-    // Filtrar solo tareas no completadas
     tasks = tasks.filter(t => !t.completed);
 
-    // Filtrar por menú (Today o Upcoming)
     if (selectedMenu === 1) {
       tasks = tasks.filter(t => {
         if (!t.dueDate) return false;
@@ -194,21 +242,18 @@ export class TaskComponent {
       });
     }
 
-    // Filtrar por lista seleccionada
     if (this.selectedListId) {
       tasks = tasks.filter(t => t.listId === this.selectedListId);
     }
 
-    // Ordenar según el filtro seleccionado
     if (this.filter() === 'hour') {
       tasks = tasks.sort((a, b) => {
-        // Combinar fecha y hora para comparación completa
         const dateTimeA = new Date(`${a.dueDate}T${a.dueTime || '23:59'}`);
         const dateTimeB = new Date(`${b.dueDate}T${b.dueTime || '23:59'}`);
 
         return this.ascHour()
-          ? dateTimeA.getTime() - dateTimeB.getTime()  // Ascendente: más temprano primero
-          : dateTimeB.getTime() - dateTimeA.getTime(); // Descendente: más tarde primero
+          ? dateTimeA.getTime() - dateTimeB.getTime()
+          : dateTimeB.getTime() - dateTimeA.getTime();
       });
     } else if (this.filter() === 'priority') {
       const priorityOrder = { 'HIGH': 3, 'MEDIUM': 2, 'LOW': 1 };
@@ -218,14 +263,13 @@ export class TaskComponent {
         const priorityB = priorityOrder[b.priority as unknown as keyof typeof priorityOrder] || 2;
 
         return this.ascPriority()
-          ? priorityA - priorityB  // Ascendente: LOW -> MEDIUM -> HIGH
-          : priorityB - priorityA; // Descendente: HIGH -> MEDIUM -> LOW
+          ? priorityA - priorityB
+          : priorityB - priorityA;
       });
     }
 
     return tasks;
   }
-
 
   get username() {
     return this.authStateService.user()?.username;

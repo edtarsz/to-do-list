@@ -1,14 +1,14 @@
 import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { ListService } from '../../global-services/lists.service';
 import { AsideItem } from "./aside-item/aside-item";
 import { IconRegistryService } from '../../global-services/icon-registry.service';
-import { CommonModule } from '@angular/common';
 import { AuthService } from '../../auth/auth.service';
 import { AuthStateService } from '../../global-services/auth-state.service';
 import { InterfaceService } from '../../global-services/interface.service';
 import { IconTextButton } from '../../global-components/icon-text-button/icon-text-button';
 import { AsideSection } from './aside-section/aside-section';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-aside',
@@ -18,10 +18,8 @@ import { Router } from '@angular/router';
 })
 export class Aside {
   public listService = inject(ListService);
-
   public iconRegistryService = inject(IconRegistryService);
   public interfaceService = inject(InterfaceService);
-
   public authStateService = inject(AuthStateService);
   private authService = inject(AuthService);
   private router = inject(Router);
@@ -33,7 +31,6 @@ export class Aside {
   noteIcon = this.iconRegistryService.getIcon('note');
   calendarIcon = this.iconRegistryService.getIcon('calendar');
 
-  // Initialize lists on aside load
   constructor() {
     this.listService.getLists().subscribe();
   }
@@ -60,33 +57,60 @@ export class Aside {
 
   deleteList(listId: number): void {
     if (this.interfaceService.deleteActive()) {
-      this.listService.deleteList(listId).subscribe()
+      this.listService.deleteList(listId).subscribe();
     } else if (this.interfaceService.selectedListId() !== listId) {
-      this.interfaceService.selectedListId.set(listId);
+      this.selectList(listId);
     } else {
-      this.interfaceService.selectedListId.set(null);
+      this.selectList(null);
     }
   }
 
   toggleMenuSelection(menuId: number): void {
-    if (this.interfaceService.selectedMenuId() !== menuId) {
-      this.interfaceService.selectedMenuId.set(menuId);
+    this.interfaceService.selectedMenuId.set(menuId);
+
+    const queryParams: any = {};
+
+    if (menuId === 1) {
+      queryParams.view = 'today';
+    } else if (menuId === 2) {
+      queryParams.view = 'upcoming';
     }
+
+    const currentListId = this.interfaceService.selectedListId();
+    if (currentListId) {
+      queryParams.listId = currentListId;
+    }
+
     switch (menuId) {
       case 1:
-        this.router.navigate(['/index/tasks']);
-        break;
       case 2:
-        this.router.navigate(['/index/tasks']);
+        this.router.navigate(['/index/tasks'], { queryParams });
         break;
-      // filter using params ?upcoming=true
       case 3:
         this.router.navigate(['/index/calendar']);
         break;
       default:
-        this.router.navigate(['/index/tasks']);
+        this.router.navigate(['/index/tasks'], { queryParams });
         break;
     }
+  }
+
+  selectList(listId: number | null): void {
+    this.interfaceService.selectedListId.set(listId);
+    const queryParams: any = {};
+
+    const currentMenuId = this.interfaceService.selectedMenuId();
+    if (currentMenuId === 1) {
+      queryParams.view = 'today';
+    } else if (currentMenuId === 2) {
+      queryParams.view = 'upcoming';
+    }
+
+    if (listId) {
+      queryParams.listId = listId;
+    }
+
+    this.router.navigate(['/index/tasks'], { queryParams });
   }
 
   logOut() {

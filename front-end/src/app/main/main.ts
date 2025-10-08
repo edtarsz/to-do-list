@@ -1,12 +1,12 @@
 import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NavigationEnd, Router, RouterOutlet, ActivatedRoute } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { Aside } from "./aside/aside";
 import { InterfaceService } from '../global-services/interface.service';
-import { CommonModule } from '@angular/common';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { AddTask } from "./operations/add-task/add-task";
 import { AddList } from "./operations/add-list/add-list";
 import { PopUp } from '../global-components/pop-up/pop-up';
-import { filter } from 'rxjs/internal/operators/filter';
 
 @Component({
   selector: 'app-main',
@@ -16,26 +16,43 @@ import { filter } from 'rxjs/internal/operators/filter';
 })
 export class Main {
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private interfaceService = inject(InterfaceService);
 
   ngOnInit() {
-    this.syncMenuWithRoute(this.router.url);
+    // Sincronizar primera vez
+    this.syncMenuWithRoute();
 
+    // Sincronizar en cada navegación
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: NavigationEnd) => {
-      this.syncMenuWithRoute(event.urlAfterRedirects);
+    ).subscribe(() => {
+      this.syncMenuWithRoute();
     });
   }
 
-  private syncMenuWithRoute(url: string) {
-    switch (true) {
-      case url.includes('tasks'):
+  private syncMenuWithRoute() {
+    const url = this.router.url;
+
+    // Extraer query params de la URL
+    const urlParams = new URLSearchParams(url.split('?')[1] || '');
+    const view = urlParams.get('view');
+    const listId = urlParams.get('listId');
+
+    if (url.includes('tasks')) {
+      if (view === 'upcoming') {
+        this.interfaceService.selectedMenuId.set(2);
+      } else {
         this.interfaceService.selectedMenuId.set(1);
-        break;
-      case url.includes('calendar'):
-        this.interfaceService.selectedMenuId.set(3);
-        break;
+      }
+
+      if (listId) {
+        this.interfaceService.selectedListId.set(Number(listId));
+      } else {
+        this.interfaceService.selectedListId.set(null);
+      }
+    } else if (url.includes('calendar')) {
+      this.interfaceService.selectedMenuId.set(3);
     }
   }
 
