@@ -1,23 +1,25 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavigationEnd, Router, RouterOutlet, ActivatedRoute } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { Aside } from "./aside/aside";
 import { InterfaceService } from '../global-services/interface.service';
 import { AddTask } from "./operations/add-task/add-task";
 import { AddList } from "./operations/add-list/add-list";
 import { PopUp } from '../global-components/pop-up/pop-up';
+import { Event } from "../global-components/event/event";
+import { AuthStateService } from '../global-services/auth-state.service';
 
 @Component({
   selector: 'app-main',
-  imports: [Aside, CommonModule, RouterOutlet, PopUp, AddTask, AddList],
+  imports: [Aside, CommonModule, RouterOutlet, PopUp, AddTask, AddList, Event],
   templateUrl: './main.html',
   styleUrl: './main.css'
 })
 export class Main {
   private router = inject(Router);
-  private route = inject(ActivatedRoute);
   private interfaceService = inject(InterfaceService);
+  private authStateService = inject(AuthStateService);
 
   ngOnInit() {
     // Sincronizar primera vez
@@ -66,5 +68,13 @@ export class Main {
 
   get isAsideOpen() {
     return this.interfaceService.isAsideOpen();
+  }
+
+  get userName() {
+    return this.authStateService.user()?.name;
+  }
+
+  get isEventActive() {
+    return this.interfaceService.isEventActive();
   }
 }

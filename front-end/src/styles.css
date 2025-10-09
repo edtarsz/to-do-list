@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin '@midudev/tailwind-animations';
 
 @theme {
     --font-family-ubuntu: 'UbuntuRegular', sans-serif;

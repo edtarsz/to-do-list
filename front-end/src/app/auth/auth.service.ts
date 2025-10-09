@@ -6,6 +6,7 @@ import { firstValueFrom, throwError } from 'rxjs';
 import { UserDTO } from '../models/user';
 import { AuthStateService } from '../global-services/auth-state.service';
 import { ListService } from '../global-services/lists.service';
+import { InterfaceService } from '../global-services/interface.service';
 
 interface AuthResponse {
     access_token: string;
@@ -17,6 +18,7 @@ interface AuthResponse {
 })
 export class AuthService {
     private authStateService = inject(AuthStateService);
+    private interfaceService = inject(InterfaceService);
     private listService = inject(ListService);
     private apiUrl = 'http://localhost:3000/api';
 
@@ -51,8 +53,14 @@ export class AuthService {
         const userDTO: UserDTO = { name, lastName, username, password };
 
         return this.http.post(`${this.apiUrl}/auth/register`, userDTO).pipe(
-            tap(() => this.authStateService.setLoading(false)),
+            tap(() => {
+                this.interfaceService.setEventActive(true);
+                this.interfaceService.setEvent('REGISTER', 'Your account has been successfully created.');
+                this.authStateService.setLoading(false);
+            }),
             catchError((err) => {
+                this.interfaceService.setEventActive(true);
+                this.interfaceService.setEvent('ERROR', 'There was an error creating your account.');
                 this.authStateService.setLoading(false);
 
                 if (err.status === 400 && err.error?.message) {
@@ -74,6 +82,8 @@ export class AuthService {
         }).pipe(
             tap(response => {
                 localStorage.setItem('access_token', response.access_token);
+                this.interfaceService.setEventActive(true);
+                this.interfaceService.setEvent('LOGIN', `Welcome, ${response.user.name}!`);
                 this.authStateService.setUser(response.user);
                 this.authStateService.setLoading(false);
             }),

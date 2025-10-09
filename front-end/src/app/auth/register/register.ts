@@ -3,7 +3,6 @@ import { AuthSection } from "../auth-section/auth-section";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
-import { AuthStateService } from '../../global-services/auth-state.service';
 
 @Component({
   selector: 'app-register',

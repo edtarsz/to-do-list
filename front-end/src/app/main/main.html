@@ -1,3 +1,7 @@
+@if(isEventActive) {
+<app-event></app-event>
+}
+
 @if (isPopUpOpen) {
 <app-pop-up [title]="currentOperation">
     @if (currentOperation === 'Add List') {
@@ -5,9 +9,9 @@
     } @else if (currentOperation === 'Add Task') {
     <app-add-task></app-add-task>
     }
-
 </app-pop-up>
 }
+
 <main class="h-screen w-screen flex gap-[1vw] bg-[var(--primary-color)] p-[2vw]">
     <!-- min width provisional not deployment -->
     <app-aside class="aside" [ngClass]="{

@@ -2,16 +2,19 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, inje
 import { RouterOutlet } from '@angular/router';
 import { gsap } from 'gsap';
 import { AuthStateService } from '../global-services/auth-state.service';
+import { Event } from "../global-components/event/event";
+import { InterfaceService } from '../global-services/interface.service';
 
 @Component({
   selector: 'app-auth',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, Event],
   templateUrl: './auth.html',
   styleUrl: './auth.css',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Auth implements OnInit, OnDestroy {
   private authStateService = inject(AuthStateService);
+  private interfaceService = inject(InterfaceService);
 
   @ViewChild('loadingSvg') set loadingSvg(element: ElementRef | undefined) {
     if (element) {
@@ -85,5 +88,9 @@ export class Auth implements OnInit, OnDestroy {
 
   get isLoading(): boolean {
     return this.authStateService.isLoading();
+  }
+
+  get isEventActive(): boolean {
+    return this.interfaceService.isEventActive();
   }
 }
