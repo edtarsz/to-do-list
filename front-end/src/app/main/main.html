@@ -2,6 +2,10 @@
 <app-event></app-event>
 }
 
+@if(isLoading) {
+<app-loading></app-loading>
+}
+
 @if (isPopUpOpen) {
 <app-pop-up [title]="currentOperation">
     @if (currentOperation === 'Add List') {

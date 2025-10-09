@@ -1,7 +1,7 @@
 import { AsyncPipe, CommonModule } from "@angular/common";
 import { Component, inject, signal, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Subject, takeUntil } from "rxjs";
+import { delay, Subject, takeUntil } from "rxjs";
 import { IconTextButton } from "../../global-components/icon-text-button/icon-text-button";
 import { AuthStateService } from "../../global-services/auth-state.service";
 import { IconRegistryService } from "../../global-services/icon-registry.service";
@@ -92,7 +92,12 @@ export class TaskComponent implements OnInit, OnDestroy {
   completeTask(task: Task) {
     if (!task.id) return;
     const payload = { completed: true };
-    this.taskService.updateTask(task.id, payload).subscribe();
+    this.taskService.updateTask(task.id, payload).subscribe({
+      next: (updatedTask) => {
+        this.interfaceService.setEventActive(true);
+        this.interfaceService.setEvent('TASK COMPLETED', `Task "${updatedTask.name}" has been marked as completed.`);
+      }
+    });
   }
 
   formatTimeTo12Hour(time24: string): string {
@@ -157,10 +162,10 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   openTaskDetails(task: Task) {
     if (!task.id) return;
+    this.interfaceService.selectedTaskId.set(task.id);
     this.interfaceService.setShowingDetailsTask(true);
     this.interfaceService.setCurrentOperation('Add Task');
     this.interfaceService.togglePopUp();
-    this.interfaceService.selectedTaskId.set(task.id || null);
   }
 
   filterByHour() {
@@ -270,6 +275,10 @@ export class TaskComponent implements OnInit, OnDestroy {
     }
 
     return tasks;
+  }
+
+  get cantTasks() {
+    return this.tasks.length;
   }
 
   get username() {

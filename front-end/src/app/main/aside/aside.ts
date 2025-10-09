@@ -57,7 +57,12 @@ export class Aside {
 
   deleteList(listId: number): void {
     if (this.interfaceService.deleteActive()) {
-      this.listService.deleteList(listId).subscribe();
+      this.listService.deleteList(listId).subscribe({
+        next: () => {
+          this.interfaceService.setEventActive(true);
+          this.interfaceService.setEvent('LIST DELETED', `List has been successfully deleted.`);
+        }
+      });
     } else if (this.interfaceService.selectedListId() !== listId) {
       this.selectList(listId);
     } else {

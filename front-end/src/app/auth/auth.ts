@@ -1,13 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { gsap } from 'gsap';
-import { AuthStateService } from '../global-services/auth-state.service';
 import { Event } from "../global-components/event/event";
+import { AuthStateService } from '../global-services/auth-state.service';
 import { InterfaceService } from '../global-services/interface.service';
+import { Loading } from "../global-components/loading/loading";
 
 @Component({
   selector: 'app-auth',
-  imports: [RouterOutlet, Event],
+  imports: [RouterOutlet, Event, Loading],
   templateUrl: './auth.html',
   styleUrl: './auth.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -16,16 +16,7 @@ export class Auth implements OnInit, OnDestroy {
   private authStateService = inject(AuthStateService);
   private interfaceService = inject(InterfaceService);
 
-  @ViewChild('loadingSvg') set loadingSvg(element: ElementRef | undefined) {
-    if (element) {
-      this._loadingSvg = element;
-      this.startLoadingAnimation();
-    }
-  }
-
-  private _loadingSvg?: ElementRef;
-
-  images = [
+  images: string[] = [
     'assets/images/calendar.png',
     'assets/images/pop-up.png',
     'assets/images/tasks.png'
@@ -36,30 +27,6 @@ export class Auth implements OnInit, OnDestroy {
   private readonly INTERVAL_TIME = 5000;
 
   constructor(private cdr: ChangeDetectorRef) { }
-
-  startLoadingAnimation() {
-    if (!this._loadingSvg) return;
-
-    const svg = this._loadingSvg.nativeElement;
-    const circles = svg.querySelectorAll('circle');
-
-    gsap.to(svg, {
-      rotation: 360,
-      duration: 2,
-      repeat: -1,
-      ease: 'linear',
-      transformOrigin: '50% 50%'
-    });
-
-    gsap.to(circles, {
-      strokeDashoffset: -205,
-      duration: 2,
-      repeat: -1,
-      ease: 'linear',
-      stagger: 0.2
-    });
-  }
-
 
   ngOnInit() {
     this.startCarousel();

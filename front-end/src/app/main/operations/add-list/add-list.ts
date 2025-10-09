@@ -15,7 +15,7 @@ import { IconTextButton } from "../../../global-components/icon-text-button/icon
   styleUrl: './add-list.css'
 })
 export class AddList {
-public interfaceService = inject(InterfaceService);
+  public interfaceService = inject(InterfaceService);
   public iconRegistryService = inject(IconRegistryService);
 
   private fb = inject(FormBuilder);
@@ -53,7 +53,7 @@ public interfaceService = inject(InterfaceService);
     '#F49AC2',
     '#CBAACB'
   ];
-
+  
   closeIcon = this.iconRegistryService.getIcon('close');
   sendIcon = this.iconRegistryService.getIcon('send');
   addIcon = this.iconRegistryService.getIcon('add');
@@ -74,7 +74,9 @@ public interfaceService = inject(InterfaceService);
   addList() {
     if (this.addListForm.valid) {
       this.listService.addList(this.buildList()).subscribe({
-        next: () => {
+        next: (list) => {
+          this.interfaceService.setEventActive(true);
+          this.interfaceService.setEvent('LIST', `List ${list.name} has been successfully created.`);
           this.addListForm.reset();
           this.togglePopUp();
         },

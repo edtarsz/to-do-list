@@ -16,10 +16,10 @@ import { Priority, Task } from '../../../models/task';
   styleUrl: './add-task.css'
 })
 export class AddTask {
-  public interfaceService = inject(InterfaceService);
-  public iconRegistryService = inject(IconRegistryService);
-  public taskService = inject(TaskService);
-  public listService = inject(ListService);
+  private interfaceService = inject(InterfaceService);
+  private iconRegistryService = inject(IconRegistryService);
+  private taskService = inject(TaskService);
+  private listService = inject(ListService);
 
   private fb = inject(FormBuilder);
 
@@ -62,26 +62,28 @@ export class AddTask {
 
     const taskId = this.interfaceService.selectedTaskId();
     if (taskId) {
-      this.taskService.getTaskById(taskId).subscribe(task => {
-        if (task) {
-          this.addTaskForm.patchValue({
-            name: task.name,
-            description: task.description,
-            priority: task.priority,
-            startDate: task.startDate,
-            dueDate: task.dueDate,
-            startTime: task.startTime,
-            dueTime: task.dueTime,
-            listId: task.listId,
-            completed: task.completed
-          });
+      this.taskService.getTaskById(taskId).subscribe({
+        next: (task) => {
+          if (task) {
+            this.addTaskForm.patchValue({
+              name: task.name,
+              description: task.description,
+              priority: task.priority,
+              startDate: task.startDate,
+              dueDate: task.dueDate,
+              startTime: task.startTime,
+              dueTime: task.dueTime,
+              listId: task.listId,
+              completed: task.completed
+            });
 
-          this.selectedList.set(this.listService.lists().find(list => list.id === task.listId)?.name || 'List');
-          this.selectedPriority.set(task.priority.toString() || 'Priority');
-          this.selectedStartTime.set(task.startTime || 'Start Time');
-          this.selectedDueTime.set(task.dueTime || 'Due Time');
-          this.selectedStartDate.set(task.startDate || 'Start Date');
-          this.selectedDueDate.set(task.dueDate || 'Due Date');
+            this.selectedList.set(this.listService.lists().find(list => list.id === task.listId)?.name || 'List');
+            this.selectedPriority.set(task.priority.toString() || 'Priority');
+            this.selectedStartTime.set(task.startTime || 'Start Time');
+            this.selectedDueTime.set(task.dueTime || 'Due Time');
+            this.selectedStartDate.set(task.startDate || 'Start Date');
+            this.selectedDueDate.set(task.dueDate || 'Due Date');
+          }
         }
       });
     }
@@ -109,21 +111,32 @@ export class AddTask {
       if (!id) return;
 
       this.taskService.updateTask(id, this.buildTask()).subscribe({
-        next: () => {
-          this.addTaskForm.reset();
-          this.resetSelections();
+        next: (task) => {
+          this.interfaceService.selectedTaskId.set(null);
+          this.event(task, 'TASK UPDATED', 'updated');
+          this.resetForm();
           this.togglePopUp();
         }
       });
     } else {
       this.taskService.addTask(this.buildTask()).subscribe({
-        next: () => {
-          this.addTaskForm.reset();
-          this.resetSelections();
+        next: (task) => {
+          this.event(task, 'TASK', 'created');
+          this.resetForm();
           this.togglePopUp();
         }
       });
     }
+  }
+
+  private resetForm() {
+    this.addTaskForm.reset();
+    this.resetSelections();
+  }
+
+  private event(task: Task, title: string, message: string) {
+    this.interfaceService.setEventActive(true);
+    this.interfaceService.setEvent(`${title}`, `Task ${task.name} has been successfully ${message}.`);
   }
 
   private getLocalDateString(date: Date = new Date()): string {
@@ -140,43 +153,36 @@ export class AddTask {
     let startDate = formValue.startDate || today;
     let dueDate = formValue.dueDate || today;
 
-    // Si solo se proporcionó dueDate (sin startDate)
     if (formValue.dueDate && !formValue.startDate) {
       startDate = today;
       dueDate = formValue.dueDate;
 
-      // Si la fecha de fin es anterior a hoy, ajustar startDate
       if (new Date(dueDate) < new Date(today)) {
         startDate = dueDate;
       }
     }
-    // Si solo se proporcionó startDate (sin dueDate)
     else if (formValue.startDate && !formValue.dueDate) {
       startDate = formValue.startDate;
       dueDate = formValue.startDate;
     }
-    // Si se proporcionaron ambas
     else if (formValue.startDate && formValue.dueDate) {
       startDate = formValue.startDate;
       dueDate = formValue.dueDate;
 
-      // Validar que startDate no sea mayor que dueDate
       if (new Date(startDate) > new Date(dueDate)) {
         dueDate = startDate;
       }
     }
-    // Si no se proporcionó ninguna
     else {
       startDate = today;
       dueDate = today;
     }
 
-    // Convertir priority a string del enum si es un número
     let priority = formValue.priority;
     if (priority === '' || priority === null || priority === undefined) {
       priority = 'MEDIUM';
     } else if (typeof priority === 'number') {
-      priority = Priority[priority]; // Convierte el número al string del enum
+      priority = Priority[priority];
     }
 
     return {
@@ -251,5 +257,9 @@ export class AddTask {
 
   get textButton() {
     return this.interfaceService.selectedTaskId() ? 'Update Task' : 'Add Task';
+  }
+
+  get isAsideOpen() {
+    return this.interfaceService.isAsideOpen();
   }
 }

@@ -9,10 +9,11 @@ import { AddList } from "./operations/add-list/add-list";
 import { PopUp } from '../global-components/pop-up/pop-up';
 import { Event } from "../global-components/event/event";
 import { AuthStateService } from '../global-services/auth-state.service';
+import { Loading } from "../global-components/loading/loading";
 
 @Component({
   selector: 'app-main',
-  imports: [Aside, CommonModule, RouterOutlet, PopUp, AddTask, AddList, Event],
+  imports: [Aside, CommonModule, RouterOutlet, PopUp, AddTask, AddList, Event, Loading],
   templateUrl: './main.html',
   styleUrl: './main.css'
 })
@@ -76,5 +77,9 @@ export class Main {
 
   get isEventActive() {
     return this.interfaceService.isEventActive();
+  }
+
+  get isLoading() {
+    return this.authStateService.isLoading();
   }
 }

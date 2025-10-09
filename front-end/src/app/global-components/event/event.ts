@@ -1,4 +1,4 @@
-import { Component, inject, effect, OnDestroy } from '@angular/core';
+import { Component, inject, effect, OnDestroy, signal } from '@angular/core';
 import { InterfaceService } from '../../global-services/interface.service';
 
 @Component({
@@ -10,41 +10,87 @@ import { InterfaceService } from '../../global-services/interface.service';
 export class Event implements OnDestroy {
   private interfaceService = inject(InterfaceService);
   private timeoutId: ReturnType<typeof setTimeout> | null = null;
+  private isFirstRun = true;
 
-  title = this.interfaceService.titleEvent();
-  message = this.interfaceService.messageEvent();
+  // Señales locales para "congelar" los datos durante la transición
+  displayTitle = signal('');
+  displayMessage = signal('');
 
   constructor() {
     effect(() => {
       const currentTitle = this.interfaceService.titleEvent();
       const currentMessage = this.interfaceService.messageEvent();
+      const eventCounter = this.interfaceService.eventCounter();
+      const eventActive = this.interfaceService.isEventActive();
 
-      // Si hay un timeout previo, cancelarlo
-      if (this.timeoutId) {
-        clearTimeout(this.timeoutId);
-      }
+      // Solo procesar si el evento está activo
+      if (!eventActive) return;
 
-      // Resetear la animación
       const el = document.getElementById('toast');
-      if (el) {
-        el.classList.remove('animate-fade-out-down');
-        el.classList.add('animate-fade-in-up');
-      }
 
-      // Crear nuevo timeout
-      this.timeoutId = setTimeout(() => {
-        const el = document.getElementById('toast');
-        if (el) {
-          el.classList.remove('animate-fade-in-up');
-          el.classList.add('animate-fade-out-down');
+      // Si no es la primera ejecución, hacer desaparecer el evento anterior inmediatamente
+      if (!this.isFirstRun && el) {
+        // Cancelar timeout previo
+        if (this.timeoutId) {
+          clearTimeout(this.timeoutId);
         }
-      }, 4000);
+
+        // Animación de salida rápida (SIN actualizar los datos todavía)
+        el.classList.remove('animate-fade-in-up');
+        el.classList.add('animate-fade-out-down');
+
+        // Esperar a que termine la animación de salida
+        setTimeout(() => {
+          // AHORA SÍ actualizar los datos
+          this.displayTitle.set(currentTitle);
+          this.displayMessage.set(currentMessage);
+
+          // Pequeño delay para asegurar que el DOM se actualizó
+          setTimeout(() => {
+            const element = document.getElementById('toast');
+            if (element) {
+              this.showNewEvent(element);
+            }
+          }, 50);
+        }, 300);
+      } else {
+        // Primera ejecución, actualizar datos y mostrar directamente
+        this.isFirstRun = false;
+        this.displayTitle.set(currentTitle);
+        this.displayMessage.set(currentMessage);
+
+        if (el) {
+          setTimeout(() => this.showNewEvent(el), 50);
+        }
+      }
     });
+  }
+
+  private showNewEvent(el: HTMLElement) {
+    // Resetear la animación
+    el.classList.remove('animate-fade-out-down');
+    el.classList.add('animate-fade-in-up');
+
+    // Crear nuevo timeout para el auto-cierre
+    this.timeoutId = setTimeout(() => {
+      const element = document.getElementById('toast');
+      if (element) {
+        element.classList.remove('animate-fade-in-up');
+        element.classList.add('animate-fade-out-down');
+      }
+    }, 4000);
   }
 
   ngOnDestroy() {
     if (this.timeoutId) {
       clearTimeout(this.timeoutId);
     }
+  }
+
+  closeEvent() {
+    if (this.timeoutId) {
+      clearTimeout(this.timeoutId);
+    }
+    this.interfaceService.setEventActive(false);
   }
 }

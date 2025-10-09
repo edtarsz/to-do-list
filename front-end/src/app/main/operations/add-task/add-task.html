@@ -5,7 +5,7 @@
     <textarea name="description" id="" formControlName="description" placeholder="Task's description" rows="6"
         class="w-full max-h-[30vh] min-h-[6rem] bg-[var(--secondary-color)] rounded-lg p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-colors duration-200 placeholder-[var(--gray)] text-sm scrollbar-hide"></textarea>
 
-    <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
+    <hr class="border-[#91343420] border-t-2 border-dashed">
 
     <div class="flex flex-col gap-4">
         <p class="text-[var(--gray)] italic text-end">Optional</p>
@@ -24,9 +24,8 @@
                     <div class="absolute w-full left-0 px-4 py-2 bg-white rounded-lg shadow-lg z-10 grid gap-x-5"
                         [class.grid-cols-1]="lists.length <= 5" [class.grid-cols-2]="lists.length > 5">
                         @for (list of lists; track list.id) {
-                        <app-aside-item [title]="list.name" [color]="list.color"
-                            [showText]="interfaceService.isAsideOpen()" [bgColorHover]="'var(--primary-color)'"
-                            (click)="selectList(+list.id!)">
+                        <app-aside-item [title]="list.name" [color]="list.color" [showText]="isAsideOpen"
+                            [bgColorHover]="'var(--primary-color)'" (click)="selectList(+list.id!)">
                         </app-aside-item>
                         }
                     </div>
@@ -43,9 +42,8 @@
                     @if (openDropdown() === 'priority') {
                     <div class="absolute w-full left-0 px-4 py-2 bg-white rounded-lg shadow-lg z-10 grid gap-x-5">
                         @for (priority of prioritys; track priority) {
-                        <app-aside-item [title]="priority.name" [color]="priority.color"
-                            [showText]="interfaceService.isAsideOpen()" [bgColorHover]="'var(--primary-color)'"
-                            (click)="selectPriority(priority.name)">
+                        <app-aside-item [title]="priority.name" [color]="priority.color" [showText]="isAsideOpen"
+                            [bgColorHover]="'var(--primary-color)'" (click)="selectPriority(priority.name)">
                         </app-aside-item>
                         }
                     </div>

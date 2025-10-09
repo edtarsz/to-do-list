@@ -31,6 +31,7 @@ export class InterfaceService {
     isEventActive = computed(() => this.state().isEventActive);
     titleEvent = signal('');
     messageEvent = signal('');
+    eventCounter = signal(0);
 
     isShowingDetailsTask = computed(() => this.state().isShowingDetailsTask);
 
@@ -72,6 +73,7 @@ export class InterfaceService {
     setEvent(title: string, message: string) {
         this.titleEvent.set(title);
         this.messageEvent.set(message);
+        this.eventCounter.update(v => v + 1);
     }
 
     // Used when signing out

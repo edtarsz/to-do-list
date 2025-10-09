@@ -97,7 +97,7 @@ export class AuthService {
         this.listService.clear();
         this.router.navigate(['/login']);
     }
-
+    
     getToken(): string | null {
         return localStorage.getItem('access_token');
     }
