@@ -33,6 +33,12 @@ export class AddList {
       color: [this.selectedColor(), [Validators.required]]
     });
 
+    const currentList = this.interfaceService.selectedList();
+    if (currentList) {
+      this.addListForm.patchValue({ name: currentList.name, color: currentList.color });
+      this.selectedColor.set(currentList.color);
+    }
+
     // { emitEvent: false } prevents angular from thinking that the user manually changed the color input
     effect(() => {
       this.addListForm.patchValue({ color: this.selectedColor() }, { emitEvent: false });
@@ -53,7 +59,7 @@ export class AddList {
     '#F49AC2',
     '#CBAACB'
   ];
-  
+
   closeIcon = this.iconRegistryService.getIcon('close');
   sendIcon = this.iconRegistryService.getIcon('send');
   addIcon = this.iconRegistryService.getIcon('add');
@@ -72,11 +78,27 @@ export class AddList {
   }
 
   addList() {
-    if (this.addListForm.valid) {
-      this.listService.addList(this.buildList()).subscribe({
-        next: (list) => {
+    if (!this.addListForm.valid) {
+      console.error('Please fill in all required fields.');
+      return;
+    }
+
+    if (this.interfaceService.selectedList()) {
+      const id = this.interfaceService.selectedList()?.id;
+      if (!id) return;
+      this.listService.updateList(id, this.buildList()).subscribe({
+        next: () => {
           this.interfaceService.setEventActive(true);
-          this.interfaceService.setEvent('LIST', `List ${list.name} has been successfully created.`);
+          this.interfaceService.setEvent('LIST', `List has been successfully updated.`);
+          this.interfaceService.selectedList.set(null);
+          this.togglePopUp();
+        }
+      });
+    } else {
+      this.listService.addList(this.buildList()).subscribe({
+        next: () => {
+          this.interfaceService.setEventActive(true);
+          this.interfaceService.setEvent('LIST', `List has been successfully created.`);
           this.addListForm.reset();
           this.togglePopUp();
         },
@@ -84,8 +106,6 @@ export class AddList {
           console.error(error);
         }
       });
-    } else {
-      console.error('Please fill in all required fields.');
     }
   }
 

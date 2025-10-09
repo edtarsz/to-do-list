@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, signal } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
@@ -22,7 +22,7 @@ export class AsideItem {
 
   @Input() showText: boolean = true;
   @Input() selected: boolean = false;
-  
+
   @Input() deleting: boolean = false;
 
   sanitizeSvg(svg: string) {

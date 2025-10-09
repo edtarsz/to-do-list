@@ -9,6 +9,7 @@ import { AuthStateService } from '../../global-services/auth-state.service';
 import { InterfaceService } from '../../global-services/interface.service';
 import { IconTextButton } from '../../global-components/icon-text-button/icon-text-button';
 import { AsideSection } from './aside-section/aside-section';
+import { List } from '../../models/list';
 
 @Component({
   selector: 'app-aside',
@@ -30,6 +31,7 @@ export class Aside {
   addIcon = this.iconRegistryService.getIcon('add');
   noteIcon = this.iconRegistryService.getIcon('note');
   calendarIcon = this.iconRegistryService.getIcon('calendar');
+  penIcon = this.iconRegistryService.getIcon('pen');
 
   constructor() {
     this.listService.getLists().subscribe();
@@ -38,6 +40,9 @@ export class Aside {
   toggleAside() {
     if (this.interfaceService.deleteActive()) {
       this.interfaceService.toggleDeleteActive();
+    }
+    if (this.interfaceService.editActive()) {
+      this.interfaceService.toggleEditActive();
     }
     this.interfaceService.toggleAside();
   }
@@ -55,6 +60,26 @@ export class Aside {
     this.interfaceService.toggleDeleteActive();
   }
 
+  toggleEditActive() {
+    this.interfaceService.toggleEditActive();
+  }
+
+  operate(list: List): void {
+    if (!list.id) return;
+    // Si la lista ya está seleccionada, deseleccionarla
+    if (this.interfaceService.selectedList()?.id === list.id) {
+      this.selectList(null);
+    } else {
+      this.selectList(list);
+    }
+
+    if (this.interfaceService.editActive()) {
+      this.editList(list);
+    } else if (this.interfaceService.deleteActive()) {
+      this.deleteList(list.id);
+    }
+  }
+
   deleteList(listId: number): void {
     if (this.interfaceService.deleteActive()) {
       this.listService.deleteList(listId).subscribe({
@@ -63,10 +88,16 @@ export class Aside {
           this.interfaceService.setEvent('LIST DELETED', `List has been successfully deleted.`);
         }
       });
-    } else if (this.interfaceService.selectedListId() !== listId) {
-      this.selectList(listId);
-    } else {
-      this.selectList(null);
+    }
+  }
+
+  // pending changes
+  // para saber si está en modo edicion checo si está seleccionado alguna lista
+  editList(list: List): void {
+    if (this.interfaceService.editActive()) {
+      this.interfaceService.selectedList.set(list);
+      this.interfaceService.setCurrentOperation('Add List');
+      this.interfaceService.togglePopUp();
     }
   }
 
@@ -81,9 +112,9 @@ export class Aside {
       queryParams.view = 'upcoming';
     }
 
-    const currentListId = this.interfaceService.selectedListId();
-    if (currentListId) {
-      queryParams.listId = currentListId;
+    const currentList = this.interfaceService.selectedList();
+    if (currentList) {
+      queryParams.listId = currentList.id;
     }
 
     switch (menuId) {
@@ -100,8 +131,8 @@ export class Aside {
     }
   }
 
-  selectList(listId: number | null): void {
-    this.interfaceService.selectedListId.set(listId);
+  selectList(list: List | null): void {
+    this.interfaceService.selectedList.set(list);
     const queryParams: any = {};
 
     const currentMenuId = this.interfaceService.selectedMenuId();
@@ -111,8 +142,8 @@ export class Aside {
       queryParams.view = 'upcoming';
     }
 
-    if (listId) {
-      queryParams.listId = listId;
+    if (list) {
+      queryParams.listId = list.id;
     }
 
     this.router.navigate(['/index/tasks'], { queryParams });

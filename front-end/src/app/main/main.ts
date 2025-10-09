@@ -10,6 +10,7 @@ import { PopUp } from '../global-components/pop-up/pop-up';
 import { Event } from "../global-components/event/event";
 import { AuthStateService } from '../global-services/auth-state.service';
 import { Loading } from "../global-components/loading/loading";
+import { ListService } from '../global-services/lists.service';
 
 @Component({
   selector: 'app-main',
@@ -21,6 +22,7 @@ export class Main {
   private router = inject(Router);
   private interfaceService = inject(InterfaceService);
   private authStateService = inject(AuthStateService);
+  private listService = inject(ListService);
 
   ngOnInit() {
     // Sincronizar primera vez
@@ -50,9 +52,12 @@ export class Main {
       }
 
       if (listId) {
-        this.interfaceService.selectedListId.set(Number(listId));
+        this.listService.getListById(Number(listId)).subscribe({
+          next: (list) => this.interfaceService.selectedList.set(list),
+          error: () => this.interfaceService.selectedList.set(null)
+        });
       } else {
-        this.interfaceService.selectedListId.set(null);
+        this.interfaceService.selectedList.set(null);
       }
     } else if (url.includes('calendar')) {
       this.interfaceService.selectedMenuId.set(3);

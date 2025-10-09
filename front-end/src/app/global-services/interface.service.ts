@@ -1,9 +1,12 @@
 import { Injectable, signal, computed } from '@angular/core';
+import { List } from '../models/list';
+import { Task } from '../models/task';
 
 interface InterfaceState {
     isAsideOpen: boolean;
     isProfileSettingsOpen: boolean;
     deleteActive: boolean;
+    editActive: boolean;
     isPopUpOpen: boolean;
     isShowingDetailsTask: boolean;
     isEventActive: boolean;
@@ -17,6 +20,7 @@ export class InterfaceService {
         isAsideOpen: true,
         isProfileSettingsOpen: false,
         deleteActive: false,
+        editActive: false,
         isPopUpOpen: false,
         isShowingDetailsTask: false,
         isEventActive: false
@@ -25,6 +29,7 @@ export class InterfaceService {
     isAsideOpen = computed(() => this.state().isAsideOpen);
     isProfileSettingsOpen = computed(() => this.state().isProfileSettingsOpen);
     deleteActive = computed(() => this.state().deleteActive);
+    editActive = computed(() => this.state().editActive);
     isPopUpOpen = computed(() => this.state().isPopUpOpen);
 
     // Events
@@ -37,8 +42,8 @@ export class InterfaceService {
 
     currentOperation = signal<'Add List' | 'Add Task'>('Add List');
 
-    selectedListId = signal<number | null>(null);
-    selectedTaskId = signal<number | null>(null);
+    selectedList = signal<List | null>(null);
+    selectedTask = signal<Task | null>(null);
     selectedMenuId = signal<number>(1);
 
     toggleAside() {
@@ -50,7 +55,17 @@ export class InterfaceService {
     }
 
     toggleDeleteActive() {
+        if (this.state().editActive) {
+            this.state.update(v => ({ ...v, editActive: false }));
+        }
         this.state.update(v => ({ ...v, deleteActive: !v.deleteActive }));
+    }
+
+    toggleEditActive() {
+        if (this.state().deleteActive) {
+            this.state.update(v => ({ ...v, deleteActive: false }));
+        }
+        this.state.update(v => ({ ...v, editActive: !v.editActive }));
     }
 
     togglePopUp() {
@@ -82,12 +97,14 @@ export class InterfaceService {
             isAsideOpen: true,
             isProfileSettingsOpen: false,
             deleteActive: false,
+            editActive: false,
             isPopUpOpen: false,
             isShowingDetailsTask: false,
             isEventActive: false
         });
 
-        this.selectedListId.set(null);
+        this.selectedTask.set(null);
+        this.selectedList.set(null);
         this.selectedMenuId.set(1);
     }
 }

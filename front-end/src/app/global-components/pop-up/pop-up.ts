@@ -18,14 +18,16 @@ export class PopUp {
   @Input() title = 'Title';
 
   togglePopUp() {
-    this.interfaceService.selectedTaskId.set(null);
-    this.interfaceService.selectedListId.set(null);
+    this.interfaceService.selectedTask.set(null);
+    this.interfaceService.selectedList.set(null);
     this.interfaceService.togglePopUp();
   }
 
   get titleText() {
-    if (this.interfaceService.selectedTaskId()) {
+    if (this.interfaceService.selectedTask()) {
       this.title = 'Edit Task';
+    } else if (this.interfaceService.selectedList()) {
+      this.title = 'Edit List';
     }
     return this.title;
   }

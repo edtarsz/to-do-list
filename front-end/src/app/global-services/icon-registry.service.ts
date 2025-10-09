@@ -17,14 +17,14 @@ export class IconRegistryService {
             <path d="M13.4584 4.25V14.1667C13.4584 14.5424 13.3092 14.9027 13.0435 15.1684C12.7778 15.4341 12.4175 15.5833 12.0417 15.5833H4.95841C4.58269 15.5833 4.22236 15.4341 3.95668 15.1684C3.691 14.9027 3.54175 14.5424 3.54175 14.1667V4.25" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M2.125 4.25H14.875" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M5.66675 4.25002V2.83335C5.66675 2.45763 5.816 2.0973 6.08168 1.83162C6.34736 1.56594 6.70769 1.41669 7.08341 1.41669H9.91675C10.2925 1.41669 10.6528 1.56594 10.9185 1.83162C11.1842 2.0973 11.3334 2.45763 11.3334 2.83335V4.25002" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`,
-      viewBox: '0 0 24 24',
-      size: '24',
+      viewBox: '0 0 17 17',
+      size: '17',
     },
     add: {
       svg: `<path d="M4.375 10.5H16.625" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
       <path d="M10.5 4.375V16.625" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>`,
-      viewBox: '0 0 24 24',
-      size: '24',
+      viewBox: '0 0 21 21',
+      size: '21',
     },
     note: {
       svg: `
@@ -95,7 +95,7 @@ export class IconRegistryService {
       <rect width="18" height="18" x="3" y="4" rx="2" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
       <path d="M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
       viewBox: '0 0 24 24',
-      size: '24'
+      size: '20'
     },
     arrow_list: {
       svg: `<path d="M1 1.5 7 7.5 13 1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
@@ -121,6 +121,11 @@ export class IconRegistryService {
       svg: `<path d="M1 1.00006L6 0.999961L11 1.00006" stroke="#1F1F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>`,
       viewBox: '0 0 12 2',
       size: '12'
+    },
+    pen: {
+      svg: `<path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/>`,
+      viewBox: '0 0 24 24',
+      size: '20'
     }
   };
 

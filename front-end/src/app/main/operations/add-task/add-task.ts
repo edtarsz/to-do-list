@@ -60,32 +60,26 @@ export class AddTask {
       completed: [false]
     });
 
-    const taskId = this.interfaceService.selectedTaskId();
-    if (taskId) {
-      this.taskService.getTaskById(taskId).subscribe({
-        next: (task) => {
-          if (task) {
-            this.addTaskForm.patchValue({
-              name: task.name,
-              description: task.description,
-              priority: task.priority,
-              startDate: task.startDate,
-              dueDate: task.dueDate,
-              startTime: task.startTime,
-              dueTime: task.dueTime,
-              listId: task.listId,
-              completed: task.completed
-            });
-
-            this.selectedList.set(this.listService.lists().find(list => list.id === task.listId)?.name || 'List');
-            this.selectedPriority.set(task.priority.toString() || 'Priority');
-            this.selectedStartTime.set(task.startTime || 'Start Time');
-            this.selectedDueTime.set(task.dueTime || 'Due Time');
-            this.selectedStartDate.set(task.startDate || 'Start Date');
-            this.selectedDueDate.set(task.dueDate || 'Due Date');
-          }
-        }
+    const task = this.interfaceService.selectedTask();
+    if (task) {
+      this.addTaskForm.patchValue({
+        name: task.name,
+        description: task.description,
+        priority: task.priority,
+        startDate: task.startDate,
+        dueDate: task.dueDate,
+        startTime: task.startTime,
+        dueTime: task.dueTime,
+        listId: task.listId,
+        completed: task.completed
       });
+
+      this.selectedList.set(this.listService.lists().find(list => list.id === task.listId)?.name || 'List');
+      this.selectedPriority.set(task.priority.toString() || 'Priority');
+      this.selectedStartTime.set(task.startTime || 'Start Time');
+      this.selectedDueTime.set(task.dueTime || 'Due Time');
+      this.selectedStartDate.set(task.startDate || 'Start Date');
+      this.selectedDueDate.set(task.dueDate || 'Due Date');
     }
   }
 
@@ -106,13 +100,13 @@ export class AddTask {
       return;
     }
 
-    if (this.interfaceService.selectedTaskId()) {
-      const id = this.interfaceService.selectedTaskId();
+    if (this.interfaceService.selectedTask()) {
+      const id = this.interfaceService.selectedTask()?.id;
       if (!id) return;
 
       this.taskService.updateTask(id, this.buildTask()).subscribe({
         next: (task) => {
-          this.interfaceService.selectedTaskId.set(null);
+          this.interfaceService.selectedTask.set(null);
           this.event(task, 'TASK UPDATED', 'updated');
           this.resetForm();
           this.togglePopUp();
@@ -256,7 +250,7 @@ export class AddTask {
   }
 
   get textButton() {
-    return this.interfaceService.selectedTaskId() ? 'Update Task' : 'Add Task';
+    return this.interfaceService.selectedTask() ? 'Update Task' : 'Add Task';
   }
 
   get isAsideOpen() {
