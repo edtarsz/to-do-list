@@ -193,9 +193,9 @@ export class TaskComponent implements OnInit, OnDestroy {
 
     // Activar filtro por primera vez
     this.cleanFilters();
-    this.ascPriority.set(true);
+    this.ascPriority.set(false);
     this.filter.set('priority');
-    this.updateQueryParams('priority', true);
+    this.updateQueryParams('priority', false);
   }
 
   private updateQueryParams(filterType: 'hour' | 'priority', ascending: boolean) {
