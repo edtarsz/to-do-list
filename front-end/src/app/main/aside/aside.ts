@@ -41,8 +41,8 @@ export class Aside {
     if (this.interfaceService.deleteActive()) {
       this.interfaceService.toggleDeleteActive();
     }
-    if (this.interfaceService.editActive()) {
-      this.interfaceService.toggleEditActive();
+    if (this.interfaceService.editActiveList()) {
+      this.interfaceService.setEditActiveList(false);
     }
     this.interfaceService.toggleAside();
   }
@@ -52,6 +52,13 @@ export class Aside {
   }
 
   togglePopUp() {
+    if (this.interfaceService.editActiveList()) {
+      this.interfaceService.setEditActiveList(false);
+    }
+    if (this.interfaceService.deleteActive()) {
+      this.interfaceService.toggleDeleteActive();
+    }
+
     this.interfaceService.togglePopUp();
     this.interfaceService.setCurrentOperation('Add List');
   }
@@ -60,23 +67,29 @@ export class Aside {
     this.interfaceService.toggleDeleteActive();
   }
 
-  toggleEditActive() {
-    this.interfaceService.toggleEditActive();
+  toggleEditActiveList() {
+    if (this.interfaceService.editActiveList()) {
+      this.interfaceService.setEditActiveList(false);
+    } else {
+      this.interfaceService.setEditActiveList(true);
+    }
   }
 
   operate(list: List): void {
     if (!list.id) return;
-    // Si la lista ya está seleccionada, deseleccionarla
+
+    if (this.interfaceService.editActiveList()) {
+      this.editList(list);
+      return;
+    } else if (this.interfaceService.deleteActive()) {
+      this.deleteList(list.id);
+      return;
+    }
+
     if (this.interfaceService.selectedList()?.id === list.id) {
       this.selectList(null);
     } else {
       this.selectList(list);
-    }
-
-    if (this.interfaceService.editActive()) {
-      this.editList(list);
-    } else if (this.interfaceService.deleteActive()) {
-      this.deleteList(list.id);
     }
   }
 
@@ -94,7 +107,7 @@ export class Aside {
   // pending changes
   // para saber si está en modo edicion checo si está seleccionado alguna lista
   editList(list: List): void {
-    if (this.interfaceService.editActive()) {
+    if (this.interfaceService.editActiveList()) {
       this.interfaceService.selectedList.set(list);
       this.interfaceService.setCurrentOperation('Add List');
       this.interfaceService.togglePopUp();

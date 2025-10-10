@@ -43,14 +43,14 @@
                     <app-icon-text-button [iconSvg]="penIcon.svg" [borderColor]="'var(--purple)'"
                         [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
                         [colorHover]="'var(--secondary-color)'" [viewBox]="penIcon.viewBox" [iconSize]="penIcon.size"
-                        [isActive]="interfaceService.editActive()" (click)="toggleEditActive()">
+                        [isActive]="interfaceService.editActiveList()" (click)="toggleEditActiveList()">
                     </app-icon-text-button>
                 </div>
                 <div class="flex flex-col gap-1 mt-1">
                     @for (list of listService.lists$(); track list.id) {
                     <app-aside-item [title]="list.name" [color]="list.color" [showText]="interfaceService.isAsideOpen()"
                         [bgColorHover]="'var(--primary-color)'" [deleting]="interfaceService.deleteActive()"
-                        (click)="operate(list)"
+                        [editing]="interfaceService.editActiveList()" (click)="operate(list)"
                         [selected]="interfaceService.selectedList()?.id === list.id"></app-aside-item>
                     }
                 </div>

@@ -6,7 +6,8 @@ interface InterfaceState {
     isAsideOpen: boolean;
     isProfileSettingsOpen: boolean;
     deleteActive: boolean;
-    editActive: boolean;
+    editActiveList: boolean;
+    editActiveTask: boolean;
     isPopUpOpen: boolean;
     isShowingDetailsTask: boolean;
     isEventActive: boolean;
@@ -20,7 +21,8 @@ export class InterfaceService {
         isAsideOpen: true,
         isProfileSettingsOpen: false,
         deleteActive: false,
-        editActive: false,
+        editActiveList: false,
+        editActiveTask: false,
         isPopUpOpen: false,
         isShowingDetailsTask: false,
         isEventActive: false
@@ -29,7 +31,8 @@ export class InterfaceService {
     isAsideOpen = computed(() => this.state().isAsideOpen);
     isProfileSettingsOpen = computed(() => this.state().isProfileSettingsOpen);
     deleteActive = computed(() => this.state().deleteActive);
-    editActive = computed(() => this.state().editActive);
+    editActiveList = computed(() => this.state().editActiveList);
+    editActiveTask = computed(() => this.state().editActiveTask);
     isPopUpOpen = computed(() => this.state().isPopUpOpen);
 
     // Events
@@ -55,17 +58,21 @@ export class InterfaceService {
     }
 
     toggleDeleteActive() {
-        if (this.state().editActive) {
-            this.state.update(v => ({ ...v, editActive: false }));
+        if (this.state().editActiveList) {
+            this.state.update(v => ({ ...v, editActiveList: false }));
         }
         this.state.update(v => ({ ...v, deleteActive: !v.deleteActive }));
     }
 
-    toggleEditActive() {
+    setEditActiveList(active: boolean) {
         if (this.state().deleteActive) {
             this.state.update(v => ({ ...v, deleteActive: false }));
         }
-        this.state.update(v => ({ ...v, editActive: !v.editActive }));
+        this.state.update(v => ({ ...v, editActiveList: active }));
+    }
+
+    setEditActiveTask(active: boolean) {
+        this.state.update(v => ({ ...v, editActiveTask: active }));
     }
 
     togglePopUp() {
@@ -97,7 +104,8 @@ export class InterfaceService {
             isAsideOpen: true,
             isProfileSettingsOpen: false,
             deleteActive: false,
-            editActive: false,
+            editActiveList: false,
+            editActiveTask: false,
             isPopUpOpen: false,
             isShowingDetailsTask: false,
             isEventActive: false

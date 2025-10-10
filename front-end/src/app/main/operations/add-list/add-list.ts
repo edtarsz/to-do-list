@@ -34,7 +34,7 @@ export class AddList {
     });
 
     const currentList = this.interfaceService.selectedList();
-    if (currentList) {
+    if (currentList && this.interfaceService.editActiveList()) {
       this.addListForm.patchValue({ name: currentList.name, color: currentList.color });
       this.selectedColor.set(currentList.color);
     }

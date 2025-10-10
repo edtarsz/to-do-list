@@ -24,6 +24,7 @@ export class AsideItem {
   @Input() selected: boolean = false;
 
   @Input() deleting: boolean = false;
+  @Input() editing: boolean = false;
 
   sanitizeSvg(svg: string) {
     return this.sanitizer.bypassSecurityTrustHtml(svg);

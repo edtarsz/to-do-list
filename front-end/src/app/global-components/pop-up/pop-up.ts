@@ -19,14 +19,14 @@ export class PopUp {
 
   togglePopUp() {
     this.interfaceService.selectedTask.set(null);
-    this.interfaceService.selectedList.set(null);
+    // this.interfaceService.selectedList.set(null);
     this.interfaceService.togglePopUp();
   }
 
   get titleText() {
-    if (this.interfaceService.selectedTask()) {
+    if (this.interfaceService.selectedTask() && this.interfaceService.editActiveTask()) {
       this.title = 'Edit Task';
-    } else if (this.interfaceService.selectedList()) {
+    } else if (this.interfaceService.selectedList() && this.interfaceService.editActiveList()) {
       this.title = 'Edit List';
     }
     return this.title;

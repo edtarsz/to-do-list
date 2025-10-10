@@ -6,14 +6,18 @@
         'justify-center': !showText,
         'hover:bg-[var(--bgColorHover)]': bgColorHover || '',
         'border-b-2 border-[var(--borderColor)] rounded-none px-2': borderColor,
-    }" [style.--bgColorHover]="bgColorHover || ''" [style.--borderColor]="borderColor || ''">
+        'dot-editing': editing,
+    }" [style.--bgColorHover]="bgColorHover || ''" [style.--borderColor]="borderColor || ''"
+    [style.--breathe-color]="'rgba(147, 51, 234, 0.08)'">
+
     @if (iconSvg) {
     <svg [attr.width]="iconSize" [attr.height]="iconSize" [attr.viewBox]="viewBox" fill="none" stroke="currentColor"
         xmlns="http://www.w3.org/2000/svg">
         <g [innerHTML]="sanitizeSvg(iconSvg)"></g>
     </svg>
     } @else {
-    <div class="rounded-full w-2 h-2 inline-block my-2" [style.background-color]="color" [class.shake]="deleting"></div>
+    <div class="rounded-full w-2 h-2 inline-block my-2" [style.background-color]="color" [class.shake]="deleting"
+        [class.dot-editing]="editing"></div>
     }
     @if (showText) {
     <span [class.shake]="deleting">{{ title }}</span>

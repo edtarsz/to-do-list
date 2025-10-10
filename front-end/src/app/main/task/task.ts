@@ -163,6 +163,7 @@ export class TaskComponent implements OnInit, OnDestroy {
   openTaskDetails(task: Task) {
     this.interfaceService.selectedTask.set(task);
     this.interfaceService.setShowingDetailsTask(true);
+    this.interfaceService.setEditActiveTask(true);
     this.interfaceService.setCurrentOperation('Add Task');
     this.interfaceService.togglePopUp();
   }
@@ -203,7 +204,9 @@ export class TaskComponent implements OnInit, OnDestroy {
       queryParams: {
         filter: filterType,
         asc: ascending
-      }
+      },
+      queryParamsHandling: 'merge',
+      replaceUrl: true
     });
   }
 

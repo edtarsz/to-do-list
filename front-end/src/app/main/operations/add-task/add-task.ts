@@ -61,7 +61,7 @@ export class AddTask {
     });
 
     const task = this.interfaceService.selectedTask();
-    if (task) {
+    if (task && this.interfaceService.editActiveTask()) {
       this.addTaskForm.patchValue({
         name: task.name,
         description: task.description,
