@@ -38,10 +38,14 @@ export const routes: Routes = [
                 component: Calendar
             },
             {
+                path: 'update-profile',
+                loadComponent: () => import('./main/update-profile/update-profile').then(m => m.UpdateProfile)
+            },
+            {
                 path: '',
                 redirectTo: 'tasks',
                 pathMatch: 'full'
-            }
+            },
         ]
     },
 

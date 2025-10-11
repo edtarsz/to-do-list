@@ -11,6 +11,7 @@ interface InterfaceState {
     isPopUpOpen: boolean;
     isShowingDetailsTask: boolean;
     isEventActive: boolean;
+    showUpdateProfile: boolean;
 }
 
 @Injectable({
@@ -25,7 +26,8 @@ export class InterfaceService {
         editActiveTask: false,
         isPopUpOpen: false,
         isShowingDetailsTask: false,
-        isEventActive: false
+        isEventActive: false,
+        showUpdateProfile: false
     });
 
     isAsideOpen = computed(() => this.state().isAsideOpen);
@@ -34,6 +36,7 @@ export class InterfaceService {
     editActiveList = computed(() => this.state().editActiveList);
     editActiveTask = computed(() => this.state().editActiveTask);
     isPopUpOpen = computed(() => this.state().isPopUpOpen);
+    showUpdateProfile = computed(() => this.state().showUpdateProfile);
 
     // Events
     isEventActive = computed(() => this.state().isEventActive);
@@ -98,6 +101,10 @@ export class InterfaceService {
         this.eventCounter.update(v => v + 1);
     }
 
+    setShowUpdateProfile(show: boolean) {
+        this.state.update(v => ({ ...v, showUpdateProfile: show }));
+    }
+
     // Used when signing out
     closeAll() {
         this.state.set({
@@ -108,7 +115,8 @@ export class InterfaceService {
             editActiveTask: false,
             isPopUpOpen: false,
             isShowingDetailsTask: false,
-            isEventActive: false
+            isEventActive: false,
+            showUpdateProfile: false
         });
 
         this.selectedTask.set(null);

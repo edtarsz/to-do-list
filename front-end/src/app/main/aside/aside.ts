@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ListService } from '../../global-services/lists.service';
 import { AsideItem } from "./aside-item/aside-item";
@@ -13,7 +13,7 @@ import { List } from '../../models/list';
 
 @Component({
   selector: 'app-aside',
-  imports: [AsideItem, IconTextButton, CommonModule, AsideSection],
+  imports: [AsideItem, IconTextButton, CommonModule, AsideSection, RouterLink],
   templateUrl: './aside.html',
   styleUrl: './aside.css'
 })
@@ -165,5 +165,10 @@ export class Aside {
   logOut() {
     this.interfaceService.closeAll();
     this.authService.logout();
+  }
+
+  navigateToUpdateProfile() {
+    this.interfaceService.toggleProfileSettings();
+    this.router.navigate(['/index/update-profile']);
   }
 }

@@ -72,7 +72,7 @@
                 [ngClass]="{
           'hover:translate-x-1 hover:px-[1vw]': interfaceService.isAsideOpen(),
           'justify-center text-center': !interfaceService.isAsideOpen(),
-        }">
+        }" (click)="navigateToUpdateProfile()">
                 Update Profile
             </li>
         </ul>

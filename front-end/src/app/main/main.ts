@@ -25,7 +25,6 @@ export class Main {
   private listService = inject(ListService);
 
   ngOnInit() {
-    // Sincronizar primera vez
     this.syncMenuWithRoute();
 
     // Sincronizar en cada navegación
@@ -38,6 +37,13 @@ export class Main {
 
   private syncMenuWithRoute() {
     const url = this.router.url;
+
+    if (url.includes('update-profile')) {
+      this.interfaceService.setShowUpdateProfile(true);
+      return;
+    } else {
+      this.interfaceService.setShowUpdateProfile(false);
+    }
 
     // Extraer query params de la URL
     const urlParams = new URLSearchParams(url.split('?')[1] || '');
@@ -64,27 +70,31 @@ export class Main {
     }
   }
 
-  get currentOperation() {
+  get currentOperation(): string {
     return this.interfaceService.currentOperation();
   }
 
-  get isPopUpOpen() {
+  get isPopUpOpen(): boolean {
     return this.interfaceService.isPopUpOpen();
   }
 
-  get isAsideOpen() {
+  get isAsideOpen(): boolean {
     return this.interfaceService.isAsideOpen();
   }
 
-  get userName() {
+  get userName(): string | undefined {
     return this.authStateService.user()?.name;
   }
 
-  get isEventActive() {
+  get isEventActive(): boolean {
     return this.interfaceService.isEventActive();
   }
 
-  get isLoading() {
+  get isLoading(): boolean {
     return this.authStateService.isLoading();
+  }
+
+  get showUpdateProfile(): boolean {
+    return this.interfaceService.showUpdateProfile();
   }
 }
