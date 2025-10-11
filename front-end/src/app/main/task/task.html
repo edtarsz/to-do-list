@@ -39,8 +39,10 @@
             <div class="flex flex-col lg:flex-row justify-between cursor-pointer gap-[1vw] lg:items-center hover:bg-[var(--primary-color)] p-[1vw] rounded-lg"
                 (click)="openTaskDetails(task)">
                 <div class="flex gap-4 items-center">
+                    @if(!showCompletedTasks){
                     <div class="border border-[var(--gray)] aspect-square h-[1.5vw] min-h-[20px] rounded-sm cursor-pointer bg-[var(--secondary-color)]"
                         (click)="completeTask(task)" (click)="$event.stopPropagation()"></div>
+                    }
                     <div class="flex flex-col">
                         @if (task.listId) {
                         <div class="flex items-center gap-[0.5vw]">

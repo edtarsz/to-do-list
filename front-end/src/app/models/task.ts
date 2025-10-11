@@ -12,6 +12,8 @@ export interface Task {
 
     listId?: number;
     completed: boolean;
+
+    completedAt?: Date;
 }
 
 export enum Priority {

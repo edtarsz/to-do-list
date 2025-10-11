@@ -1,7 +1,7 @@
 import { AsyncPipe, CommonModule } from "@angular/common";
 import { Component, inject, signal, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
-import { delay, Subject, takeUntil } from "rxjs";
+import { Subject, takeUntil } from "rxjs";
 import { IconTextButton } from "../../global-components/icon-text-button/icon-text-button";
 import { AuthStateService } from "../../global-services/auth-state.service";
 import { IconRegistryService } from "../../global-services/icon-registry.service";
@@ -161,6 +161,9 @@ export class TaskComponent implements OnInit, OnDestroy {
   }
 
   openTaskDetails(task: Task) {
+    if (this.showCompletedTasks) {
+      return;
+    }
     this.interfaceService.selectedTask.set(task);
     this.interfaceService.setShowingDetailsTask(true);
     this.interfaceService.setEditActiveTask(true);
@@ -226,13 +229,12 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   get tasks() {
     let tasks = this.taskService.tasks$();
-    const selectedMenu = this.interfaceService.selectedMenuId();
     const now = new Date();
     now.setHours(0, 0, 0, 0);
 
     tasks = tasks.filter(t => !t.completed);
 
-    if (selectedMenu === 1) {
+    if (this.selectedMenuId === 1) {
       tasks = tasks.filter(t => {
         if (!t.dueDate) return false;
         const taskDate = new Date(t.dueDate);
@@ -240,7 +242,7 @@ export class TaskComponent implements OnInit, OnDestroy {
 
         return taskDate.getTime() <= now.getTime();
       });
-    } else if (selectedMenu === 2) {
+    } else if (this.selectedMenuId === 2) {
       tasks = tasks.filter(t => {
         if (!t.dueDate) return false;
         const taskDate = new Date(t.dueDate);
@@ -248,6 +250,15 @@ export class TaskComponent implements OnInit, OnDestroy {
 
         return taskDate.getTime() > now.getTime();
       });
+    } else if (this.selectedMenuId === 4) {
+      // duda
+      tasks = this.taskService.tasks$()
+        .filter(t => t.completed)
+        .sort((a, b) => {
+          if (!a.completedAt) return 1;
+          if (!b.completedAt) return -1;
+          return new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime();
+        });
     }
 
     if (this.selectedListId) {
@@ -299,5 +310,13 @@ export class TaskComponent implements OnInit, OnDestroy {
   get iconPriority() {
     if (this.filter() !== 'priority') return this.lineIcon;
     return this.ascPriority() ? this.arrowUpwardsIcon : this.arrowDownwardsIcon;
+  }
+
+  get selectedMenuId() {
+    return this.interfaceService.selectedMenuId();
+  }
+
+  get showCompletedTasks() {
+    return this.selectedMenuId === 4;
   }
 }

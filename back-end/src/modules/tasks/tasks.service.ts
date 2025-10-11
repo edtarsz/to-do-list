@@ -31,6 +31,7 @@ export class TasksService {
 
     async updateTask(id: number, updateTaskDto: Partial<CreateTaskDto>, userId: number) {
         try {
+            updateTaskDto.completedAt = new Date();
             await this.getTaskById(id, userId);
             return this.prisma.task.update({ where: { id }, data: updateTaskDto });
         } catch (error) {

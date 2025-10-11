@@ -32,4 +32,7 @@ export class CreateTaskDto {
 
     @IsOptional()
     listId?: number;
+
+    @IsOptional()
+    completedAt?: Date;
 }

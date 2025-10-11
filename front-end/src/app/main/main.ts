@@ -52,9 +52,17 @@ export class Main {
 
     if (url.includes('tasks')) {
       if (view === 'upcoming') {
+        // Si está en "upcoming", seleccionar el menú 2
         this.interfaceService.selectedMenuId.set(2);
+        this.interfaceService.setShowCompletedTasks(false);
+      } else if (view === 'completed') {
+        // Si está en "completed", seleccionar el menú 4
+        this.interfaceService.selectedMenuId.set(4);
+        this.interfaceService.setShowCompletedTasks(true);
       } else {
+        // Por defecto, seleccionar el menú 1 (today)
         this.interfaceService.selectedMenuId.set(1);
+        this.interfaceService.setShowCompletedTasks(false);
       }
 
       if (listId) {

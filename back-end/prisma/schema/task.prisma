@@ -1,6 +1,6 @@
 model Task {
   id          Int      @id @default(autoincrement())
-  name       String
+  name        String
   description String?
   priority    Priority @default(MEDIUM)
 
@@ -10,7 +10,8 @@ model Task {
   startTime String
   dueTime   String
 
-  completed Boolean @default(false)
+  completed   Boolean  @default(false)
+  completedAt DateTime?
 
   // Relacion de muchos a uno con User
   userId Int

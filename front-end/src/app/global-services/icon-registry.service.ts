@@ -126,6 +126,15 @@ export class IconRegistryService {
       svg: `<path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/>`,
       viewBox: '0 0 24 24',
       size: '20'
+    },
+    calendar_check: {
+      svg: `<path d="M8 2v4" stroke="#8F8F8F" stroke-width="2" />
+        <path d="M16 2v4" stroke="#8F8F8F" stroke-width="2"/>
+        <rect width="18" height="18" x="3" y="4" rx="2" stroke="#8F8F8F" stroke-width="2"/>
+        <path d="M3 10h18" stroke="#8F8F8F" stroke-width="2"/>
+        <path d="m9 16 2 2 4-4" stroke="#8F8F8F" stroke-width="2"/>`,
+      viewBox: '0 0 24 24',
+      size: '24'
     }
   };
 
@@ -162,7 +171,16 @@ export class IconRegistryService {
         bgColorHover: 'var(--primary-color)',
         showText: true,
         iconSize: '24'
-      }
+      },
+      {
+        id: 4,
+        name: "Completed",
+        icon: this.getIcon('calendar_check'),
+        viewBox: '0 0 24 24',
+        bgColorHover: 'var(--primary-color)',
+        showText: true,
+        iconSize: '24'
+      },
     ]
   }
 }

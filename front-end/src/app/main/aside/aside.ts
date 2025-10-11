@@ -13,7 +13,7 @@ import { List } from '../../models/list';
 
 @Component({
   selector: 'app-aside',
-  imports: [AsideItem, IconTextButton, CommonModule, AsideSection, RouterLink],
+  imports: [AsideItem, IconTextButton, CommonModule, AsideSection],
   templateUrl: './aside.html',
   styleUrl: './aside.css'
 })
@@ -121,18 +121,25 @@ export class Aside {
 
     if (menuId === 1) {
       queryParams.view = 'today';
+      this.interfaceService.setShowCompletedTasks(false);
     } else if (menuId === 2) {
       queryParams.view = 'upcoming';
+      this.interfaceService.setShowCompletedTasks(false);
+    } else if (menuId === 4) {
+      queryParams.view = 'completed';
+      this.interfaceService.setShowCompletedTasks(true);
     }
 
     const currentList = this.interfaceService.selectedList();
-    if (currentList) {
+    if (currentList && menuId !== 4) {
       queryParams.listId = currentList.id;
     }
 
     switch (menuId) {
       case 1:
       case 2:
+      case 4:
+        // For menu 1, 2, and 4, navigate to tasks with appropriate query params
         this.router.navigate(['/index/tasks'], { queryParams });
         break;
       case 3:
