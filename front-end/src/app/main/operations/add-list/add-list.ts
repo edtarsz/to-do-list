@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, inject, signal, effect } from "@angular/core";
+import { Component, inject, signal, effect, OnDestroy } from "@angular/core";
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { IconRegistryService } from "../../../global-services/icon-registry.service";
 import { InterfaceService } from "../../../global-services/interface.service";
@@ -14,7 +14,7 @@ import { IconTextButton } from "../../../global-components/icon-text-button/icon
   templateUrl: './add-list.html',
   styleUrl: './add-list.css'
 })
-export class AddList {
+export class AddList implements OnDestroy {
   public interfaceService = inject(InterfaceService);
   public iconRegistryService = inject(IconRegistryService);
 
@@ -37,12 +37,18 @@ export class AddList {
     if (currentList && this.interfaceService.editActiveList()) {
       this.addListForm.patchValue({ name: currentList.name, color: currentList.color });
       this.selectedColor.set(currentList.color);
+    } else {
+      // Si no está editando, asegurarse de que el formulario esté limpio
+      this.addListForm.reset({ color: this.selectedColor() });
     }
 
-    // { emitEvent: false } prevents angular from thinking that the user manually changed the color input
     effect(() => {
       this.addListForm.patchValue({ color: this.selectedColor() }, { emitEvent: false });
     });
+  }
+
+  ngOnDestroy() {
+    this.interfaceService.setEditActiveList(false);
   }
 
   pastelColors = [
@@ -83,30 +89,38 @@ export class AddList {
       return;
     }
 
-    if (this.interfaceService.selectedList()) {
-      const id = this.interfaceService.selectedList()?.id;
-      if (!id) return;
-      this.listService.updateList(id, this.buildList()).subscribe({
+    const selectedList = this.interfaceService.selectedList();
+
+    if (selectedList && selectedList.id) {
+      // Modo edición
+      this.listService.updateList(selectedList.id, this.buildList()).subscribe({
         next: () => {
           this.interfaceService.setEventActive(true);
-          this.interfaceService.setEvent('LIST', `List has been successfully updated.`);
-          this.interfaceService.selectedList.set(null);
-          this.togglePopUp();
+          this.interfaceService.setEvent('LIST UPDATED', `List has been successfully updated.`);
+          this.cleanupAndClose();
         }
       });
     } else {
+      // Modo creación
       this.listService.addList(this.buildList()).subscribe({
         next: () => {
           this.interfaceService.setEventActive(true);
-          this.interfaceService.setEvent('LIST', `List has been successfully created.`);
-          this.addListForm.reset();
-          this.togglePopUp();
+          this.interfaceService.setEvent('LIST CREATED', `List has been successfully created.`);
+          this.cleanupAndClose();
         },
         error: (error) => {
           console.error(error);
         }
       });
     }
+  }
+
+  cleanupAndClose() {
+    this.addListForm.reset();
+    this.selectedColor.set('#FFD6E8');
+    this.interfaceService.selectedList.set(null);
+    this.interfaceService.setEditActiveList(false);
+    this.togglePopUp();
   }
 
   buildList(): List {

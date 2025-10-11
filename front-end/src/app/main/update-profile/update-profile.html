@@ -56,17 +56,19 @@
                         class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200">
                 </div>
             </div>
-            <div class="w-[30vw] flex gap-[1vw]">
-                <div class="w-[80%]">
+            <div class="w-full flex gap-[1vw] justify-end">
+                <div class="w-auto sm:w-[10%]">
                     <app-icon-text-button [text]="'Cancel'" [bgColorHover]="'var(--red)'" [borderColor]="'var(--red)'"
                         [type]="'submit'" [color]="'var(--red)'" [colorHover]="'var(--secondary-color)'" class="w-full"
                         (click)="closeUpdateProfile()">
                     </app-icon-text-button>
                 </div>
-                <app-icon-text-button [text]="'Save Changes'" [bgColorHover]="'var(--purple)'"
-                    [borderColor]="'var(--purple)'" [type]="'submit'" [color]="'var(--purple)'"
-                    [colorHover]="'var(--secondary-color)'" class="w-full">
-                </app-icon-text-button>
+                <div class="w-auto sm:w-[20%]">
+                    <app-icon-text-button [text]="'Save Changes'" [bgColorHover]="'var(--purple)'"
+                        [borderColor]="'var(--purple)'" [type]="'submit'" [color]="'var(--purple)'"
+                        [colorHover]="'var(--secondary-color)'" class="w-full">
+                    </app-icon-text-button>
+                </div>
             </div>
         </div>
     </div>

@@ -3,6 +3,7 @@ import { IconTextButton } from "../../global-components/icon-text-button/icon-te
 import { IconRegistryService } from '../../global-services/icon-registry.service';
 import { InterfaceService } from '../../global-services/interface.service';
 import { Router } from '@angular/router';
+import { AuthStateService } from '../../global-services/auth-state.service';
 
 @Component({
   selector: 'app-update-profile',
