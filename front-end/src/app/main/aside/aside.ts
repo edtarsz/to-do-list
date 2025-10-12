@@ -130,8 +130,9 @@ export class Aside {
       this.interfaceService.setShowCompletedTasks(true);
     }
 
+    // Mantener la lista seleccionada en todos los menús
     const currentList = this.interfaceService.selectedList();
-    if (currentList && menuId !== 4) {
+    if (currentList) {
       queryParams.listId = currentList.id;
     }
 
@@ -139,7 +140,7 @@ export class Aside {
       case 1:
       case 2:
       case 4:
-        // For menu 1, 2, and 4, navigate to tasks with appropriate query params
+        // Para todos los menús con tareas, mantener query params
         this.router.navigate(['/index/tasks'], { queryParams });
         break;
       case 3:
@@ -156,10 +157,13 @@ export class Aside {
     const queryParams: any = {};
 
     const currentMenuId = this.interfaceService.selectedMenuId();
+
     if (currentMenuId === 1) {
       queryParams.view = 'today';
     } else if (currentMenuId === 2) {
       queryParams.view = 'upcoming';
+    } else if (currentMenuId === 4) {
+      queryParams.view = 'completed';
     }
 
     if (list) {

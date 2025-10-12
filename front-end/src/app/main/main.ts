@@ -45,33 +45,32 @@ export class Main {
       this.interfaceService.setShowUpdateProfile(false);
     }
 
-    // Extraer query params de la URL
     const urlParams = new URLSearchParams(url.split('?')[1] || '');
     const view = urlParams.get('view');
     const listId = urlParams.get('listId');
 
-    if (url.includes('tasks')) {
-      if (view === 'upcoming') {
-        // Si está en "upcoming", seleccionar el menú 2
-        this.interfaceService.selectedMenuId.set(2);
-        this.interfaceService.setShowCompletedTasks(false);
-      } else if (view === 'completed') {
-        // Si está en "completed", seleccionar el menú 4
-        this.interfaceService.selectedMenuId.set(4);
-        this.interfaceService.setShowCompletedTasks(true);
-      } else {
-        // Por defecto, seleccionar el menú 1 (today)
-        this.interfaceService.selectedMenuId.set(1);
-        this.interfaceService.setShowCompletedTasks(false);
-      }
-
-      if (listId) {
+    if (listId) {
+      const currentList = this.interfaceService.selectedList();
+      if (!currentList || currentList.id !== Number(listId)) {
         this.listService.getListById(Number(listId)).subscribe({
           next: (list) => this.interfaceService.selectedList.set(list),
           error: () => this.interfaceService.selectedList.set(null)
         });
+      }
+    } else {
+      this.interfaceService.selectedList.set(null);
+    }
+
+    if (url.includes('tasks')) {
+      if (view === 'upcoming') {
+        this.interfaceService.selectedMenuId.set(2);
+        this.interfaceService.setShowCompletedTasks(false);
+      } else if (view === 'completed') {
+        this.interfaceService.selectedMenuId.set(4);
+        this.interfaceService.setShowCompletedTasks(true);
       } else {
-        this.interfaceService.selectedList.set(null);
+        this.interfaceService.selectedMenuId.set(1);
+        this.interfaceService.setShowCompletedTasks(false);
       }
     } else if (url.includes('calendar')) {
       this.interfaceService.selectedMenuId.set(3);

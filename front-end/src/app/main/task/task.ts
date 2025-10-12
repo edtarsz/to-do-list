@@ -232,39 +232,46 @@ export class TaskComponent implements OnInit, OnDestroy {
     const now = new Date();
     now.setHours(0, 0, 0, 0);
 
-    tasks = tasks.filter(t => !t.completed);
+    if (this.selectedMenuId === 4) {
+      tasks = tasks.filter(t => t.completed);
+    } else {
+      tasks = tasks.filter(t => !t.completed);
+    }
 
+    // Filtrar por fecha según el menú (solo para tareas no completadas)
     if (this.selectedMenuId === 1) {
+      // tareas vencidas o de hoy
       tasks = tasks.filter(t => {
         if (!t.dueDate) return false;
         const taskDate = new Date(t.dueDate);
         taskDate.setHours(0, 0, 0, 0);
-
         return taskDate.getTime() <= now.getTime();
       });
     } else if (this.selectedMenuId === 2) {
+      // tareas futuras
       tasks = tasks.filter(t => {
         if (!t.dueDate) return false;
         const taskDate = new Date(t.dueDate);
         taskDate.setHours(0, 0, 0, 0);
-
         return taskDate.getTime() > now.getTime();
       });
-    } else if (this.selectedMenuId === 4) {
-      // duda
-      tasks = this.taskService.tasks$()
-        .filter(t => t.completed)
-        .sort((a, b) => {
-          if (!a.completedAt) return 1;
-          if (!b.completedAt) return -1;
-          return new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime();
-        });
     }
 
+    // Filtrar por lista (aplica a todos los menús, incluyendo completadas)
     if (this.selectedListId) {
       tasks = tasks.filter(t => t.listId === this.selectedListId);
     }
 
+    // Ordenar tareas completadas por fecha de completado
+    if (this.selectedMenuId === 4) {
+      tasks = tasks.sort((a, b) => {
+        if (!a.completedAt) return 1;
+        if (!b.completedAt) return -1;
+        return new Date(b.completedAt).getTime() - new Date(a.completedAt).getTime();
+      });
+    }
+
+    // Aplicar filtros de ordenamiento (hora o prioridad)
     if (this.filter() === 'hour') {
       tasks = tasks.sort((a, b) => {
         const dateTimeA = new Date(`${a.dueDate}T${a.dueTime || '23:59'}`);
