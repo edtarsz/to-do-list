@@ -1,0 +1,30 @@
+<div class="left-0 top-0 fixed w-screen h-screen bg-[rgba(0,0,0,0.5)] flex justify-center items-center backdrop-blur-sm z-1"
+    (click)="togglePopUp()">
+    <div class="flex flex-col items-center gap-[1vw] top-4 z-10 min-w-[300px] w-[30vw] p-4 bg-[var(--purple)] text-white rounded-lg shadow-xl"
+        (click)="$event.stopPropagation()">
+        <div class="flex items-center justify-between w-full">
+            <h1 class="font-family-ubuntu-mono-bold text-md md:text-xl lg:text-2xl">CONFIRM DELETE</h1>
+            <div>
+                <app-icon-text-button [iconSvg]="closeIcon.svg" [color]="'var(--secondary-color)'"
+                    [bgColorHover]="'var(--secondary-color)'" [colorHover]="'var(--purple)'"
+                    [viewBox]="closeIcon.viewBox" [iconSize]="closeIcon.size" (click)="togglePopUp()">
+                </app-icon-text-button>
+            </div>
+        </div>
+        <div class="w-full">
+            <p>Are you sure you want to do this?</p>
+        </div>
+        <div class="w-full flex gap-[1vw]">
+            <div class="w-full">
+                <app-icon-text-button [color]="'var(--secondary-color)'" [text]="'CONFIRM'" [bgColorHover]="'var(--secondary-color)'"
+                    [colorHover]="'var(--purple)'" (click)="confirm()">
+                </app-icon-text-button>
+            </div>
+            <div class="w-full">
+                <app-icon-text-button [color]="'var(--secondary-color)'" [text]="'CANCEL'" [bgColorHover]="'var(--secondary-color)'"
+                    [colorHover]="'var(--purple)'" (click)="togglePopUp()">
+                </app-icon-text-button>
+            </div>
+        </div>
+    </div>
+</div>

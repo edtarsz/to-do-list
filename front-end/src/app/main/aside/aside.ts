@@ -77,12 +77,12 @@ export class Aside {
 
   operate(list: List): void {
     if (!list.id) return;
-
     if (this.interfaceService.editActiveList()) {
       this.editList(list);
       return;
     } else if (this.interfaceService.deleteActive()) {
-      this.deleteList(list.id);
+      this.interfaceService.setConfirmAction(list);
+      this.interfaceService.toggleShowPopUpConfirm();
       return;
     }
 
@@ -93,16 +93,16 @@ export class Aside {
     }
   }
 
-  deleteList(listId: number): void {
-    if (this.interfaceService.deleteActive()) {
-      this.listService.deleteList(listId).subscribe({
-        next: () => {
-          this.interfaceService.setEventActive(true);
-          this.interfaceService.setEvent('LIST DELETED', `List has been successfully deleted.`);
-        }
-      });
-    }
-  }
+  // deleteList(listId: number): void {
+  //   if (this.interfaceService.deleteActive()) {
+  //     this.listService.deleteList(listId).subscribe({
+  //       next: () => {
+  //         this.interfaceService.setEventActive(true);
+  //         this.interfaceService.setEvent('LIST DELETED', `List has been successfully deleted.`);
+  //       }
+  //     });
+  //   }
+  // }
 
   // pending changes
   // para saber si está en modo edicion checo si está seleccionado alguna lista

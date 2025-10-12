@@ -6,6 +6,10 @@
 <app-loading></app-loading>
 }
 
+@if (isPopUpConfirmOpen) {
+    <app-pop-up-confirm></app-pop-up-confirm>
+}
+
 @if (isPopUpOpen) {
 <app-pop-up [title]="currentOperation">
     @if (currentOperation === 'Add List') {

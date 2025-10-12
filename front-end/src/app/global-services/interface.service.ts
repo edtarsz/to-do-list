@@ -13,6 +13,7 @@ interface InterfaceState {
     isEventActive: boolean;
     showUpdateProfile: boolean;
     showCompletedTasks: boolean;
+    showPopUpConfirm: boolean;
 }
 
 @Injectable({
@@ -29,7 +30,8 @@ export class InterfaceService {
         isShowingDetailsTask: false,
         isEventActive: false,
         showUpdateProfile: false,
-        showCompletedTasks: false
+        showCompletedTasks: false,
+        showPopUpConfirm: false,
     });
 
     isAsideOpen = computed(() => this.state().isAsideOpen);
@@ -40,6 +42,9 @@ export class InterfaceService {
     isPopUpOpen = computed(() => this.state().isPopUpOpen);
     showUpdateProfile = computed(() => this.state().showUpdateProfile);
     showCompletedTasks = computed(() => this.state().showCompletedTasks);
+    showPopUpConfirm = computed(() => this.state().showPopUpConfirm);
+
+    confirmAction = signal<Task | List | null>(null);
 
     // Events
     isEventActive = computed(() => this.state().isEventActive);
@@ -112,6 +117,14 @@ export class InterfaceService {
         this.state.update(v => ({ ...v, showCompletedTasks: show }));
     }
 
+    toggleShowPopUpConfirm() {
+        this.state.update(v => ({ ...v, showPopUpConfirm: !v.showPopUpConfirm }));
+    }
+
+    setConfirmAction(item: Task | List | null) {
+        this.confirmAction.set(item);
+    }
+
     // Used when signing out
     closeAll() {
         this.state.set({
@@ -124,9 +137,11 @@ export class InterfaceService {
             isShowingDetailsTask: false,
             isEventActive: false,
             showUpdateProfile: false,
-            showCompletedTasks: false
+            showCompletedTasks: false,
+            showPopUpConfirm: false,
         });
 
+        this.confirmAction.set(null);
         this.selectedTask.set(null);
         this.selectedList.set(null);
         this.selectedMenuId.set(1);

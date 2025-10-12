@@ -11,10 +11,11 @@ import { Event } from "../global-components/event/event";
 import { AuthStateService } from '../global-services/auth-state.service';
 import { Loading } from "../global-components/loading/loading";
 import { ListService } from '../global-services/lists.service';
+import { PopUpConfirm } from "../global-components/pop-up-confirm/pop-up-confirm";
 
 @Component({
   selector: 'app-main',
-  imports: [Aside, CommonModule, RouterOutlet, PopUp, AddTask, AddList, Event, Loading],
+  imports: [Aside, CommonModule, RouterOutlet, PopUp, AddTask, AddList, Event, Loading, PopUpConfirm],
   templateUrl: './main.html',
   styleUrl: './main.css'
 })
@@ -103,5 +104,9 @@ export class Main {
 
   get showUpdateProfile(): boolean {
     return this.interfaceService.showUpdateProfile();
+  }
+
+  get isPopUpConfirmOpen(): boolean {
+    return this.interfaceService.showPopUpConfirm();
   }
 }

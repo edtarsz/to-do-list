@@ -18,8 +18,12 @@ export class PopUp {
   @Input() title = 'Title';
 
   togglePopUp() {
-    this.interfaceService.selectedTask.set(null);
-    // this.interfaceService.selectedList.set(null);
+    if (this.interfaceService.selectedTask()) {
+      this.interfaceService.selectedTask.set(null);
+    }
+    if (this.interfaceService.selectedList()) {
+      // this.interfaceService.selectedList.set(null);
+    }
     this.interfaceService.togglePopUp();
   }
 
