@@ -28,43 +28,75 @@
                     <div class="flex flex-col w-full h-full">
                         <input formControlName="name" type="text" placeholder="First Name"
                             class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200">
+                        @if (updateUserForm.get('name')?.touched && updateUserForm.get('name')?.errors) {
+                        <small class="text-red-500 mt-1">
+                            {{ getErrorMessage('name') }}
+                        </small>
+                        }
                     </div>
 
                     <div class="flex flex-col w-full h-full">
                         <input formControlName="lastName" type="text" placeholder="Last Name"
                             class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200">
+                        @if (updateUserForm.get('lastName')?.touched && updateUserForm.get('lastName')?.errors) {
+                        <small class="text-red-500 mt-1">
+                            {{ getErrorMessage('lastName') }}
+                        </small>
+                        }
                     </div>
                 </div>
             </div>
             <div class="flex justify-between w-full items-center h-auto">
                 <p class="font-family-ubuntu-mono-bold">Username</p>
-                <div class="w-[60vw]">
+                <div class="flex flex-col w-[60vw]">
                     <input formControlName="username" type="text" placeholder="Enter your username"
                         class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200">
+                    @if (updateUserForm.get('username')?.touched && updateUserForm.get('username')?.errors) {
+                    <small class="text-red-500 mt-1">
+                        {{ getErrorMessage('username') }}
+                    </small>
+                    }
                 </div>
             </div>
             <div class="flex justify-between w-full items-center h-auto">
-                <p class="font-family-ubuntu-mono-bold">Password</p>
-                <div class="w-[60vw]">
-                    <input formControlName="password" type="password" placeholder="Enter your password"
+                <p class="font-family-ubuntu-mono-bold">New Password</p>
+                <div class="flex flex-col w-[60vw]">
+                    <input formControlName="password" type="password" placeholder="Enter your new password (optional)"
                         class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200">
+                    @if (updateUserForm.get('password')?.touched && updateUserForm.get('password')?.errors) {
+                    <small class="text-red-500 mt-1">
+                        {{ getErrorMessage('password') }}
+                    </small>
+                    }
                 </div>
             </div>
             <div class="flex justify-between w-full items-center h-auto">
-                <p class="font-family-ubuntu-mono-bold">Confirm Password</p>
-                <div class="w-[60vw]">
-                    <input formControlName="password" type="password" placeholder="Enter your password"
+                <p class="font-family-ubuntu-mono-bold">Confirm New Password</p>
+                <div class="flex flex-col w-[60vw]">
+                    <input formControlName="confirmPassword" type="password" placeholder="Confirm your new password"
                         class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200">
+                    @if (updateUserForm.get('confirmPassword')?.touched && passwordMismatch()) {
+                    <small class="text-red-500 mt-1">
+                        Las contraseñas no coinciden
+                    </small>
+                    }
                 </div>
             </div>
+
+            @if (errorMessage) {
+            <div class="w-full text-red-500 text-sm">
+                {{ errorMessage }}
+            </div>
+            }
+
             <div class="w-full flex gap-[1vw] justify-end">
                 <div class="w-auto sm:w-[10%]">
                     <app-icon-text-button [text]="'Cancel'" [bgColorHover]="'var(--red)'" [borderColor]="'var(--red)'"
-                        [type]="'submit'" [color]="'var(--red)'" [colorHover]="'var(--secondary-color)'" class="w-full"
+                        [type]="'button'" [color]="'var(--red)'" [colorHover]="'var(--secondary-color)'" class="w-full"
                         (click)="closeUpdateProfile()">
                     </app-icon-text-button>
                 </div>
-                <div class="w-auto sm:w-[20%]">
+                <div class="w-auto sm:w-[10%]">
                     <app-icon-text-button [text]="'Save Changes'" [bgColorHover]="'var(--purple)'"
                         [borderColor]="'var(--purple)'" [type]="'submit'" [color]="'var(--purple)'"
                         [colorHover]="'var(--secondary-color)'" class="w-full">

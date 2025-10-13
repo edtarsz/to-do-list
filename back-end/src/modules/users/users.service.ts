@@ -3,6 +3,7 @@ import { PrismaErrorService } from 'src/prisma/prisma-error.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -15,7 +16,7 @@ export class UserService {
         try {
             return this.prisma.user.create({ data: createUserDto });
         } catch (error) {
-            this.prismaErrorService.handleError(error, 'Failed to create task');
+            this.prismaErrorService.handleError(error, 'Failed to create user');
         }
     }
 
@@ -32,7 +33,19 @@ export class UserService {
     async updateUser(id: number, updateUserDto: Partial<CreateUserDto>) {
         try {
             await this.getUserById(id);
-            return this.prisma.user.update({ where: { id }, data: updateUserDto });
+
+            const dataToUpdate = { ...updateUserDto };
+            if (dataToUpdate.password) {
+                dataToUpdate.password = await bcrypt.hash(dataToUpdate.password, 10);
+            }
+
+            const updatedUser = await this.prisma.user.update({
+                where: { id },
+                data: dataToUpdate
+            });
+
+            const { password, ...userWithoutPassword } = updatedUser;
+            return userWithoutPassword;
         } catch (error) {
             this.prismaErrorService.handleError(error, 'Failed to update user');
         }

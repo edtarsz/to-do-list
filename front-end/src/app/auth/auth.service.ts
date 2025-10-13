@@ -3,14 +3,14 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { tap, catchError, delay } from 'rxjs/operators';
 import { firstValueFrom, throwError } from 'rxjs';
-import { UserDTO } from '../models/user';
+import { User } from '../models/user';
 import { AuthStateService } from '../global-services/auth-state.service';
 import { ListService } from '../global-services/lists.service';
 import { InterfaceService } from '../global-services/interface.service';
 
 interface AuthResponse {
     access_token: string;
-    user: UserDTO;
+    user: User;
 }
 
 @Injectable({
@@ -37,7 +37,7 @@ export class AuthService {
         this.authStateService.setLoading(true);
         try {
             const user = await firstValueFrom(
-                this.http.get<UserDTO>(`${this.apiUrl}/auth/me`)
+                this.http.get<User>(`${this.apiUrl}/auth/me`)
             );
             this.authStateService.setUser(user);
         } catch (error) {
@@ -50,9 +50,9 @@ export class AuthService {
     register(name: string, lastName: string, username: string, password: string) {
         this.authStateService.setLoading(true);
 
-        const userDTO: UserDTO = { name, lastName, username, password };
+        const user: User = { name, lastName, username, password };
 
-        return this.http.post(`${this.apiUrl}/auth/register`, userDTO).pipe(
+        return this.http.post(`${this.apiUrl}/auth/register`, user).pipe(
             tap(() => {
                 this.interfaceService.setEventActive(true);
                 this.interfaceService.setEvent('REGISTER', 'Your account has been successfully created.');

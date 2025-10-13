@@ -1,9 +1,9 @@
 // auth/auth.state.ts
 import { Injectable, signal, computed } from '@angular/core';
-import { UserDTO, Role } from '../models/user';
+import { User } from '../models/user';
 
 export interface AuthState {
-    user: UserDTO | null;
+    user: User | null;
     isAuthenticated: boolean;
     isLoading: boolean;
 }
@@ -27,7 +27,7 @@ export class AuthStateService {
         return user ? `${user.name} ${user.lastName}` : '';
     });
 
-    setUser(user: UserDTO | null) {
+    setUser(user: User | null) {
         this.state.update(s => ({ ...s, user, isAuthenticated: !!user }));
     }
 

@@ -3,24 +3,18 @@ import { Role } from '@prisma/client';
 
 export class CreateUserDto {
     @IsString()
-    @MinLength(1)
-    @MaxLength(255)
+    @MinLength(2)
     name: string;
 
     @IsString()
-    @MinLength(1)
-    @MaxLength(255)
+    @MinLength(2)
     lastName: string;
 
     @IsString()
-    @MinLength(1)
-    @MaxLength(10)
+    @MinLength(3)
     username: string;
 
     @IsString()
     @MinLength(8)
     password: string;
-
-    @IsEnum(Role)
-    role: Role;
 }
