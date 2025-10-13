@@ -125,6 +125,10 @@ export class InterfaceService {
         this.confirmAction.set(item);
     }
 
+    setSelectedList(list: List | null) {
+        this.selectedList.set(list);
+    }
+
     // Used when signing out
     closeAll() {
         this.state.set({

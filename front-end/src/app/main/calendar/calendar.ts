@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { TaskService } from '../../global-services/tasks.service';
 import { Task } from '../../models/task';
 import { ListService } from '../../global-services/lists.service';
+import { InterfaceService } from '../../global-services/interface.service';
 
 @Component({
   selector: 'app-calendar',
@@ -14,13 +15,13 @@ import { ListService } from '../../global-services/lists.service';
 })
 export class Calendar implements OnInit {
   iconRegistryService = inject(IconRegistryService);
+  private interfaceService = inject(InterfaceService);
   private taskService = inject(TaskService);
   private listService = inject(ListService);
 
   arrowBackIcon = this.iconRegistryService.getIcon('arrow_downwards');
   arrowNextIcon = this.iconRegistryService.getIcon('arrow_list');
 
-  currentDate = new Date();
   currentWeekOffset = 0;
   weekDays: { name: string; date: number; fullDate: Date }[] = [];
   currentMonth = '';
@@ -112,60 +113,55 @@ export class Calendar implements OnInit {
     });
   }
 
-  isAllDayTask(task: Task): boolean {
-    const startMinutes = this.getMinutesFromTime(task.startTime);
-    const endMinutes = this.getMinutesFromTime(task.dueTime);
-    const durationMinutes = endMinutes - startMinutes;
-    const durationHours = durationMinutes / 60;
-
-    const taskStartDate = new Date(task.startDate);
-    const taskDueDate = new Date(task.dueDate);
-    const isMultiDay = taskStartDate.getDate() !== taskDueDate.getDate() ||
-      taskStartDate.getMonth() !== taskDueDate.getMonth() ||
-      taskStartDate.getFullYear() !== taskDueDate.getFullYear();
-
-    return isMultiDay || durationHours >= 12 ||
-      (task.startTime === "00:00" && task.dueTime === "23:59");
-  }
-
   getTaskGroups(dayInfo: { name: string; date: number; fullDate: Date }): Task[][] {
     const tasks = this.getTasksForDay(dayInfo);
     if (tasks.length === 0) return [];
 
-    const allDayTasks = tasks.filter(task => this.isAllDayTask(task));
-    const timedTasks = tasks.filter(task => !this.isAllDayTask(task));
+    // Filtrar solo las tareas que NO son all-day
+    const timedTasks = tasks.filter(task => task.startTime !== "00:00" || task.dueTime !== "23:59");
+
+    if (timedTasks.length === 0) return [];
 
     const groups: Task[][] = [];
+    const sortedTasks = [...timedTasks].sort((a, b) => {
+      return this.getMinutesFromTime(a.startTime) - this.getMinutesFromTime(b.startTime);
+    });
 
-    if (allDayTasks.length > 0) {
-      groups.push(allDayTasks);
-    }
+    let currentGroup: Task[] = [sortedTasks[0]];
 
-    if (timedTasks.length > 0) {
-      const sortedTasks = [...timedTasks].sort((a, b) => {
-        const timeA = this.getMinutesFromTime(a.startTime);
-        const timeB = this.getMinutesFromTime(b.startTime);
-        return timeA - timeB;
-      });
+    for (let i = 1; i < sortedTasks.length; i++) {
+      const currentTask = sortedTasks[i];
+      const overlaps = currentGroup.some(groupTask => this.tasksOverlap(groupTask, currentTask));
 
-      let currentGroup: Task[] = [sortedTasks[0]];
-
-      for (let i = 1; i < sortedTasks.length; i++) {
-        const currentTask = sortedTasks[i];
-
-        const overlaps = currentGroup.some(groupTask => this.tasksOverlap(groupTask, currentTask));
-
-        if (overlaps) {
-          currentGroup.push(currentTask);
-        } else {
-          groups.push(currentGroup);
-          currentGroup = [currentTask];
-        }
+      if (overlaps) {
+        currentGroup.push(currentTask);
+      } else {
+        groups.push(currentGroup);
+        currentGroup = [currentTask];
       }
-      groups.push(currentGroup);
     }
+    groups.push(currentGroup);
 
     return groups;
+  }
+
+  getTaskDateRange(task: Task): string {
+    const start = new Date(task.startDate);
+    const end = new Date(task.dueDate);
+
+    if (task.startDate === task.dueDate) {
+      const month = start.toLocaleDateString('en-US', { month: 'short' });
+      return `${month} ${start.getDate()}`;
+    }
+
+    const startMonth = start.toLocaleDateString('en-US', { month: 'short' });
+    const endMonth = end.toLocaleDateString('en-US', { month: 'short' });
+
+    if (startMonth === endMonth) {
+      return `${startMonth} ${start.getDate()}-${end.getDate()}`;
+    }
+
+    return `${startMonth} ${start.getDate()} - ${endMonth} ${end.getDate()}`;
   }
 
   tasksOverlap(task1: Task, task2: Task): boolean {
@@ -183,10 +179,6 @@ export class Calendar implements OnInit {
   }
 
   getGroupStartTime(tasks: Task[]): string {
-    if (tasks.length > 0 && this.isAllDayTask(tasks[0])) {
-      return "00:00";
-    }
-
     const times = tasks.map(t => this.getMinutesFromTime(t.startTime));
     const minTime = Math.min(...times);
     const hours = Math.floor(minTime / 60);
@@ -195,11 +187,6 @@ export class Calendar implements OnInit {
   }
 
   getGroupEndTime(tasks: Task[]): string {
-    if (tasks.length > 0 && this.isAllDayTask(tasks[0])) {
-      const minHeight = Math.max(1, tasks.length * 0.5);
-      return `${minHeight.toString().padStart(2, '0')}:00`;
-    }
-
     const times = tasks.map(t => this.getMinutesFromTime(t.dueTime));
     const maxTime = Math.max(...times);
     const hours = Math.floor(maxTime / 60);
@@ -227,47 +214,131 @@ export class Calendar implements OnInit {
     return `${vh}vh`;
   }
 
-  getListColor(task: Task): string {
-    let color = '#B6E7F2';
-
+  getTaskColor(task: Task): string {
     if (task.listId) {
-      this.listService.getListById(task.listId).subscribe(list => {
-        color = list.color;
-      });
+      const list = this.listService.lists().find(l => l.id === task.listId);
+      if (list) return list.color;
     }
 
-    return color;
+    // Color según prioridad
+    const colors = {
+      0: '#10b981', // LOW - verde
+      1: '#f59e0b', // MEDIUM - amarillo
+      2: '#ef4444'  // HIGH - rojo
+    };
+    return colors[task.priority as keyof typeof colors] || '#6b7280';
   }
 
-  getTaskLeftPosition(task: Task, dayInfo: { name: string; date: number; fullDate: Date }): string {
-    const taskStartDate = new Date(task.startDate);
-    const dayDate = dayInfo.fullDate;
+  getMultiDayTasks(): Task[] {
+    const weekStart = this.weekDays[0].fullDate;
+    const weekEnd = this.weekDays[6].fullDate;
 
-    const normalizedTaskStart = new Date(taskStartDate.getFullYear(), taskStartDate.getMonth(), taskStartDate.getDate());
-    const normalizedDay = new Date(dayDate.getFullYear(), dayDate.getMonth(), dayDate.getDate());
+    return this.tasks.filter(task => {
+      if (task.completed) return false;
 
-    if (normalizedDay.getTime() === normalizedTaskStart.getTime()) {
-      return '5%';
+      const isAllDay = task.startTime === "00:00" && task.dueTime === "23:59";
+      const taskStart = new Date(task.startDate);
+      const taskEnd = new Date(task.dueDate);
+      const isInWeek = taskStart <= weekEnd && taskEnd >= weekStart;
+
+      return isAllDay && isInWeek;
+    });
+  }
+
+  getMultiDayTaskLayers(): Task[][] {
+    const allDayTasks = this.getMultiDayTasks();
+    if (allDayTasks.length === 0) return [];
+
+    const sortedTasks = [...allDayTasks].sort((a, b) => {
+      const startCompare = new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
+      if (startCompare !== 0) return startCompare;
+
+      const durationA = new Date(a.dueDate).getTime() - new Date(a.startDate).getTime();
+      const durationB = new Date(b.dueDate).getTime() - new Date(b.startDate).getTime();
+      return durationB - durationA;
+    });
+
+    const layers: Task[][] = [];
+
+    sortedTasks.forEach(task => {
+      let placed = false;
+      const taskSpan = this.getTaskSpan(task);
+
+      for (let layer of layers) {
+        let hasOverlap = false;
+
+        for (let existingTask of layer) {
+          const existingSpan = this.getTaskSpan(existingTask);
+
+          const task1Start = taskSpan.startIndex;
+          const task1End = taskSpan.startIndex + taskSpan.span;
+          const task2Start = existingSpan.startIndex;
+          const task2End = existingSpan.startIndex + existingSpan.span;
+
+          if (task1Start < task2End && task2Start < task1End) {
+            hasOverlap = true;
+            break;
+          }
+        }
+
+        if (!hasOverlap) {
+          layer.push(task);
+          placed = true;
+          break;
+        }
+      }
+
+      if (!placed) {
+        layers.push([task]);
+      }
+    });
+
+    return layers;
+  }
+
+  getTaskSpan(task: Task): { startIndex: number, span: number } {
+    const taskStart = new Date(task.startDate);
+    const taskEnd = new Date(task.dueDate);
+
+    taskStart.setHours(0, 0, 0, 0);
+    taskEnd.setHours(0, 0, 0, 0);
+
+    let startIndex = -1;
+    let endIndex = -1;
+
+    for (let i = 0; i < this.weekDays.length; i++) {
+      const dayDate = new Date(this.weekDays[i].fullDate);
+      dayDate.setHours(0, 0, 0, 0);
+
+      if (dayDate.getTime() >= taskStart.getTime()) {
+        startIndex = i;
+        break;
+      }
     }
 
-    return '0%';
-  }
+    if (startIndex === -1) startIndex = 0;
 
-  getTaskRightPosition(task: Task, dayInfo: { name: string; date: number; fullDate: Date }): string {
-    const taskDueDate = new Date(task.dueDate);
-    const dayDate = dayInfo.fullDate;
+    for (let i = this.weekDays.length - 1; i >= 0; i--) {
+      const dayDate = new Date(this.weekDays[i].fullDate);
+      dayDate.setHours(0, 0, 0, 0);
 
-    const normalizedTaskDue = new Date(taskDueDate.getFullYear(), taskDueDate.getMonth(), taskDueDate.getDate());
-    const normalizedDay = new Date(dayDate.getFullYear(), dayDate.getMonth(), dayDate.getDate());
-
-    if (normalizedDay.getTime() === normalizedTaskDue.getTime()) {
-      return '5%';
+      if (dayDate.getTime() <= taskEnd.getTime()) {
+        endIndex = i + 1;
+        break;
+      }
     }
 
-    return '0%';
+    if (endIndex === -1) endIndex = this.weekDays.length;
+    if (startIndex === -1 || endIndex === -1) return { startIndex: 0, span: 0 };
+
+    const span = endIndex - startIndex;
+    return { startIndex, span: Math.max(span, 1) };
   }
 
-  getPriorityColor(priority: number): string {
-    return 'bg-[var(--profile)]';
+  openTaskDetails(task: Task) {
+    this.interfaceService.setCurrentOperation('Add Task');
+    this.interfaceService.selectedTask.set(task);
+    this.interfaceService.setEditActiveTask(true);
+    this.interfaceService.togglePopUp();
   }
 }
