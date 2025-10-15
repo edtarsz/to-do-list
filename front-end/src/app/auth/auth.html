@@ -8,15 +8,15 @@
 
 <div class="h-screen w-screen flex gap-[1vw] bg-[var(--primary-color)] p-[2vw]">
     <div class="flex flex-col w-full h-full rounded-2xl p-[1.5vw] justify-center items-center">
-        <header class="w-[80%] flex items-center gap-[0.5vw]">
+        <header class="w-full md:w-[80%] flex items-center gap-[0.5vw]">
             <img src="assets/svgs/icon-app.svg" alt="">
             <h2 class="font-family-ubuntu-bold">Tala Tasks</h2>
         </header>
-        <div class="w-[80%] flex flex-col justify-center flex-1">
+        <div class="w-full md:w-[80%] flex flex-col justify-center flex-1">
             <router-outlet></router-outlet>
         </div>
     </div>
-    <div class="w-full h-full bg-[var(--secondary-color)] rounded-2xl p-[1.5vw] shadow-md">
+    <div class="hidden md:block w-full h-full bg-[var(--secondary-color)] rounded-2xl p-[1.5vw] shadow-md">
         <div class="relative w-full h-full rounded-xl overflow-hidden">
             @for (image of images; track $index) {
             <img draggable="false" [src]="image" alt="Slide {{$index + 1}}"

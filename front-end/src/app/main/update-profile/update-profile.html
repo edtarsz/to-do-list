@@ -10,8 +10,8 @@
             (click)="closeUpdateProfile()">
         </app-icon-text-button>
     </div>
-    <h1 class="text-[2vw] font-family-ubuntu-mono-bold">Update Profile</h1>
-    <div class="w-full h-full flex flex-col gap-[8vh] overflow-y-auto">
+    <h1 class="text-[clamp(1.5rem,3vw,2rem)] font-family-ubuntu-mono-bold">Update Profile</h1>
+    <div class="w-full h-full flex flex-col gap-[4vh] sm:gap-[8vh] overflow-y-auto">
         <div class="w-full flex-1 min-h-0 relative">
             <img src="assets/images/waves-user.svg" alt="" class="w-full h-full object-cover rounded-2xl"
                 draggable="false">
@@ -21,10 +21,11 @@
                     draggable="false">
             </div>
         </div>
-        <div class="flex flex-col gap-5 items-end h-auto">
-            <div class="flex justify-between w-full items-center h-auto">
+        <div class="flex flex-col gap-3 sm:gap-5 items-end h-auto">
+            <div
+                class="flex flex-col sm:flex-row justify-between w-full items-start sm:items-center h-auto gap-2 sm:gap-5">
                 <p class="font-family-ubuntu-mono-bold">Full Name</p>
-                <div class="flex gap-5 w-[60vw]">
+                <div class="flex gap-5 w-full sm:w-[60vw]">
                     <div class="flex flex-col w-full h-full">
                         <input formControlName="name" type="text" placeholder="First Name"
                             class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200">
@@ -46,9 +47,10 @@
                     </div>
                 </div>
             </div>
-            <div class="flex justify-between w-full items-center h-auto">
+            <div
+                class="flex flex-col sm:flex-row justify-between w-full items-start sm:items-center h-auto gap-2 sm:gap-5">
                 <p class="font-family-ubuntu-mono-bold">Username</p>
-                <div class="flex flex-col w-[60vw]">
+                <div class="flex gap-5 w-full sm:w-[60vw]">
                     <input formControlName="username" type="text" placeholder="Enter your username"
                         class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200">
                     @if (updateUserForm.get('username')?.touched && updateUserForm.get('username')?.errors) {
@@ -58,9 +60,10 @@
                     }
                 </div>
             </div>
-            <div class="flex justify-between w-full items-center h-auto">
+            <div
+                class="flex flex-col sm:flex-row justify-between w-full items-start sm:items-center h-auto gap-2 sm:gap-5">
                 <p class="font-family-ubuntu-mono-bold">New Password</p>
-                <div class="flex flex-col w-[60vw]">
+                <div class="flex gap-5 w-full sm:w-[60vw]">
                     <input formControlName="password" type="password" placeholder="Enter your new password (optional)"
                         class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200">
                     @if (updateUserForm.get('password')?.touched && updateUserForm.get('password')?.errors) {
@@ -70,9 +73,10 @@
                     }
                 </div>
             </div>
-            <div class="flex justify-between w-full items-center h-auto">
+            <div
+                class="flex flex-col sm:flex-row justify-between w-full items-start sm:items-center h-auto gap-2 sm:gap-5">
                 <p class="font-family-ubuntu-mono-bold">Confirm New Password</p>
-                <div class="flex flex-col w-[60vw]">
+                <div class="flex gap-5 w-full sm:w-[60vw]">
                     <input formControlName="confirmPassword" type="password" placeholder="Confirm your new password"
                         class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200">
                     @if (updateUserForm.get('confirmPassword')?.touched && passwordMismatch()) {
@@ -90,13 +94,13 @@
             }
 
             <div class="w-full flex gap-[1vw] justify-end">
-                <div class="w-auto sm:w-[10%]">
+                <div class="min-w-[80px] sm:w-[10%]">
                     <app-icon-text-button [text]="'Cancel'" [bgColorHover]="'var(--red)'" [borderColor]="'var(--red)'"
                         [type]="'button'" [color]="'var(--red)'" [colorHover]="'var(--secondary-color)'" class="w-full"
                         (click)="closeUpdateProfile()">
                     </app-icon-text-button>
                 </div>
-                <div class="w-auto sm:w-[10%]">
+                <div class="min-w-[120px] sm:w-[15%]">
                     <app-icon-text-button [text]="'Save Changes'" [bgColorHover]="'var(--purple)'"
                         [borderColor]="'var(--purple)'" [type]="'submit'" [color]="'var(--purple)'"
                         [colorHover]="'var(--secondary-color)'" class="w-full">

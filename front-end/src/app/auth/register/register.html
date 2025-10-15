@@ -2,7 +2,7 @@
     [description]="'Already have an account?'" [route]="'/login'" [routeText]="'Sign in'" (formSubmit)="onSubmit()">
 
     <div class="flex flex-col gap-5">
-        <div class="flex gap-5">
+        <div class="flex gap-5 flex-col md:flex-row">
             <div class="flex flex-col w-full">
                 <input formControlName="name" type="text" placeholder="First Name"
                     class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200">
