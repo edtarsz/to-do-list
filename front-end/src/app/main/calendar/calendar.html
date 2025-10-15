@@ -7,8 +7,10 @@
                 class="rotate-90">
             </app-icon-text-button>
 
-            <app-icon-text-button [text]="weekNumber" [color]="'black'" [bgColor]="'var(--secondary-color)'">
-            </app-icon-text-button>
+            <div class="text-sm font-family-ubuntu-mono">
+                <app-icon-text-button [text]="weekNumber" [color]="'black'" [bgColor]="'var(--secondary-color)'">
+                </app-icon-text-button>
+            </div>
 
             <app-icon-text-button (click)="nextWeek()" [color]="'black'" [iconSvg]="arrowNextIcon.svg"
                 [viewBox]="arrowNextIcon.viewBox" [iconSize]="'14'" [bgColor]="'var(--secondary-color)'"

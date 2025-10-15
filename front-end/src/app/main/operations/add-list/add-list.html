@@ -1,6 +1,26 @@
-<form [formGroup]="addListForm" (ngSubmit)="addList()" class="flex flex-col gap-4">
-    <input type="text" placeholder="List's name" formControlName="name"
-        class="w-full bg-[var(--secondary-color)] rounded-lg p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200 placeholder-[var(--gray)] text-sm">
+@if (isListLimitReached() && !interfaceService.editActiveList()) {
+<div class="my-3 p-3 bg-red-500/10 border border-red-500 text-red-500 rounded-lg text-sm text-center">
+    You have reached the maximum of 12 lists. Please delete one to add a new one.
+</div>
+}
+
+<form [formGroup]="addListForm" (ngSubmit)="addList()" class="flex flex-col gap-4"
+    [attr.disabled]="(isListLimitReached() && !interfaceService.editActiveList()) ? true : null">
+    <div class="flex flex-col">
+        <input type="text" placeholder="List's name" formControlName="name"
+            class="w-full bg-[var(--secondary-color)] rounded-lg p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200 placeholder-[var(--gray)] text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            [class.border-red-500]="addListForm.get('name')?.touched && addListForm.get('name')?.invalid">
+
+        @if (addListForm.get('name')?.touched && addListForm.get('name')?.invalid) {
+        <small class="text-red-500 mt-1 text-sm">
+            {{ getErrorMessage('name') }}
+        </small>
+        }
+        <div class="text-end text-xs text-[var(--gray)] mt-1">
+            {{ addListForm.get('name')?.value?.length || 0 }}/255
+        </div>
+    </div>
+
     <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
     <div class="flex justify-between items-center relative">
         <div class="relative">
@@ -24,7 +44,8 @@
 
         <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'" [iconSvg]="sendIcon.svg"
             [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'" [borderColor]="'var(--purple)'"
-            [viewBox]="sendIcon.viewBox" [iconSize]="sendIcon.size" [text]="'Add List'">
+            [viewBox]="sendIcon.viewBox" [iconSize]="sendIcon.size"
+            [text]="interfaceService.editActiveList() ? 'Update List' : 'Add List'">
         </app-icon-text-button>
     </div>
 </form>

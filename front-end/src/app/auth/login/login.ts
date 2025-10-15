@@ -20,12 +20,16 @@ export class Login {
   isSubmitting = false;
 
   constructor() {
+    this.setupForm();
+  }
+
+  private setupForm() {
     this.loginForm = this.fb.group({
       username: ['', [
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(30),
-        Validators.pattern(/^[a-zA-Z0-9_-]+$/) // Solo letras, números, guiones y guiones bajos
+        Validators.pattern(/^[a-zA-Z0-9_-]+$/) // solo letras, números, guiones y guiones bajos
       ]],
       password: ['', [
         Validators.required,
@@ -43,9 +47,7 @@ export class Login {
       return;
     }
 
-    if (this.isSubmitting) {
-      return; // Prevenir múltiples envíos
-    }
+    if (this.isSubmitting) return; // previene múltiples envíos
 
     this.isSubmitting = true;
     const { username, password } = this.loginForm.value;
@@ -66,22 +68,13 @@ export class Login {
     const control = this.loginForm.get(controlName);
     if (!control || !control.touched) return '';
 
-    if (control.hasError('required')) {
-      return 'This field is required';
-    }
-    if (control.hasError('minlength')) {
-      const requiredLength = control.getError('minlength').requiredLength;
-      return `Must be at least ${requiredLength} characters`;
-    }
-    if (control.hasError('maxlength')) {
-      const requiredLength = control.getError('maxlength').requiredLength;
-      return `Must be at most ${requiredLength} characters`;
-    }
-    if (control.hasError('pattern')) {
-      if (controlName === 'username') {
-        return 'Invalid username format';
-      }
-    }
+    if (control.hasError('required')) return 'This field is required';
+    if (control.hasError('minlength'))
+      return `Must be at least ${control.getError('minlength').requiredLength} characters`;
+    if (control.hasError('maxlength'))
+      return `Must be at most ${control.getError('maxlength').requiredLength} characters`;
+    if (control.hasError('pattern') && controlName === 'username')
+      return 'Invalid username format';
 
     return 'Invalid field';
   }

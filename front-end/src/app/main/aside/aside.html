@@ -29,7 +29,10 @@
         <hr class="border-[#1f1f1f20] border-t-2 border-dashed">
         <div class="flex flex-col overflow-y-auto overflow-x-hidden flex-1 min-h-0 scrollbar-hide px-1">
             <app-aside-section [title]="'LISTS'" [showText]="interfaceService.isAsideOpen()">
-                <div section-buttons class="flex items-center gap-[0.5vw]">
+                <div id="buttons" section-buttons class="flex items-center gap-[0.5vw] overflow-hidden" [ngClass]="{
+                    'max-w-0 opacity-0': !interfaceService.isAsideOpen(),
+                    'max-w-xs opacity-100': interfaceService.isAsideOpen()
+                    }">
                     <app-icon-text-button [iconSvg]="trashIcon.svg" [borderColor]="'var(--red)'" [color]="'var(--red)'"
                         [bgColorHover]="'var(--red)'" [colorHover]="'var(--secondary-color)'"
                         [viewBox]="trashIcon.viewBox" [iconSize]="trashIcon.size"
@@ -78,20 +81,25 @@
         </ul>
         <hr class="w-8 border-[var(--purple)] border-t-4 m-auto rounded-4xl">
         }
-        <div class="p-2 h-auto flex justify-center items-center gap-[1vw] transition-transform duration-200 hover:bg-[var(--primary-color)] rounded-lg hover:cursor-pointer"
+        <div class="p-2 h-auto flex justify-center items-center transition-transform duration-200 hover:bg-[var(--primary-color)] rounded-lg hover:cursor-pointer"
             [ngClass]="{
         'justify-center px-0': !interfaceService.isAsideOpen(),
         'bg-[var(--primary-color)]': interfaceService.isProfileSettingsOpen(),
-      }" (click)="toggleProfileSettings()">
+        'gap-[1vw]': interfaceService.isAsideOpen()
+    }" (click)="toggleProfileSettings()">
+
             <div class="w-[40px] h-[40px] flex items-center justify-center bg-[var(--pink)] rounded-full">
                 <img src="assets/svgs/user.svg" alt="" class="w-[30px] h-[30px]">
             </div>
-            @if (interfaceService.isAsideOpen()) {
-            <div class="font-family-ubuntu-mono-bold text-sm">
+
+            <div class="font-family-ubuntu-mono-bold text-sm transition-all duration-300 ease-in-out overflow-hidden whitespace-nowrap"
+                [ngClass]="{
+            'max-w-xs opacity-100': interfaceService.isAsideOpen(),
+            'max-w-0 opacity-0': !interfaceService.isAsideOpen()
+        }">
                 <h3>{{ authStateService.userName() }}</h3>
                 <h4 class="text-[var(--gray)]">{{ authStateService.user()?.role }}</h4>
             </div>
-            }
         </div>
     </div>
 </div>

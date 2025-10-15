@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input, signal } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { InterfaceService } from '../../../global-services/interface.service';
 
 @Component({
   selector: 'app-aside-item',
@@ -10,6 +11,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class AsideItem {
   private sanitizer = inject(DomSanitizer);
+  private interfaceService = inject(InterfaceService);
 
   @Input() title!: string;
   @Input() color!: string;
@@ -28,5 +30,9 @@ export class AsideItem {
 
   sanitizeSvg(svg: string) {
     return this.sanitizer.bypassSecurityTrustHtml(svg);
+  }
+
+  get isAsideOpen() {
+    return this.interfaceService.isAsideOpen();
   }
 }

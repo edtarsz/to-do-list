@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common";
-import { Component, inject, signal, effect, OnDestroy } from "@angular/core";
+// Se añade 'computed' a la lista de imports de @angular/core
+import { Component, inject, signal, effect, OnDestroy, computed } from "@angular/core";
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { IconRegistryService } from "../../../global-services/icon-registry.service";
 import { InterfaceService } from "../../../global-services/interface.service";
@@ -17,17 +18,46 @@ import { IconTextButton } from "../../../global-components/icon-text-button/icon
 export class AddList implements OnDestroy {
   public interfaceService = inject(InterfaceService);
   public iconRegistryService = inject(IconRegistryService);
-
+  public listService = inject(ListService);
   private fb = inject(FormBuilder);
 
-  public listService = inject(ListService);
+  addListForm!: FormGroup;
 
   selectedColor = signal('#FFD6E8');
   showColorPicker = false;
 
-  addListForm!: FormGroup;
+  private MAX_LISTS = 12;
+  public listCount = computed(() => this.listService.lists().length);
+  public isListLimitReached = computed(() => this.listCount() >= this.MAX_LISTS);
+
+  pastelColors = [
+    '#4BA3C3', // azul oscuro
+    '#3B9E7B', // verde intenso
+    '#E76FAF', // rosa vibrante
+    '#A84B4B', // rojo oscuro
+    '#B8548D', // morado intenso
+    '#7EB77E', // verde medio
+    '#FF8C42', // naranja brillante
+    '#E94C4C', // rojo intenso
+    '#44B85D', // verde vivo
+    '#5C92AC', // azul grisáceo
+    '#E64C99', // rosa fuerte
+    '#9B5FBF'  // morado
+  ];
+
+  closeIcon = this.iconRegistryService.getIcon('close');
+  sendIcon = this.iconRegistryService.getIcon('send');
+  addIcon = this.iconRegistryService.getIcon('add');
 
   constructor() {
+    this.setupForm();
+
+    effect(() => {
+      this.addListForm.patchValue({ color: this.selectedColor() }, { emitEvent: false });
+    });
+  }
+
+  private setupForm() {
     this.addListForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(255)]],
       color: [this.selectedColor(), [Validators.required]]
@@ -35,40 +65,19 @@ export class AddList implements OnDestroy {
 
     const currentList = this.interfaceService.selectedList();
     if (currentList && this.interfaceService.editActiveList()) {
-      this.addListForm.patchValue({ name: currentList.name, color: currentList.color });
+      this.addListForm.patchValue({
+        name: currentList.name,
+        color: currentList.color
+      });
       this.selectedColor.set(currentList.color);
     } else {
-      // Si no está editando, asegurarse de que el formulario esté limpio
       this.addListForm.reset({ color: this.selectedColor() });
     }
-
-    effect(() => {
-      this.addListForm.patchValue({ color: this.selectedColor() }, { emitEvent: false });
-    });
   }
 
   ngOnDestroy() {
     this.interfaceService.setEditActiveList(false);
   }
-
-  pastelColors = [
-    '#B6E7F2',
-    '#8FD3B1',
-    '#F2B6C9',
-    '#D38F8F',
-    '#D5A6BD',
-    '#C1E1C1',
-    '#FFB347',
-    '#FF6961',
-    '#77DD77',
-    '#AEC6CF',
-    '#F49AC2',
-    '#CBAACB'
-  ];
-
-  closeIcon = this.iconRegistryService.getIcon('close');
-  sendIcon = this.iconRegistryService.getIcon('send');
-  addIcon = this.iconRegistryService.getIcon('add');
 
   toggleColorPicker() {
     this.showColorPicker = !this.showColorPicker;
@@ -84,15 +93,24 @@ export class AddList implements OnDestroy {
   }
 
   addList() {
+    // --- NUEVO: GUARDA DE SEGURIDAD EN LA LÓGICA ---
+    // Previene la creación si se alcanzó el límite, pero siempre permite la edición.
+    const isEditing = this.interfaceService.editActiveList();
+    if (!isEditing && this.isListLimitReached()) {
+      this.interfaceService.setEvent('LIMIT REACHED', `You cannot add more than ${this.MAX_LISTS} lists.`);
+      this.interfaceService.setEventActive(true);
+      return; // Detiene la ejecución del método
+    }
+
     if (!this.addListForm.valid) {
-      console.error('Please fill in all required fields.');
+      this.addListForm.markAllAsTouched();
       return;
     }
 
     const selectedList = this.interfaceService.selectedList();
 
-    if (selectedList && selectedList.id) {
-      // Modo edición
+    if (selectedList && selectedList.id && isEditing) {
+      // edición
       this.listService.updateList(selectedList.id, this.buildList()).subscribe({
         next: () => {
           this.interfaceService.setEventActive(true);
@@ -101,7 +119,7 @@ export class AddList implements OnDestroy {
         }
       });
     } else {
-      // Modo creación
+      // creación
       this.listService.addList(this.buildList()).subscribe({
         next: () => {
           this.interfaceService.setEventActive(true);
@@ -125,5 +143,29 @@ export class AddList implements OnDestroy {
 
   buildList(): List {
     return this.addListForm.value;
+  }
+
+  getErrorMessage(controlName: string): string {
+    const control = this.addListForm.get(controlName);
+
+    if (!control || !control.touched || !control.invalid) {
+      return '';
+    }
+
+    if (control.hasError('required')) {
+      return 'List name is required.';
+    }
+
+    if (control.hasError('minlength')) {
+      const requiredLength = control.getError('minlength').requiredLength;
+      return `List name must be at least ${requiredLength} characters long.`;
+    }
+
+    if (control.hasError('maxlength')) {
+      const requiredLength = control.getError('maxlength').requiredLength;
+      return `List name must not exceed ${requiredLength} characters.`;
+    }
+
+    return 'Invalid field.';
   }
 }

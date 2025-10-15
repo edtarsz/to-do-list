@@ -4,9 +4,10 @@
             [ngClass]="{'text-center': !showText,}">
             {{ title }}
         </h2>
-        @if (interfaceService.isAsideOpen()) {
+
+        <!-- No es necesario, lo manejo con opacity en el aside -->
+        <!-- @if (interfaceService.isAsideOpen()) {} -->
         <ng-content select="[section-buttons]"></ng-content>
-        }
     </div>
 
     <!-- Lista de items pasada desde fuera -->

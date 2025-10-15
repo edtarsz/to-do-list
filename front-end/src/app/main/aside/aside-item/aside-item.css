@@ -1,25 +1,7 @@
-/* Animación de shake existente */
 @keyframes shake {
-
-  0%,
-  100% {
-    transform: translateX(0) rotate(0deg);
-  }
-
-  10%,
-  30%,
-  50%,
-  70%,
-  90% {
-    transform: translateX(-2px) rotate(-1deg);
-  }
-
-  20%,
-  40%,
-  60%,
-  80% {
-    transform: translateX(2px) rotate(1deg);
-  }
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-2px) rotate(-1deg); }
+  20%, 40%, 60%, 80% { transform: translateX(2px) rotate(1deg); }
 }
 
 .shake {
@@ -27,20 +9,14 @@
 }
 
 @keyframes dot-pulse {
-
-  0%,
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-
-  50% {
-    transform: scale(1.01);
-    color: var(--purple);
-    opacity: 1;
-  }
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.01); color: var(--purple); opacity: 1; }
 }
 
 .dot-editing {
   animation: dot-pulse 1.5s ease-out infinite;
+}
+
+span {
+  transition: opacity 0.3s ease-in-out;
 }

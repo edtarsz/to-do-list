@@ -1,9 +1,35 @@
 <form [formGroup]="addTaskForm" (ngSubmit)="addTask()" class="flex flex-col gap-4">
-    <input type="text" placeholder="Task's name" formControlName="name"
-        class="w-full bg-[var(--secondary-color)] rounded-lg p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200 placeholder-[var(--gray)] text-sm">
+    @if (errorMessage) {
+    <div class="w-full bg-red-500/10 border border-red-500 text-red-500 p-3 rounded-md text-sm">
+        {{ errorMessage }}
+    </div>
+    }
 
-    <textarea name="description" id="" formControlName="description" placeholder="Task's description" rows="6"
-        class="w-full max-h-[30vh] min-h-[6rem] bg-[var(--secondary-color)] rounded-lg p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-colors duration-200 placeholder-[var(--gray)] text-sm scrollbar-hide"></textarea>
+    <div class="flex flex-col">
+        <input type="text" placeholder="Task's name" formControlName="name"
+            class="w-full bg-[var(--secondary-color)] rounded-lg p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200 placeholder-[var(--gray)] text-sm"
+            [class.border-red-500]="addTaskForm.get('name')?.touched && addTaskForm.get('name')?.errors || (addTaskForm.hasError('datetimeRange') && (addTaskForm.get('startDate')?.touched || addTaskForm.get('dueDate')?.touched || addTaskForm.get('startTime')?.touched || addTaskForm.get('dueTime')?.touched))">
+        @if (addTaskForm.get('name')?.touched && addTaskForm.get('name')?.errors) {
+        <small class="text-red-500 mt-1 text-sm">
+            {{ getErrorMessage('name') }}
+        </small>
+        }
+    </div>
+
+    <div class="flex flex-col">
+        <textarea name="description" id="" formControlName="description" placeholder="Task's description" rows="6"
+            class="w-full max-h-[30vh] min-h-[6rem] bg-[var(--secondary-color)] rounded-lg p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-colors duration-200 placeholder-[var(--gray)] text-sm scrollbar-hide"
+            [class.border-red-500]="addTaskForm.get('description')?.touched && addTaskForm.get('description')?.errors">
+        </textarea>
+        @if (addTaskForm.get('description')?.touched && addTaskForm.get('description')?.errors) {
+        <small class="text-red-500 mt-1 text-sm">
+            {{ getErrorMessage('description') }}
+        </small>
+        }
+        <div class="text-end text-xs text-[var(--gray)] mt-1">
+            {{ addTaskForm.get('description')?.value?.length || 0 }}/500
+        </div>
+    </div>
 
     <hr class="border-[#91343420] border-t-2 border-dashed">
 
@@ -11,7 +37,6 @@
         <p class="text-[var(--gray)] italic text-end">Optional</p>
 
         <div class="flex gap-2 h-full w-full">
-            <!-- Col 1 - List y Priority -->
             <div class="flex flex-col gap-2 w-full">
                 <div class="w-full h-full relative">
                     <app-icon-text-button [type]="'button'" [colorHover]="'var(--secondary-color)'"
@@ -51,34 +76,30 @@
                 </div>
             </div>
 
-            <!-- Col 2 - Time y Date -->
-            <div class="w-full h-full flex flex-col gap-2">
+            <div class="min-w-[300px] w-full h-full flex flex-col gap-2">
                 <div class="grid grid-cols-2 gap-2 h-full w-full">
-                    <!-- Time Column -->
                     <div class="flex flex-col gap-2">
-                        <!-- Start Time -->
                         <div class="h-full relative">
                             <app-icon-text-button [type]="'button'" [colorHover]="'var(--secondary-color)'"
                                 [iconSvg]="clockIcon.svg" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
                                 [borderColor]="'var(--purple)'" [viewBox]="clockIcon.viewBox"
-                                [iconSize]="clockIcon.size" [text]="selectedStartTime() || 'Start'"
+                                [iconSize]="clockIcon.size" [text]="selectedStartTime()"
                                 (click)="toggleDropdown('startTime')">
                             </app-icon-text-button>
 
                             @if (openDropdown() === 'startTime') {
                             <div class="absolute w-full left-0 p-2 bg-white rounded-lg shadow-lg z-10">
                                 <input type="time" (change)="onStartTimeChange($event)"
-                                    class="w-full bg-[var(--secondary-color)] rounded-lg p-2 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200 text-sm">
+                                    class=" cursor-pointer w-full bg-[var(--secondary-color)] rounded-lg p-2 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200 text-sm">
                             </div>
                             }
                         </div>
 
-                        <!-- Due Time -->
                         <div class="h-full relative">
                             <app-icon-text-button [type]="'button'" [colorHover]="'var(--secondary-color)'"
                                 [iconSvg]="clockIcon.svg" [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'"
                                 [borderColor]="'var(--purple)'" [viewBox]="clockIcon.viewBox"
-                                [iconSize]="clockIcon.size" [text]="selectedDueTime() || 'Due'"
+                                [iconSize]="clockIcon.size" [text]="selectedDueTime()"
                                 (click)="toggleDropdown('dueTime')">
                             </app-icon-text-button>
 
@@ -91,15 +112,13 @@
                         </div>
                     </div>
 
-                    <!-- Date Column -->
                     <div class="flex flex-col gap-2">
-                        <!-- Start Date -->
                         <div class="h-full relative">
                             <app-icon-text-button [type]="'button'" [colorHover]="'var(--secondary-color)'"
                                 [iconSvg]="calendarCleanIcon.svg" [color]="'var(--purple)'"
                                 [bgColorHover]="'var(--purple)'" [borderColor]="'var(--purple)'"
                                 [viewBox]="calendarCleanIcon.viewBox" [iconSize]="calendarCleanIcon.size"
-                                [text]="selectedStartDate() || 'Start'" (click)="toggleDropdown('startDate')">
+                                [text]="selectedStartDate()" (click)="toggleDropdown('startDate')">
                             </app-icon-text-button>
 
                             @if (openDropdown() === 'startDate') {
@@ -110,13 +129,12 @@
                             }
                         </div>
 
-                        <!-- Due Date -->
                         <div class="h-full relative">
                             <app-icon-text-button [type]="'button'" [colorHover]="'var(--secondary-color)'"
                                 [iconSvg]="calendarCleanIcon.svg" [color]="'var(--purple)'"
                                 [bgColorHover]="'var(--purple)'" [borderColor]="'var(--purple)'"
                                 [viewBox]="calendarCleanIcon.viewBox" [iconSize]="calendarCleanIcon.size"
-                                [text]="selectedDueDate() || 'Due'" (click)="toggleDropdown('dueDate')">
+                                [text]="selectedDueDate()" (click)="toggleDropdown('dueDate')">
                             </app-icon-text-button>
 
                             @if (openDropdown() === 'dueDate') {
@@ -135,7 +153,7 @@
 
         <app-icon-text-button [type]="'submit'" [colorHover]="'var(--secondary-color)'" [iconSvg]="sendIcon.svg"
             [color]="'var(--purple)'" [bgColorHover]="'var(--purple)'" [borderColor]="'var(--purple)'"
-            [viewBox]="sendIcon.viewBox" [iconSize]="sendIcon.size" [text]="textButton">
+            [viewBox]="sendIcon.viewBox" [iconSize]="sendIcon.size" [text]="buttonText">
         </app-icon-text-button>
     </div>
 </form>

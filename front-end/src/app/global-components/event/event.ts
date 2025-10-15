@@ -10,86 +10,70 @@ import { InterfaceService } from '../../global-services/interface.service';
 export class Event implements OnDestroy {
   private interfaceService = inject(InterfaceService);
   private timeoutId: ReturnType<typeof setTimeout> | null = null;
-  private isFirstRun = true;
+  private closeTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
-  // Señales locales para "congelar" los datos durante la transición
+  // para rastrear el último evento mostrado.
+  private lastEventCount = 0;
+
   displayTitle = signal('');
   displayMessage = signal('');
+  isVisible = signal(false);
+  isFadingOut = signal(false);
 
   constructor() {
     effect(() => {
-      const currentTitle = this.interfaceService.titleEvent();
-      const currentMessage = this.interfaceService.messageEvent();
-      const eventCounter = this.interfaceService.eventCounter();
-      const eventActive = this.interfaceService.isEventActive();
+      const newEventCount = this.interfaceService.eventCounter();
+      const isActive = this.interfaceService.isEventActive();
 
-      // Solo procesar si el evento está activo
-      if (!eventActive) return;
-
-      const el = document.getElementById('toast');
-
-      // Si no es la primera ejecución, hacer desaparecer el evento anterior inmediatamente
-      if (!this.isFirstRun && el) {
-        // Cancelar timeout previo
-        if (this.timeoutId) {
-          clearTimeout(this.timeoutId);
-        }
-
-        // Animación de salida rápida sin actualizar los datos todavía
-        el.classList.remove('animate-fade-in-up');
-        el.classList.add('animate-fade-out-down');
-
-        // Esperar a que termine la animación de salida
-        setTimeout(() => {
-          this.displayTitle.set(currentTitle);
-          this.displayMessage.set(currentMessage);
-
-          // Pequeño delay para asegurar que el DOM se actualizó
-          setTimeout(() => {
-            const element = document.getElementById('toast');
-            if (element) {
-              this.showNewEvent(element);
-            }
-          }, 50);
-        }, 300);
-      } else {
-        // Primera ejecución, actualizar datos y mostrar directamente
-        this.isFirstRun = false;
-        this.displayTitle.set(currentTitle);
-        this.displayMessage.set(currentMessage);
-
-        if (el) {
-          setTimeout(() => this.showNewEvent(el), 50);
-        }
+      if (newEventCount > this.lastEventCount && isActive) {
+        this.lastEventCount = newEventCount;
+        this.showEvent();
       }
     });
   }
 
-  private showNewEvent(el: HTMLElement) {
-    // Resetear la animación
-    el.classList.remove('animate-fade-out-down');
-    el.classList.add('animate-fade-in-up');
+  private showEvent() {
+    if (this.isVisible()) {
+      this.closeEvent(true);
+    } else {
+      this._displayEvent();
+    }
+  }
 
-    // Crear nuevo timeout para el auto-cierre
-    this.timeoutId = setTimeout(() => {
-      const element = document.getElementById('toast');
-      if (element) {
-        element.classList.remove('animate-fade-in-up');
-        element.classList.add('animate-fade-out-down');
+  closeEvent(isTransitioning = false) {
+    if (this.isFadingOut() || !this.isVisible()) {
+      return;
+    }
+    this.isFadingOut.set(true);
+    this.clearTimeouts();
+    this.closeTimeoutId = setTimeout(() => {
+      if (isTransitioning) {
+        this._displayEvent();
+      } else {
+        this.isVisible.set(false);
+        this.isFadingOut.set(false);
+        this.interfaceService.setEventActive(false);
       }
+    }, 500);
+  }
+
+  private _displayEvent() {
+    this.clearTimeouts();
+    this.isFadingOut.set(false);
+    this.displayTitle.set(this.interfaceService.titleEvent());
+    this.displayMessage.set(this.interfaceService.messageEvent());
+    this.isVisible.set(true);
+    this.timeoutId = setTimeout(() => {
+      this.closeEvent();
     }, 4000);
   }
 
-  ngOnDestroy() {
-    if (this.timeoutId) {
-      clearTimeout(this.timeoutId);
-    }
+  private clearTimeouts() {
+    if (this.timeoutId) clearTimeout(this.timeoutId);
+    if (this.closeTimeoutId) clearTimeout(this.closeTimeoutId);
   }
 
-  closeEvent() {
-    if (this.timeoutId) {
-      clearTimeout(this.timeoutId);
-    }
-    this.interfaceService.setEventActive(false);
+  ngOnDestroy() {
+    this.clearTimeouts();
   }
 }
