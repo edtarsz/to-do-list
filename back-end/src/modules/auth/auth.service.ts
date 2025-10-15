@@ -20,7 +20,7 @@ export class AuthService {
         });
 
         if (existingUser) {
-            throw new ConflictException('El usuario ya está registrado');
+            throw new ConflictException('Username is already taken');
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -46,7 +46,7 @@ export class AuthService {
         });
 
         if (!user || !(await bcrypt.compare(password, user.password))) {
-            throw new UnauthorizedException('Credenciales inválidas');
+            throw new UnauthorizedException('Invalid credentials');
         }
 
         const payload = { sub: user.id, username: user.username };

@@ -1,13 +1,22 @@
-<app-auth-section [formGroup]="registerForm" [buttonText]="'Create an account'" [title]="'Create an account'"
-    [description]="'Already have an account?'" [route]="'/login'" [routeText]="'Sign in'" (formSubmit)="onSubmit()">
+<app-auth-section [formGroup]="registerForm" [buttonText]="isSubmitting ? 'Creating account...' : 'Create an account'"
+    [title]="'Create an account'" [description]="'Already have an account?'" [route]="'/login'" [routeText]="'Sign in'"
+    (formSubmit)="onSubmit()">
 
     <div class="flex flex-col gap-5">
+        <!-- Mostrar error global si existe -->
+        @if (errorMessage) {
+        <div class="bg-red-500/10 border border-red-500 text-red-500 p-3 rounded-md text-sm">
+            {{ errorMessage }}
+        </div>
+        }
+
         <div class="flex gap-5 flex-col md:flex-row">
             <div class="flex flex-col w-full">
                 <input formControlName="name" type="text" placeholder="First Name"
-                    class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200">
+                    class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200"
+                    [class.border-red-500]="registerForm.get('name')?.touched && registerForm.get('name')?.errors">
                 @if (registerForm.get('name')?.touched && registerForm.get('name')?.errors) {
-                <small class="text-red-500">
+                <small class="text-red-500 mt-1">
                     {{ getErrorMessage('name') }}
                 </small>
                 }
@@ -15,9 +24,10 @@
 
             <div class="flex flex-col w-full">
                 <input formControlName="lastName" type="text" placeholder="Last Name"
-                    class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200">
+                    class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200"
+                    [class.border-red-500]="registerForm.get('lastName')?.touched && registerForm.get('lastName')?.errors">
                 @if (registerForm.get('lastName')?.touched && registerForm.get('lastName')?.errors) {
-                <small class="text-red-500">
+                <small class="text-red-500 mt-1">
                     {{ getErrorMessage('lastName') }}
                 </small>
                 }
@@ -26,9 +36,10 @@
 
         <div class="flex flex-col w-full">
             <input formControlName="username" type="text" placeholder="Enter your username"
-                class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200">
+                class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200"
+                [class.border-red-500]="registerForm.get('username')?.touched && registerForm.get('username')?.errors">
             @if (registerForm.get('username')?.touched && registerForm.get('username')?.errors) {
-            <small class="text-red-500">
+            <small class="text-red-500 mt-1">
                 {{ getErrorMessage('username') }}
             </small>
             }
@@ -36,9 +47,10 @@
 
         <div class="flex flex-col w-full">
             <input formControlName="password" type="password" placeholder="Enter your password"
-                class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200">
+                class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200"
+                [class.border-red-500]="registerForm.get('password')?.touched && registerForm.get('password')?.errors">
             @if (registerForm.get('password')?.touched && registerForm.get('password')?.errors) {
-            <small class="text-red-500">
+            <small class="text-red-500 mt-1">
                 {{ getErrorMessage('password') }}
             </small>
             }

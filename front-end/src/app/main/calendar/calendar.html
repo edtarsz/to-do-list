@@ -3,14 +3,16 @@
         <h1 class="text-2xl lg:text-[2vw]">{{ currentMonth }}, {{ currentYear }}</h1>
         <div class="flex items-center gap-[1vw]">
             <app-icon-text-button (click)="previousWeek()" [color]="'black'" [iconSvg]="arrowBackIcon.svg"
-                [viewBox]="arrowBackIcon.viewBox" [iconSize]="'14'" [bgColor]="'var(--secondary-color)'">
+                [viewBox]="arrowBackIcon.viewBox" [iconSize]="'14'" [bgColor]="'var(--secondary-color)'"
+                class="rotate-90">
             </app-icon-text-button>
 
             <app-icon-text-button [text]="weekNumber" [color]="'black'" [bgColor]="'var(--secondary-color)'">
             </app-icon-text-button>
 
             <app-icon-text-button (click)="nextWeek()" [color]="'black'" [iconSvg]="arrowNextIcon.svg"
-                [viewBox]="arrowNextIcon.viewBox" [iconSize]="'14'" [bgColor]="'var(--secondary-color)'">
+                [viewBox]="arrowNextIcon.viewBox" [iconSize]="'14'" [bgColor]="'var(--secondary-color)'"
+                class="rotate-270">
             </app-icon-text-button>
         </div>
     </div>

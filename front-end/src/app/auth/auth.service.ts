@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { tap, catchError, delay } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
 import { firstValueFrom, throwError } from 'rxjs';
 import { User } from '../models/user';
 import { AuthStateService } from '../global-services/auth-state.service';
@@ -58,18 +58,33 @@ export class AuthService {
                 this.interfaceService.setEvent('REGISTER', 'Your account has been successfully created.');
                 this.authStateService.setLoading(false);
             }),
-            catchError((err) => {
-                this.interfaceService.setEventActive(true);
-                this.interfaceService.setEvent('ERROR', 'There was an error creating your account.');
+            catchError((error: HttpErrorResponse) => {
                 this.authStateService.setLoading(false);
 
-                if (err.status === 400 && err.error?.message) {
-                    console.error('Errores de validación:', err.error.message);
-                    return throwError(() => err.error.message.join(', '));
+                let errorMessage = 'There was an error creating your account.';
+
+                // Manejar errores específicos del backend
+                if (error.status === 400) {
+                    if (error.error?.message) {
+                        // Si el mensaje es un array de errores de validación
+                        if (Array.isArray(error.error.message)) {
+                            errorMessage = error.error.message.join(', ');
+                        } else {
+                            errorMessage = error.error.message;
+                        }
+                    }
+                } else if (error.status === 409) {
+                    // Usuario ya existe
+                    errorMessage = 'Username already exists. Please choose a different username.';
+                } else if (error.status === 0) {
+                    errorMessage = 'Could not connect to the server. Please try again.';
                 }
 
-                console.error('Error inesperado:', err);
-                return throwError(() => err.error?.message || 'Error desconocido');
+                this.interfaceService.setEventActive(true);
+                this.interfaceService.setEvent('ERROR', errorMessage);
+
+                console.error('Registration error:', error);
+                return throwError(() => new Error(errorMessage));
             })
         );
     }
@@ -95,9 +110,12 @@ export class AuthService {
         localStorage.removeItem('access_token');
         this.authStateService.clear();
         this.listService.clear();
+        this.interfaceService.closeAll();
         this.router.navigate(['/login']);
+        this.interfaceService.setEventActive(true);
+        this.interfaceService.setEvent('LOGOUT', "Catch you later! We'll miss you around here!");
     }
-    
+
     getToken(): string | null {
         return localStorage.getItem('access_token');
     }
@@ -105,17 +123,20 @@ export class AuthService {
     private handleError(error: HttpErrorResponse) {
         this.authStateService.setLoading(false);
 
-        let errorMessage = 'Ocurrió un error';
+        let errorMessage = 'An error occurred';
 
         if (error.error?.message) {
             errorMessage = error.error.message;
         } else if (error.status === 0) {
-            errorMessage = 'No se pudo conectar con el servidor';
+            errorMessage = 'Could not connect to the server';
         } else if (error.status === 401) {
-            errorMessage = 'Credenciales inválidas';
-        } else if (error.status === 409) {
-            errorMessage = 'El email ya está registrado';
+            errorMessage = 'Invalid credentials';
+        } else if (error.status === 404) {
+            errorMessage = 'User not found';
         }
+
+        this.interfaceService.setEventActive(true);
+        this.interfaceService.setEvent('ERROR', errorMessage);
 
         return throwError(() => new Error(errorMessage));
     }

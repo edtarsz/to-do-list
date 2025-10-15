@@ -28,15 +28,34 @@ export class UpdateProfile {
   updateUserForm!: FormGroup;
   closeIcon = this.iconRegistryService.getIcon('close');
   errorMessage = '';
+  isSubmitting = false;
 
   constructor() {
     const currentUser = this.interfaceAuthStateService.user();
 
     this.updateUserForm = this.fb.group({
-      name: [currentUser?.name || '', [Validators.required, Validators.minLength(2)]],
-      lastName: [currentUser?.lastName || '', [Validators.required, Validators.minLength(2)]],
-      username: [currentUser?.username || '', [Validators.required, Validators.minLength(3)]],
-      password: ['', [Validators.minLength(8)]],
+      name: [currentUser?.name || '', [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(50),
+        Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+$/)
+      ]],
+      lastName: [currentUser?.lastName || '', [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(50),
+        Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+(?:\s[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*$/)
+      ]],
+      username: [currentUser?.username || '', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(30),
+        Validators.pattern(/^[a-zA-Z0-9_-]+$/)
+      ]],
+      password: ['', [
+        Validators.minLength(8),
+        Validators.maxLength(100)
+      ]],
       confirmPassword: ['']
     });
   }
@@ -44,15 +63,26 @@ export class UpdateProfile {
   onSubmit() {
     this.errorMessage = '';
 
-    if (!this.updateUserForm.valid) {
+    // Limpiar error de duplicate si existe
+    if (this.updateUserForm.get('username')?.hasError('duplicate')) {
+      const currentErrors = this.updateUserForm.get('username')?.errors;
+      if (currentErrors) {
+        delete currentErrors['duplicate'];
+        const hasOtherErrors = Object.keys(currentErrors).length > 0;
+        this.updateUserForm.get('username')?.setErrors(hasOtherErrors ? currentErrors : null);
+      }
+    }
+
+    if (this.updateUserForm.invalid) {
       this.updateUserForm.markAllAsTouched();
       return;
     }
 
     const { name, lastName, username, password, confirmPassword } = this.updateUserForm.value;
 
-    // Validar que las contraseñas coincidan si se ingresó alguna
     if (password && password !== confirmPassword) {
+      this.errorMessage = 'Passwords do not match';
+      this.updateUserForm.get('confirmPassword')?.setErrors({ mismatch: true });
       this.updateUserForm.get('confirmPassword')?.markAsTouched();
       return;
     }
@@ -70,8 +100,15 @@ export class UpdateProfile {
       return;
     }
 
+    if (this.isSubmitting) {
+      return;
+    }
+
+    this.isSubmitting = true;
+
     this.userService.updateUser(+userId, payload).subscribe({
       next: () => {
+        this.isSubmitting = false;
         this.interfaceService.setEventActive(true);
         this.interfaceService.setEvent('SUCCESS', 'Profile updated successfully.');
         this.interfaceAuthService.initializeAuth();
@@ -79,7 +116,17 @@ export class UpdateProfile {
         this.router.navigate(['/login']);
       },
       error: (error) => {
-        this.errorMessage = error.error?.message || 'An error occurred while updating the profile.';
+        this.isSubmitting = false;
+        const errorMsg = error.error?.message || error.message || 'An error occurred while updating the profile.';
+        
+        // Detectar error de username duplicado
+        if (errorMsg.toLowerCase().includes('username')) {
+          this.errorMessage = 'This username is already taken. Please choose another one.';
+          this.updateUserForm.get('username')?.setErrors({ duplicate: true });
+          this.updateUserForm.get('username')?.markAsTouched();
+        } else {
+          this.errorMessage = errorMsg;
+        }
       }
     });
   }
@@ -100,7 +147,6 @@ export class UpdateProfile {
     const password = this.updateUserForm.get('password')?.value;
     const confirmPassword = this.updateUserForm.get('confirmPassword')?.value;
 
-    // Solo mostrar error si ambos campos tienen contenido y no coinciden
     if (password && confirmPassword && password !== confirmPassword) {
       return true;
     }
@@ -118,14 +164,35 @@ export class UpdateProfile {
 
   getErrorMessage(controlName: string): string {
     const control = this.updateUserForm.get(controlName);
-    if (!control) return '';
+    if (!control || !control.touched) return '';
 
     if (control.hasError('required')) {
-      return 'This is a required field';
+      return 'This field is required';
     }
     if (control.hasError('minlength')) {
       const requiredLength = control.getError('minlength').requiredLength;
       return `Must be at least ${requiredLength} characters`;
+    }
+    if (control.hasError('maxlength')) {
+      const requiredLength = control.getError('maxlength').requiredLength;
+      return `Must be at most ${requiredLength} characters`;
+    }
+    if (control.hasError('pattern')) {
+      if (controlName === 'name') {
+        return 'Only letters are allowed (no numbers, spaces or special characters)';
+      }
+      if (controlName === 'lastName') {
+        return 'Only letters and one space are allowed (no numbers or special characters)';
+      }
+      if (controlName === 'username') {
+        return 'Only letters, numbers, hyphens and underscores allowed';
+      }
+    }
+    if (control.hasError('mismatch')) {
+      return 'Passwords do not match';
+    }
+    if (control.hasError('duplicate')) {
+      return 'This username is already taken';
     }
 
     return 'Invalid field';

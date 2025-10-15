@@ -35,13 +35,12 @@ export class Event implements OnDestroy {
           clearTimeout(this.timeoutId);
         }
 
-        // Animación de salida rápida (SIN actualizar los datos todavía)
+        // Animación de salida rápida sin actualizar los datos todavía
         el.classList.remove('animate-fade-in-up');
         el.classList.add('animate-fade-out-down');
 
         // Esperar a que termine la animación de salida
         setTimeout(() => {
-          // AHORA SÍ actualizar los datos
           this.displayTitle.set(currentTitle);
           this.displayMessage.set(currentMessage);
 

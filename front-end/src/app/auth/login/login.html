@@ -1,13 +1,19 @@
-<app-auth-section [formGroup]="loginForm" [buttonText]="'Sign in'" [title]="'Sign in'"
-    [description]="`Don't have an account?`" [route]="'/register'" [routeText]="'Sign up'" [buttonAction]="'login'"
-    (formSubmit)="onSubmit()">
+<app-auth-section [formGroup]="loginForm" [buttonText]="isSubmitting ? 'Signing in...' : 'Sign in'" [title]="'Sign in'"
+    [description]="`Don't have an account?`" [route]="'/register'" [routeText]="'Sign up'" (formSubmit)="onSubmit()">
 
     <div class="flex flex-col gap-5">
+        @if (errorMessage) {
+        <div class="bg-red-500/10 border border-red-500 text-red-500 p-3 rounded-md text-sm">
+            {{ errorMessage }}
+        </div>
+        }
+
         <div class="flex flex-col w-full">
             <input formControlName="username" type="text" placeholder="Enter your username"
-                class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200">
+                class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200"
+                [class.border-red-500]="loginForm.get('username')?.touched && loginForm.get('username')?.errors">
             @if (loginForm.get('username')?.touched && loginForm.get('username')?.errors) {
-            <small class="text-red-500">
+            <small class="text-red-500 mt-1">
                 {{ getErrorMessage('username') }}
             </small>
             }
@@ -15,18 +21,13 @@
 
         <div class="flex flex-col w-full">
             <input formControlName="password" type="password" placeholder="Enter your password"
-                class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200">
+                class="w-full bg-[var(--secondary-color)] rounded-md shadow-sm placeholder:text-[var(--gray)] p-3 outline-none focus:border-[var(--purple)] border-2 border-transparent transition-all duration-200"
+                [class.border-red-500]="loginForm.get('password')?.touched && loginForm.get('password')?.errors">
             @if (loginForm.get('password')?.touched && loginForm.get('password')?.errors) {
-            <small class="text-red-500">
+            <small class="text-red-500 mt-1">
                 {{ getErrorMessage('password') }}
             </small>
             }
         </div>
-
-        @if (errorMessage) {
-        <div class="text-red-500 text-sm">
-            {{ errorMessage }}
-        </div>
-        }
     </div>
 </app-auth-section>

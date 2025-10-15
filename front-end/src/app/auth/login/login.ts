@@ -17,40 +17,72 @@ export class Login {
 
   loginForm!: FormGroup;
   errorMessage = '';
+  isSubmitting = false;
 
   constructor() {
     this.loginForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(3)]],
-      password: ['', [Validators.required, Validators.minLength(8)]]
+      username: ['', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(30),
+        Validators.pattern(/^[a-zA-Z0-9_-]+$/) // Solo letras, números, guiones y guiones bajos
+      ]],
+      password: ['', [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.maxLength(100)
+      ]]
     });
   }
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      const { username, password } = this.loginForm.value;
-      this.authService.login(username, password).subscribe({
-        next: () => this.router.navigate(['/index/tasks']),
-        error: (error) => {
-          this.errorMessage = error.message || 'Error al iniciar sesión';
-        }
-      });
-    } else {
+    this.errorMessage = '';
+
+    if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
+      return;
     }
+
+    if (this.isSubmitting) {
+      return; // Prevenir múltiples envíos
+    }
+
+    this.isSubmitting = true;
+    const { username, password } = this.loginForm.value;
+
+    this.authService.login(username, password).subscribe({
+      next: () => {
+        this.isSubmitting = false;
+        this.router.navigate(['/index/tasks']);
+      },
+      error: (error) => {
+        this.isSubmitting = false;
+        this.errorMessage = error.message || 'Invalid credentials';
+      }
+    });
   }
 
   getErrorMessage(controlName: string): string {
     const control = this.loginForm.get(controlName);
-    if (!control) return '';
+    if (!control || !control.touched) return '';
 
     if (control.hasError('required')) {
-      return 'Este campo es obligatorio';
+      return 'This field is required';
     }
     if (control.hasError('minlength')) {
       const requiredLength = control.getError('minlength').requiredLength;
-      return `Debe tener al menos ${requiredLength} caracteres`;
+      return `Must be at least ${requiredLength} characters`;
+    }
+    if (control.hasError('maxlength')) {
+      const requiredLength = control.getError('maxlength').requiredLength;
+      return `Must be at most ${requiredLength} characters`;
+    }
+    if (control.hasError('pattern')) {
+      if (controlName === 'username') {
+        return 'Invalid username format';
+      }
     }
 
-    return 'Campo inválido';
+    return 'Invalid field';
   }
 }
