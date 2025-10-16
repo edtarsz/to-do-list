@@ -20,15 +20,15 @@ FROM node:22.19.0-alpine
 WORKDIR /app
 
 # Instala el cliente de PostgreSQL para usar 'pg_isready'
-RUN apk add --no-cache postgresql-client
+# RUN apk add --no-cache postgresql-client
 
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/package*.json ./
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/prisma ./prisma
 
-COPY entrypoint-local.sh .
-RUN chmod +x entrypoint-local.sh
+# COPY entrypoint-local.sh .
+# RUN chmod +x entrypoint-local.sh
 
 ENV PORT=3000
 
