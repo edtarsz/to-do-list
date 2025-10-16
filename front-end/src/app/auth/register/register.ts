@@ -29,7 +29,7 @@ export class Register {
         Validators.required,
         Validators.minLength(2),
         Validators.maxLength(50),
-        Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+$/) // Solo letras (incluye acentos y ñ)
+        Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+(?:\s[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ]+)*$/) // Solo letras y un espacio
       ]],
       lastName: ['', [
         Validators.required,
@@ -87,9 +87,7 @@ export class Register {
       return `Must be at most ${control.getError('maxlength').requiredLength} characters`;
 
     if (control.hasError('pattern')) {
-      if (controlName === 'name')
-        return 'Only letters are allowed (no numbers, spaces or special characters)';
-      if (controlName === 'lastName')
+      if (controlName === 'name' || controlName === 'lastName')
         return 'Only letters and one space are allowed (no numbers or special characters)';
       if (controlName === 'username')
         return 'Only letters, numbers, hyphens and underscores allowed';
