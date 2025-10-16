@@ -6,26 +6,32 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Hace la magia 
+  const configService = app.get(ConfigService);
+
+  const allowedOrigins = [
+    configService.get('FRONTEND_URL'),
+    'http://localhost:4200',
+  ].filter(Boolean);
+
   app.enableCors({
-    origin: app.get(ConfigService).get('FRONTEND_URL'),
-    methods: 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS',
+    origin: allowedOrigins,
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    exposedHeaders: ['Authorization'],
   });
 
-  // Sirve para validar los DTOs
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
     forbidNonWhitelisted: true,
     transform: true,
   }));
 
-  // Prefijo global para las rutas
   app.setGlobalPrefix('api');
 
-  const PORT = app.get(ConfigService).get('BACK_END_PORT');
+  const PORT = process.env.PORT || configService.get('BACK_END_PORT') || 3000;
 
-  await app.listen(PORT);
-  console.log(`Server running on http://localhost:${PORT}`);
+  await app.listen(PORT, '0.0.0.0');
+  console.log(`Server running on port ${PORT}`);
 }
 bootstrap();

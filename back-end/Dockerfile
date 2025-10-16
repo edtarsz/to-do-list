@@ -1,39 +1,44 @@
+# Stage 1: Build
 FROM node:22.19.0-alpine AS build
 
 WORKDIR /app
 
 COPY package*.json ./
-COPY tsconfig*.json ./
-COPY nest-cli.json ./
 
 RUN npm install
 
-COPY prisma ./prisma/
-COPY src ./src/
+COPY . .
 
-RUN npx prisma generate --schema=./prisma/schema
+RUN npm run build -- --configuration=production
 
-RUN npm run build -- --webpack
+# Stage 2: Serve con nginx
+FROM nginx:alpine
 
-FROM node:22.19.0-alpine
+COPY --from=build /app/dist/front-end/browser /usr/share/nginx/html
 
-WORKDIR /app
+# Configuración de nginx para Angular
+RUN echo 'server { \
+    listen 80; \
+    server_name _; \
+    root /usr/share/nginx/html; \
+    index index.html; \
+    \
+    location / { \
+    try_files $uri $uri/ /index.html; \
+    } \
+    \
+    # Headers de seguridad \
+    add_header X-Frame-Options "SAMEORIGIN" always; \
+    add_header X-Content-Type-Options "nosniff" always; \
+    add_header X-XSS-Protection "1; mode=block" always; \
+    \
+    # Caché para assets \
+    location ~* \\.(?:css|js|jpg|jpeg|gif|png|ico|svg|woff|woff2|ttf|eot)$ { \
+    expires 1y; \
+    add_header Cache-Control "public, immutable"; \
+    } \
+    }' > /etc/nginx/conf.d/default.conf
 
-# Instala el cliente de PostgreSQL para usar 'pg_isready'
-# RUN apk add --no-cache postgresql-client
+EXPOSE 80
 
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/package*.json ./
-COPY --from=build /app/dist ./dist
-COPY --from=build /app/prisma ./prisma
-
-# COPY entrypoint-local.sh .
-# RUN chmod +x entrypoint-local.sh
-
-ENV PORT=3000
-
-EXPOSE 3000
-
-# Desarrollo
-# CMD ["./entrypoint.sh"]
-CMD ["node", "dist/main.js"]
+CMD ["nginx", "-g", "daemon off;"]
