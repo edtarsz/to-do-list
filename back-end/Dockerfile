@@ -10,9 +10,10 @@ COPY nest-cli.json ./
 RUN npm install
 
 COPY prisma ./prisma/
+
 COPY src ./src/
 
-RUN npx prisma generate --schema=./prisma/schema.prisma
+RUN npx prisma generate --schema=./prisma/schema/schema.prisma
 
 RUN npm run build
 
@@ -30,4 +31,4 @@ ENV NODE_ENV=production
 
 EXPOSE 10000
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy --schema=./prisma/schema/schema.prisma && node dist/main.js"]
