@@ -7,7 +7,7 @@ import { User } from '../models/user';
 import { AuthStateService } from '../global-services/auth-state.service';
 import { ListService } from '../global-services/lists.service';
 import { InterfaceService } from '../global-services/interface.service';
-import { environment } from "../../enviroments/environment";
+import { environment } from "../../environments/environment";
 
 interface AuthResponse {
     access_token: string;
