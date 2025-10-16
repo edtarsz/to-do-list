@@ -12,6 +12,7 @@ services:
     build: 
       context: ./back-end
       dockerfile: Dockerfile
+    command: ./entrypoint-local.sh
     depends_on:
       - db
     environment:

@@ -34,4 +34,6 @@ ENV PORT=3000
 
 EXPOSE 3000
 
-CMD ["./entrypoint.sh"]
+# Desarrollo
+# CMD ["./entrypoint.sh"]
+CMD ["node", "dist/main.js"]
