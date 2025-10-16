@@ -4,41 +4,30 @@ FROM node:22.19.0-alpine AS build
 WORKDIR /app
 
 COPY package*.json ./
+COPY tsconfig*.json ./
+COPY nest-cli.json ./
 
 RUN npm install
 
-COPY . .
+COPY prisma ./prisma/
+COPY src ./src/
 
-RUN npm run build -- --configuration=production
+RUN npx prisma generate --schema=./prisma/schema.prisma
 
-# Stage 2: Serve con nginx
-FROM nginx:alpine
+RUN npm run build
 
-COPY --from=build /app/dist/front-end/browser /usr/share/nginx/html
+# Stage 2: Production
+FROM node:22.19.0-alpine
 
-# Configuración de nginx para Angular
-RUN echo 'server { \
-    listen 80; \
-    server_name _; \
-    root /usr/share/nginx/html; \
-    index index.html; \
-    \
-    location / { \
-    try_files $uri $uri/ /index.html; \
-    } \
-    \
-    # Headers de seguridad \
-    add_header X-Frame-Options "SAMEORIGIN" always; \
-    add_header X-Content-Type-Options "nosniff" always; \
-    add_header X-XSS-Protection "1; mode=block" always; \
-    \
-    # Caché para assets \
-    location ~* \\.(?:css|js|jpg|jpeg|gif|png|ico|svg|woff|woff2|ttf|eot)$ { \
-    expires 1y; \
-    add_header Cache-Control "public, immutable"; \
-    } \
-    }' > /etc/nginx/conf.d/default.conf
+WORKDIR /app
 
-EXPOSE 80
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/package*.json ./
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/prisma ./prisma
 
-CMD ["nginx", "-g", "daemon off;"]
+ENV NODE_ENV=production
+
+EXPOSE 10000
+
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/main.js"]
