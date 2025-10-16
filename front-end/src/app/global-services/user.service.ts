@@ -3,12 +3,13 @@ import { HttpClient } from "@angular/common/http";
 import { tap, catchError } from "rxjs/operators";
 import { Observable, throwError } from "rxjs";
 import { User } from "../models/user";
+import { environment } from "../../enviroments/environment";
 
 @Injectable({
     providedIn: 'root'
 })
 export class UserService {
-    private apiURL = 'http://localhost:3000/api/users';
+    private apiURL = `${environment.BACK_END_URL}/api/users`;
     private httpClient = inject(HttpClient);
 
     // Signal para un solo usuario

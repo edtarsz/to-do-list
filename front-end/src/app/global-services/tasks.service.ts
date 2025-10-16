@@ -3,12 +3,13 @@ import { HttpClient } from "@angular/common/http";
 import { tap, catchError } from "rxjs/operators";
 import { Observable, throwError } from "rxjs";
 import { Task } from "../models/task";
+import { environment } from "../../enviroments/environment";
 
 @Injectable({
     providedIn: 'root'
 })
 export class TaskService {
-    private apiURL = 'http://localhost:3000/api/tasks';
+    private apiURL = `${environment.BACK_END_URL}/api/tasks`;
     private httpClient = inject(HttpClient);
 
     tasks = signal<Task[]>([]);

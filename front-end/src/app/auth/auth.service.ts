@@ -7,6 +7,7 @@ import { User } from '../models/user';
 import { AuthStateService } from '../global-services/auth-state.service';
 import { ListService } from '../global-services/lists.service';
 import { InterfaceService } from '../global-services/interface.service';
+import { environment } from "../../enviroments/environment";
 
 interface AuthResponse {
     access_token: string;
@@ -20,7 +21,7 @@ export class AuthService {
     private authStateService = inject(AuthStateService);
     private interfaceService = inject(InterfaceService);
     private listService = inject(ListService);
-    private apiUrl = 'http://localhost:3000/api';
+    private apiUrl = `${environment.BACK_END_URL}/api`;
 
     constructor(
         private http: HttpClient,

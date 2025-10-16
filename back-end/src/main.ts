@@ -23,7 +23,7 @@ async function bootstrap() {
   // Prefijo global para las rutas
   app.setGlobalPrefix('api');
 
-  const PORT = app.get(ConfigService).get('PORT');
+  const PORT = app.get(ConfigService).get('BACK_END_PORT');
 
   await app.listen(PORT);
   console.log(`Server running on http://localhost:${PORT}`);

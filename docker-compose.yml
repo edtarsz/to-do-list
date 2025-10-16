@@ -1,0 +1,28 @@
+services:
+  db:
+    image: postgres:17.6
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+    ports:
+      - "${DATABASE_PORT}:${DATABASE_PORT}"
+
+  back-end:
+    build: ./back-end
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@db:${DATABASE_PORT}/${DATABASE_NAME}
+      JWT_SECRET: ${JWT_SECRET}
+      BACK_END_PORT: ${BACK_END_PORT}
+      FRONTEND_URL: ${FRONTEND_URL}
+    ports:
+      - "${BACK_END_PORT}:${BACK_END_PORT}"
+
+  front-end:
+    build: ./front-end
+    depends_on:
+      - back-end
+    ports:
+      - "${FRONT_END_PORT}:80"

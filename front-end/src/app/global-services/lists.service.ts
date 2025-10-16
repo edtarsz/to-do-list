@@ -3,12 +3,13 @@ import { HttpClient } from "@angular/common/http";
 import { tap } from "rxjs/internal/operators/tap";
 import { catchError, Observable, throwError } from "rxjs";
 import { List } from "../models/list";
+import { environment } from "../../enviroments/environment";
 
 @Injectable({
     providedIn: 'root'
 })
 export class ListService {
-    private apiURL = 'http://localhost:3000/api/lists';
+    private apiURL = `${environment.BACK_END_URL}/api/lists`;
     private httpClient = inject(HttpClient);
 
     lists = signal<List[]>([]);
