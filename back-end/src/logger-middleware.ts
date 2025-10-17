@@ -6,9 +6,15 @@ export class LoggerMiddleware implements NestMiddleware {
     private logger = new Logger('HTTP');
 
     use(req: Request, res: Response, next: NextFunction) {
-        this.logger.debug(
-            `${req.method} ${req.originalUrl} - body: ${JSON.stringify(req.body)}`,
-        );
+        const { method, originalUrl, headers, body } = req;
+        const origin = headers.origin;
+
+        if (method === 'OPTIONS') {
+            this.logger.debug(`🔄 PREFLIGHT ${originalUrl} from ${origin}`);
+        } else {
+            this.logger.debug(`${method} ${originalUrl} - body: ${JSON.stringify(body)}`);
+        }
+
         next();
     }
 }

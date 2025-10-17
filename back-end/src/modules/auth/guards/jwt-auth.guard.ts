@@ -1,6 +1,7 @@
 import { Injectable, ExecutionContext } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Reflector } from '@nestjs/core';
+import { Observable } from 'rxjs';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -8,12 +9,17 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         super();
     }
 
-    canActivate(context: ExecutionContext) {
-        // Permitir rutas públicas con decorator @Public()
-        const isPublic = this.reflector.get<boolean>(
-            'isPublic',
+    canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+        const request = context.switchToHttp().getRequest();
+        
+        if (request.method === 'OPTIONS') {
+            return true;
+        }
+
+        const isPublic = this.reflector.getAllAndOverride<boolean>('isPublic', [
             context.getHandler(),
-        );
+            context.getClass(),
+        ]);
 
         if (isPublic) {
             return true;
