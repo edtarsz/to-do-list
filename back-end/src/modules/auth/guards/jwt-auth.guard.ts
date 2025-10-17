@@ -12,6 +12,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
         const request = context.switchToHttp().getRequest();
         
+        // Allow preflight OPTIONS requests to pass through
         if (request.method === 'OPTIONS') {
             return true;
         }
@@ -21,6 +22,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
             context.getClass(),
         ]);
 
+        // Allow public routes with @Public() decorator
         if (isPublic) {
             return true;
         }

@@ -8,6 +8,7 @@ import { ListService } from "../../../global-services/lists.service";
 import { List } from "../../../models/list";
 import { AsideItem } from "../../aside/aside-item/aside-item";
 import { IconTextButton } from "../../../global-components/icon-text-button/icon-text-button";
+import { finalize } from "rxjs";
 
 @Component({
   selector: 'app-add-list',
@@ -93,7 +94,6 @@ export class AddList implements OnDestroy {
   }
 
   addList() {
-    // --- NUEVO: GUARDA DE SEGURIDAD EN LA LÓGICA ---
     // Previene la creación si se alcanzó el límite, pero siempre permite la edición.
     const isEditing = this.interfaceService.editActiveList();
     if (!isEditing && this.isListLimitReached()) {
@@ -110,26 +110,33 @@ export class AddList implements OnDestroy {
     const selectedList = this.interfaceService.selectedList();
 
     if (selectedList && selectedList.id && isEditing) {
-      // edición
-      this.listService.updateList(selectedList.id, this.buildList()).subscribe({
-        next: () => {
-          this.interfaceService.setEventActive(true);
-          this.interfaceService.setEvent('LIST UPDATED', `List has been successfully updated.`);
-          this.cleanupAndClose();
-        }
-      });
+      this.cleanupAndClose();
+
+      this.listService.updateList(selectedList.id, this.buildList())
+        .pipe()
+        .subscribe({
+          next: () => {
+            this.interfaceService.setEventActive(true);
+            this.interfaceService.setEvent('LIST UPDATED', `List has been successfully updated.`);
+          },
+          error: (error) => {
+            console.error(error);
+          }
+        });
     } else {
-      // creación
-      this.listService.addList(this.buildList()).subscribe({
-        next: () => {
-          this.interfaceService.setEventActive(true);
-          this.interfaceService.setEvent('LIST CREATED', `List has been successfully created.`);
-          this.cleanupAndClose();
-        },
-        error: (error) => {
-          console.error(error);
-        }
-      });
+      this.cleanupAndClose();
+
+      this.listService.addList(this.buildList())
+        .pipe()
+        .subscribe({
+          next: () => {
+            this.interfaceService.setEventActive(true);
+            this.interfaceService.setEvent('LIST CREATED', `List has been successfully created.`);
+          },
+          error: (error) => {
+            console.error(error);
+          }
+        });
     }
   }
 

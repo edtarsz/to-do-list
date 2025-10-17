@@ -15,8 +15,7 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'https://to-do-list-front-end-4r4j.onrender.com',
-      'http://localhost:5173',
-      'http://localhost:3000',
+      configService.get('FRONT_END_URL'),
     ],
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
     credentials: false,
@@ -26,14 +25,12 @@ async function bootstrap() {
     optionsSuccessStatus: 204,
   });
 
-  // Validation pipes
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
     forbidNonWhitelisted: true,
     transform: true,
   }));
 
-  // Global prefix
   app.setGlobalPrefix('api');
 
   const PORT = process.env.PORT || configService.get('BACK_END_PORT') || 3000;

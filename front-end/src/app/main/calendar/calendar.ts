@@ -78,9 +78,9 @@ export class Calendar implements OnInit {
   }
 
   getWeekNumber(date: Date): string {
-    const weekNames = ['Primera', 'Segunda', 'Tercera', 'Cuarta', 'Quinta'];
+    const weekNames = ['First', 'Second', 'Third', 'Fourth', 'Fifth'];
     const monthWeek = Math.ceil(date.getDate() / 7);
-    return `${weekNames[monthWeek - 1] || monthWeek + 'a'} Semana`;
+    return `${weekNames[monthWeek - 1] || monthWeek + 'a'} Week`;
   }
 
   previousWeek() {

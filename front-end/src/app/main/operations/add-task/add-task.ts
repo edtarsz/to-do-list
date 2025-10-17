@@ -8,6 +8,7 @@ import { TaskService } from '../../../global-services/tasks.service';
 import { ListService } from '../../../global-services/lists.service';
 import { AsideItem } from '../../aside/aside-item/aside-item';
 import { Priority, Task } from '../../../models/task';
+import { finalize } from 'rxjs/internal/operators/finalize';
 
 @Component({
   selector: 'app-add-task',
@@ -124,34 +125,39 @@ export class AddTask {
 
     if (this.interfaceService.selectedTask()) {
       const id = this.interfaceService.selectedTask()?.id;
-      if (!id) return;
+      if (!id) {
+        this.isSubmitting = false;
+        return;
+      }
 
-      this.taskService.updateTask(id, taskData).subscribe({
-        next: (task) => {
-          this.isSubmitting = false;
-          this.interfaceService.selectedTask.set(null);
-          this.event(task, 'TASK UPDATED', 'updated');
-          this.resetForm();
-          this.togglePopUp();
-        },
-        error: (error) => {
-          this.isSubmitting = false;
-          this.errorMessage = error.error?.message || 'An error occurred while updating the task.';
-        }
-      });
+      this.interfaceService.selectedTask.set(null);
+      this.resetForm();
+      this.togglePopUp();
+
+      this.taskService.updateTask(id, taskData)
+        .pipe(finalize(() => this.isSubmitting = false))
+        .subscribe({
+          next: (task) => {
+            this.event(task, 'TASK UPDATED', 'updated');
+          },
+          error: (error) => {
+            this.errorMessage = error.error?.message || 'An error occurred while updating the task.';
+          }
+        });
     } else {
-      this.taskService.addTask(taskData).subscribe({
-        next: (task) => {
-          this.isSubmitting = false;
-          this.event(task, 'TASK', 'created');
-          this.resetForm();
-          this.togglePopUp();
-        },
-        error: (error) => {
-          this.isSubmitting = false;
-          this.errorMessage = error.error?.message || 'An error occurred while creating the task.';
-        }
-      });
+      this.resetForm();
+      this.togglePopUp();
+
+      this.taskService.addTask(taskData)
+        .pipe(finalize(() => this.isSubmitting = false))
+        .subscribe({
+          next: (task) => {
+            this.event(task, 'TASK', 'created');
+          },
+          error: (error) => {
+            this.errorMessage = error.error?.message || 'An error occurred while creating the task.';
+          }
+        });
     }
   }
 
