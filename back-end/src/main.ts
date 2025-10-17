@@ -37,8 +37,8 @@ async function bootstrap() {
 
   await app.listen(PORT, '0.0.0.0');
 
-  console.log(`✅ Server running on port ${PORT}`);
-  console.log(`✅ CORS enabled for: https://to-do-list-front-end-4r4j.onrender.com`);
+  console.log(`Server running on port ${PORT}`);
+  console.log(`CORS enabled for: https://to-do-list-front-end-4r4j.onrender.com`);
 }
 
 bootstrap();
