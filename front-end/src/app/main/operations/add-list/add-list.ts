@@ -94,12 +94,11 @@ export class AddList implements OnDestroy {
   }
 
   addList() {
-    // Previene la creación si se alcanzó el límite, pero siempre permite la edición.
     const isEditing = this.interfaceService.editActiveList();
     if (!isEditing && this.isListLimitReached()) {
       this.interfaceService.setEvent('LIMIT REACHED', `You cannot add more than ${this.MAX_LISTS} lists.`);
       this.interfaceService.setEventActive(true);
-      return; // Detiene la ejecución del método
+      return;
     }
 
     if (!this.addListForm.valid) {
@@ -109,11 +108,12 @@ export class AddList implements OnDestroy {
 
     const selectedList = this.interfaceService.selectedList();
 
+    const listData = this.buildList();
+
     if (selectedList && selectedList.id && isEditing) {
       this.cleanupAndClose();
 
-      this.listService.updateList(selectedList.id, this.buildList())
-        .pipe()
+      this.listService.updateList(selectedList.id, listData)
         .subscribe({
           next: () => {
             this.interfaceService.setEventActive(true);
@@ -126,8 +126,7 @@ export class AddList implements OnDestroy {
     } else {
       this.cleanupAndClose();
 
-      this.listService.addList(this.buildList())
-        .pipe()
+      this.listService.addList(listData)
         .subscribe({
           next: () => {
             this.interfaceService.setEventActive(true);
