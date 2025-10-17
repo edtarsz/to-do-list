@@ -12,10 +12,18 @@ async function bootstrap() {
     '*',
   ].filter(Boolean);
 
+  app.use((req, res, next) => {
+    console.log(`📨 ${req.method} ${req.path}`);
+    console.log(`🌍 Origin: ${req.headers.origin}`);
+    console.log('FRONT-END URL:', configService.get('FRONT_END_URL'));
+    next();
+  });
+
   // credentials: true,
   app.enableCors({
     origin: allowedOrigins,
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+    credentials: false,
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
     exposedHeaders: ['Authorization'],
   });
