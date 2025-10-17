@@ -9,14 +9,13 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   const allowedOrigins = [
-    configService.get('FRONTEND_URL'),
-    'http://localhost:4200',
+    '*',
   ].filter(Boolean);
 
+  // credentials: true,
   app.enableCors({
     origin: allowedOrigins,
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
-    credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
     exposedHeaders: ['Authorization'],
   });
